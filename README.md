@@ -1,6 +1,4 @@
-========================
-Royale Tippgemeinschaft --- Backend
-========================
+# Royale Tippgemeinschaft --- Backend
 
 ## Aktuelle TODOs
 

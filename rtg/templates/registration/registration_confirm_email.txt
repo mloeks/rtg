@@ -1,0 +1,11 @@
+Hallo {{ user.get_short_name }},
+
+vielen Dank für Deine Registrierung bei der Royalen Tippgemeinschaft 2016.
+
+Dein Username lautet: {{ user.username }}
+
+Du kannst Dich ab sofort einloggen und loslegen.
+Bei Rückfragen wende dich einfach an koenigshaus@royale-tippgemeinschaft.de
+
+Hochachtungsvoll,
+Das Königshaus

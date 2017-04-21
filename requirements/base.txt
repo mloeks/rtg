@@ -1,0 +1,16 @@
+Django==1.10.7
+djangorestframework
+
+fabric
+psycopg2
+path.py
+unipath
+pytest
+django-rest-auth[extras]
+django-allauth
+djangorestframework-jwt
+django-cors-headers
+django-filter
+django-pgcrypto
+Pillow
+html2text

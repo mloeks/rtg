@@ -9,10 +9,10 @@
 ### END INIT INFO
 
 
-NAME="rtg2016"
-PROJECT_DIR="$HOME/${NAME}_demo/rtg2016"
+NAME="rtg"
+PROJECT_DIR="$HOME/${NAME}_demo/rtg"
 SETTINGS="$NAME.settings.test"
-PYTHONPATH="$HOME/django-${NAME}_demo:$HOME/${NAME}_demo/rtg2016"
+PYTHONPATH="$HOME/django-${NAME}_demo:$HOME/${NAME}_demo/rtg"
 
 PIDFILE="$PROJECT_DIR/$NAME.pid"
 SOCKET="$PROJECT_DIR/$NAME.sock"

@@ -2,16 +2,16 @@
 
 if [[ "$1" == "SET" ]];then
     echo "SETTING PROD password protection..."
-    CONF_FILE=${HOME}/scripts/rtg2016/rtg2016_passprotected.conf
+    CONF_FILE=${HOME}/scripts/rtg/rtg_passprotected.conf
 
 else
     echo "REMOVING PROD password protection..."
-    CONF_FILE=${HOME}/scripts/rtg2016/rtg2016_original.conf
+    CONF_FILE=${HOME}/scripts/rtg/rtg_original.conf
 fi
 
 ${HOME}/init/nginx stop
 
 cd ${HOME}/nginx/conf/sites/
-cp ${CONF_FILE} ./rtg2016.conf
+cp ${CONF_FILE} ./rtg.conf
 
 ${HOME}/init/nginx start

@@ -91,7 +91,7 @@ def get_env_variable(var_name):
         error_msg = "Set the %s environment variable" % var_name
         raise ImproperlyConfigured(error_msg)
 
-SECRET_KEY = get_env_variable('SECRET_KEY_RTG2016')
+SECRET_KEY = get_env_variable('SECRET_KEY_RTG')
 
 ########## END SECRET CONFIGURATION
 
@@ -220,7 +220,7 @@ LOGGING = {
         'application_log': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(DJANGO_ROOT, 'rtg2016_app.log'),
+            'filename': os.path.join(DJANGO_ROOT, 'rtg_app.log'),
             'maxBytes': 1024*1024*15, # 15MB
             'backupCount': 10,
         },
@@ -231,7 +231,7 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        'rtg2016_app': {
+        'rtg_app': {
             'handlers': ['application_log',],
             'level': 'DEBUG',
         },

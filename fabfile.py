@@ -6,7 +6,7 @@ env.hosts = ['s17.wservices.ch']
 
 local_user = 'mloeks'
 svn_user = local_user
-app_name = 'rtg2016'
+app_name = 'rtg'
 
 ## constant fields
 DEMO_APP = {
@@ -38,7 +38,7 @@ SVN_BASE_URL = 'https://srv55.svn-repos.de/dev897/%s/%s' % (svn_user, app_name)
 def run_tests_local():
     with lcd(LOCAL_APP['dir']):
         print "Running tests..."
-        local('/home/%s/pyve/%s/bin/python rtg2016/manage.py test rtg' % (local_user, app_name))
+        local('/home/%s/pyve/%s/bin/python rtg/manage.py test rtg' % (local_user, app_name))
 
 
 def svn_commit():
@@ -64,12 +64,12 @@ def deploy(app_env):
         run('bash ' + app_env['backup_script'])
 
         print "Remote checkout of latest revision..."
-        run('rm -rf /tmp/rtg2016')
+        run('rm -rf /tmp/rtg')
         run('svn checkout --username %s %s /tmp/%s' % (svn_user, SVN_BASE_URL, app_name,))
 
         print "Keeping media files of existing app..."
         with cd(app_env['dir']):
-            run('cp -rf %s/media /tmp/%s/rtg2016' % (app_name, app_name,))
+            run('cp -rf %s/media /tmp/%s/rtg' % (app_name, app_name,))
 
         print "Stopping " + app_env['name'] + " app server..."
         run('${HOME}/init/%s stop' % app_env['name'])
@@ -77,7 +77,7 @@ def deploy(app_env):
         print "Replacing " + app_env['name'] + " app with freshly checked out project"
         with cd(app_env['dir']):
             run('rm -rf %s' % app_name)
-            run('rsync -aC /tmp/%s/rtg2016 .' % app_name)
+            run('rsync -aC /tmp/%s/rtg .' % app_name)
             run('rsync -aC /tmp/%s/requirements .' % app_name)
 
         print "Updating pip requirements..."
@@ -111,7 +111,7 @@ def deploy(app_env):
 
 def deployment_cleanup():
     print "Cleaning up..."
-    local('rm -rf /tmp/rtg2016')
-    local('rm -rf /tmp/rtg2016*.dump')
-    run('rm -rf /tmp/rtg2016')
-    run('rm -rf /tmp/rtg2016*.dump')
+    local('rm -rf /tmp/rtg')
+    local('rm -rf /tmp/rtg*.dump')
+    run('rm -rf /tmp/rtg')
+    run('rm -rf /tmp/rtg*.dump')

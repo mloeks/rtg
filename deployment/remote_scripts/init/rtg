@@ -9,8 +9,8 @@
 ### END INIT INFO
 
 
-NAME="rtg2016"
-PROJECT_DIR="$HOME/$NAME/rtg2016"
+NAME="rtg"
+PROJECT_DIR="$HOME/$NAME/rtg"
 SETTINGS="$NAME.settings.production"
 PYTHONPATH="$HOME/django-$NAME:$HOME/$NAME/$NAME"
 

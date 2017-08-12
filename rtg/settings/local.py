@@ -49,12 +49,11 @@ EMAIL_UNDISCLOSED_RECIPIENTS = False
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'rtg2016',
+        'NAME': 'rtg',
         'USER': 'mloeks',
         'PASSWORD': '!Warwickshire',
         'HOST': '127.0.0.1',
-        # 'PORT': '5432',
-        'PORT': '5532',
+        'PORT': '5432',
         # maximum number of seconds to keep the db connection open
         # 0 = re-open the connection at each request (slow)
         # None = keep the connection open forever (maybe performance issues on external system by allowed number of parallel accesses)

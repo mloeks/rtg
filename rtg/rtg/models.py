@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from datetime import *
-from string import lower
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -70,7 +69,7 @@ class TournamentRound(models.Model):
         ordering = ["display_order"]
 
     def __unicode__(self):  # Python 3: def __str__(self):
-        return unicode(self.name)
+        return str(self.name)
 
 
 class Team(models.Model):
@@ -114,9 +113,9 @@ class Game(models.Model):
     def result_str(self):
         if hasattr(self, 'homegoals') and self.homegoals != -1 and \
                 hasattr(self, 'awaygoals') and self.awaygoals != -1:
-            return u'%i:%i' % (self.homegoals, self.awaygoals)
+            return '%i:%i' % (self.homegoals, self.awaygoals)
         else:
-            return u'-:-'
+            return '-:-'
     result_str.short_description = 'Result'
 
     def has_started(self):
@@ -182,7 +181,7 @@ class Game(models.Model):
                                             'must be part of the same group.'))
 
     def __unicode__(self):  # Python 3: def __str__(self):
-        return unicode(self.hometeam) + u' - ' + unicode(self.awayteam)
+        return str(self.hometeam) + ' - ' + str(self.awayteam)
 
 
 class GameBetResult(models.Model):
@@ -210,9 +209,9 @@ class GameBet(models.Model):
 
     def bet_str(self):
         if self.homegoals != -1 and self.awaygoals != -1:
-            return u'%i:%i' % (self.homegoals, self.awaygoals)
+            return '%i:%i' % (self.homegoals, self.awaygoals)
         else:
-            return u'-:-'
+            return '-:-'
 
     def has_bet(self):
         return self.homegoals != -1 and self.awaygoals != -1
@@ -342,7 +341,7 @@ class ExtraBet(models.Model):
         if hasattr(self, 'result_bet') and self.result_bet:
             return self.result_bet
         else:
-            return u'---'
+            return '---'
 
     @staticmethod
     def get_user_bets(user_id):
@@ -391,7 +390,7 @@ class Statistic(models.Model):
             for game_bet in GameBet.get_user_bets(self.user.pk, True):
                 if game_bet.game.has_result():
                     self.points += game_bet.result_bet_type.points
-                    result_bet_type = lower(game_bet.result_bet_type.type)
+                    result_bet_type = game_bet.result_bet_type.type.lower()
                     if result_bet_type == 'volltreffer':
                         self.no_volltreffer += 1
                     elif result_bet_type == 'differenz':
@@ -493,9 +492,9 @@ class Profile(models.Model):
 
     def avatar_tag(self):
         if self.avatar:
-            return u'<img src="%s" />' % self.avatar.url
+            return '<img src="%s" />' % self.avatar.url
         else:
-            return u'No avatar.'
+            return 'No avatar.'
 
     # TODO add to model tests!
     def get_open_bets(self):
@@ -521,7 +520,7 @@ class Profile(models.Model):
         return open_bets
 
     def __unicode__(self):  # Python 3: def __str__(self):
-        return unicode(self.user) + u'\'s Profile'
+        return str(self.user) + '\'s Profile'
 
 
 class Post(models.Model):

@@ -25,7 +25,7 @@ class Command(BaseCommand):
     def create_bets(self, bet_percentage):
         nr_games = Game.objects.count()
         game_ct_to_generate_bets = int(bet_percentage*nr_games)
-        print "Generating bets for %i of %i games..." % (game_ct_to_generate_bets, nr_games)
+        print("Generating bets for %i of %i games..." % (game_ct_to_generate_bets, nr_games))
 
         for user in User.objects.all():
             for game in Game.objects.all().order_by('?')[:game_ct_to_generate_bets]:

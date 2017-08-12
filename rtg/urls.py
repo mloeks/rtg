@@ -1,5 +1,5 @@
 from django.conf import settings
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from rest_auth.views import PasswordResetConfirmView
@@ -7,7 +7,7 @@ from rest_auth.views import PasswordResetView
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = [
     # enable Django admin interface:
     url(r'^admin/', include(admin.site.urls)),
 
@@ -29,7 +29,7 @@ urlpatterns = patterns('',
 
     # contact form endpoint
     url(r'^contact/$', 'rtg.views.contact_request', name='rtg_contact_request'),
-)
+]
 
 # Uncomment the next line to serve media files in dev.
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -48,7 +48,7 @@ class IsAdminOrSelf(permissions.BasePermission):
 
 class IsAdminOrSelfUpdateOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
-        permitted_methods = permissions.SAFE_METHODS + (u'PUT',)
+        permitted_methods = permissions.SAFE_METHODS + ('PUT',)
         return request.user.is_authenticated() and request.method in permitted_methods
 
     def has_object_permission(self, request, view, obj):

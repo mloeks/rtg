@@ -1,25 +1,19 @@
 import json
 
+from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.core.exceptions import PermissionDenied
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
-
-from rest_framework import viewsets, status, filters
-from rest_framework.decorators import detail_route
+from rest_framework import viewsets, filters
 from rest_framework.decorators import parser_classes
 from rest_framework.parsers import FormParser, JSONParser
 from rest_framework.parsers import MultiPartParser
-from rest_framework.response import Response
-from rest_framework.status import HTTP_201_CREATED
-from rest_framework.status import HTTP_400_BAD_REQUEST
 
+import filters as rtgfilters
 import permissions as rtg_permissions
-from rtg import filters as rtgfilters
-from serializers import *
-from models import *
 from forms import RtgContactForm
+from serializers import *
 
 
 class GameBetViewSet(viewsets.ModelViewSet):

@@ -85,7 +85,6 @@ STATICFILES_FINDERS = (
 def get_env_variable(var_name):
     """Get the environment variable or return exception."""
     try:
-        print os.environ
         return os.environ[var_name]
     except KeyError:
         error_msg = "Set the %s environment variable" % var_name
@@ -242,7 +241,7 @@ LOGGING = {
 
 ########## WSGI CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
-WSGI_APPLICATION = '%s.wsgi.application' % SITE_NAME
+WSGI_APPLICATION = 'wsgi.application'
 ########## END WSGI CONFIGURATION
 
 # auth settings

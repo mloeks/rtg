@@ -205,9 +205,9 @@ class VenueTests(TestCase):
                 Venue.objects.create(name=None, city=u"Köln", capacity=123)
         with self.assertRaises(IntegrityError):
             with transaction.atomic():
-                Venue.objects.create(name=u'Südstadion', city=None, capacity=456)
+                Venue.objects.create(name='Südstadion', city=None, capacity=456)
         # capacity is optional
-        Venue.objects.create(name=u"1. FC Köln", city=u'Köln')
+        Venue.objects.create(name=u"1. FC Köln", city='Köln')
 
     def test_invalid_field_restrictions(self):
         with self.assertRaises(DataError):
@@ -860,19 +860,19 @@ class ExtraBetTests(TestCase):
         self.assertIsNone(ExtraBet.get_user_extra_bet(u2.pk, e2.pk))
 
     def test_compute_points(self):
-        u, e1, e2 = utils.create_user(), utils.create_extra(result=u'Österreich'), utils.create_extra(result='Espana')
+        u, e1, e2 = utils.create_user(), utils.create_extra(result='Österreich'), utils.create_extra(result='Espana')
 
-        eb = utils.create_extrabet(u'Österreich', e1, u)
+        eb = utils.create_extrabet('Österreich', e1, u)
         self.assertEqual(10, eb.compute_points())
 
-        eb = utils.create_extrabet(u'Deutschland', e2, u)
+        eb = utils.create_extrabet('Deutschland', e2, u)
         self.assertEqual(0, eb.compute_points())
 
     def test_compute_points_none(self):
-        u, e, e_r = utils.create_user(), utils.create_extra(), utils.create_extra(result=u'Österreich')
+        u, e, e_r = utils.create_user(), utils.create_extra(), utils.create_extra(result='Österreich')
 
         # extra has no result
-        eb1 = utils.create_extrabet(u'Österreich', e, u)
+        eb1 = utils.create_extrabet('Österreich', e, u)
         self.assertEqual(0, eb1.compute_points())
 
         # no bet was set
@@ -944,8 +944,8 @@ class StatisticTests(TestCase):
         BET_AMOUNT=0.6
 
         start_time = time.clock()
-        print "~"*50
-        print "SCALING test START = %s" % start_time
+        print("~"*50)
+        print("SCALING test START = %s" % start_time)
 
         # create many users
         users = []
@@ -981,18 +981,18 @@ class StatisticTests(TestCase):
 
         end_time = time.clock()
         duration = (end_time - start_time)
-        print "SCALING test FINISHED = %s" % end_time
-        print "TOOK %f s altogether" % duration
-        print "TOOK %f s on average per game save" % avg_game_save
-        print "~"*50
-        print "~"*50
+        print("SCALING test FINISHED = %s" % end_time)
+        print("TOOK %f s altogether" % duration)
+        print("TOOK %f s on average per game save" % avg_game_save)
+        print("~"*50)
+        print("~"*50)
 
-        print "USER STATISTICS:"
+        print("USER STATISTICS:")
         ranked_users = sorted(list(User.objects.all().order_by('username')),
                               key=lambda it: (it.statistic.points, it.statistic.no_volltreffer, it.statistic.no_bets),
                               reverse=True)
         for u in ranked_users:
-            print u.statistic.pretty_print()
+            print(u.statistic.pretty_print())
 
         self.assertEqual(int(BET_AMOUNT*len(games)), users[0].statistic.no_bets)
         # TODO what else could be asserted?

@@ -1,13 +1,8 @@
 """Development settings and globals."""
 
-from __future__ import absolute_import
 from django.utils import timezone
-import datetime
-
-from os.path import join, normpath
 
 from .base import *
-
 
 ########## DEBUG CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#debug
@@ -26,7 +21,7 @@ TEMPLATE_DEBUG = DEBUG
 ########## END DEBUG CONFIGURATION
 
 ALLOWED_HOSTS = [
-    'localhost:8888'
+    'localhost'
 ]
 
 CORS_ORIGIN_REGEX_WHITELIST = ('^(https?://)?localhost:8888$', )

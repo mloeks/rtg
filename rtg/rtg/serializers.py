@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
-from django.contrib.auth.models import User, Group
-from django.conf import settings as dj_settings
 from django.template.defaultfilters import filesizeformat
-from rest_framework.authtoken.models import Token
-from rest_framework.fields import CharField, IntegerField, ImageField
-
-from models import *
 from rest_framework import serializers
+from rest_framework.fields import CharField, IntegerField
 
 from rtg.fields import Base64ImageField
+from rtg.models import *
 
 
 class GameBetResultSerializer(serializers.ModelSerializer):

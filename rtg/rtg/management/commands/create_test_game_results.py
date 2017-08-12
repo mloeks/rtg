@@ -28,7 +28,7 @@ class Command(BaseCommand):
     def create_game_results(self, game_percentage):
         nr_games = Game.objects.count()
         game_ct_to_generate_bets = int(game_percentage * nr_games)
-        print "Generating random results for %i of %i games..." % (game_ct_to_generate_bets, nr_games)
+        print("Generating random results for %i of %i games..." % (game_ct_to_generate_bets, nr_games))
 
         for game in Game.objects.all().order_by('?')[:game_ct_to_generate_bets]:
             game.homegoals = randrange(5)

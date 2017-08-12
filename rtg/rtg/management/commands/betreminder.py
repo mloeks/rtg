@@ -31,7 +31,7 @@ class Command(BaseCommand):
                 subject = settings.EMAIL_PREFIX + subject
 
                 message = render_to_string('rtg/bet_reminder_email.html', ctx)
-                print "Sending reminder E-Mail to " + str(user.username) + " [" + str(user.email) + "]..."
+                print("Sending reminder E-Mail to " + str(user.username) + " [" + str(user.email) + "]...")
                 mail = EmailMultiAlternatives(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email],
                                               bcc=['admin@royale-tippgemeinschaft.de'])
                 mail.send()

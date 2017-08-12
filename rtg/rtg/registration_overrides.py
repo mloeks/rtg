@@ -69,7 +69,7 @@ class RtgAccountAdapter(DefaultAccountAdapter):
     def clean_username(self, username, shallow=False):
         self.username_regex = re.compile(r'^[\w\säöüÄÖÜéèáàß.@+-]+$')
         self.error_messages['invalid_username'] = \
-            u'Dein Username darf nur aus Buchstaben, Zahlen, Leerzeichen und @/./+/-/_. bestehen.'
+            'Dein Username darf nur aus Buchstaben, Zahlen, Leerzeichen und @/./+/-/_. bestehen.'
         return super(RtgAccountAdapter, self).clean_username(username, shallow)
 
     def clean_first_name(self, first_name):

@@ -1,7 +1,7 @@
-import html2text
-import re
 import os
+import re
 
+import html2text
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.utils.text import slugify
@@ -11,7 +11,7 @@ from rtg.models import User
 
 def jwt_response_payload_handler(token, user=None, request=None):
     avatar_prop = user.profile.avatar_cropped
-    avatar_url = unicode(user.profile.avatar_cropped) if avatar_prop else None
+    avatar_url = str(user.profile.avatar_cropped) if avatar_prop else None
     no_open_bets = len(user.profile.get_open_bets()) + len(user.profile.get_open_extras())
 
     return {
@@ -34,7 +34,7 @@ def extract_awaygoals_from_result(result):
 
 
 def game_to_string(game):
-    return unicode(game.hometeam.name) + u' - ' + unicode(game.awayteam.name)
+    return str(game.hometeam.name) + ' - ' + str(game.awayteam.name)
 
 
 def get_avatar_path(instance, filename):

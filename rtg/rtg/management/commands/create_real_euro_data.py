@@ -27,12 +27,12 @@ class Command(BaseCommand):
     def create_venues(self):
         venues = {
             'saint-denis': Venue(city='Saint-Denis', name='Stade de France', capacity=81338),
-            'marseille': Venue(city='Marseille', name=u'Stade Vélodrome', capacity=67394),
+            'marseille': Venue(city='Marseille', name='Stade Vélodrome', capacity=67394),
             'lyon': Venue(city='Lyon', name='Parc Olympique Lyonnais', capacity=59286),
             'lille': Venue(city='Lille', name='Stade Pierre-Mauroy', capacity=50186),
             'paris': Venue(city='Paris', name='Parc des Princes', capacity=48712),
             'bordeaux': Venue(city='Bordeaux', name='Nouveau Stade de Bordeaux', capacity=42115),
-            'saint-etienne': Venue(city=u'Saint-Étienne', name='Stade Geoffroy-Guichard', capacity=41965),
+            'saint-etienne': Venue(city='Saint-Étienne', name='Stade Geoffroy-Guichard', capacity=41965),
             'nizza': Venue(city='Nizza', name='Allianz Riviera', capacity=35624),
             'lens': Venue(city='Lens', name='Stade Bollaert-Delelis', capacity=38223),
             'toulouse': Venue(city='Toulouse', name='Stadium Municipal', capacity=33150)
@@ -73,7 +73,7 @@ class Command(BaseCommand):
         teams = {
             'ALB': Team(name='Albanien', abbreviation='ALB', group=self.groups['a']),
             'FRA': Team(name='Frankreich', abbreviation='FRA', group=self.groups['a']),
-            'ROU': Team(name=u'Rumänien', abbreviation='ROU', group=self.groups['a']),
+            'ROU': Team(name='Rumänien', abbreviation='ROU', group=self.groups['a']),
             'SUI': Team(name='Schweiz', abbreviation='SUI', group=self.groups['a']),
 
             'ENG': Team(name='England', abbreviation='ENG', group=self.groups['b']),
@@ -89,14 +89,14 @@ class Command(BaseCommand):
             'CRO': Team(name='Kroatien', abbreviation='CRO', group=self.groups['d']),
             'CZE': Team(name='Tschechien', abbreviation='CZE', group=self.groups['d']),
             'ESP': Team(name='Spanien', abbreviation='ESP', group=self.groups['d']),
-            'TUR': Team(name=u'Türkei', abbreviation='TUR', group=self.groups['d']),
+            'TUR': Team(name='Türkei', abbreviation='TUR', group=self.groups['d']),
 
             'BEL': Team(name='Belgien', abbreviation='BEL', group=self.groups['e']),
             'ITA': Team(name='Italien', abbreviation='ITA', group=self.groups['e']),
             'IRL': Team(name='Irland', abbreviation='IRL', group=self.groups['e']),
             'SWE': Team(name='Schweden', abbreviation='SWE', group=self.groups['e']),
 
-            'AUT': Team(name=u'Österreich', abbreviation='AUT', group=self.groups['f']),
+            'AUT': Team(name='Österreich', abbreviation='AUT', group=self.groups['f']),
             'HUN': Team(name='Ungarn', abbreviation='HUN', group=self.groups['f']),
             'ISL': Team(name='Island', abbreviation='ISL', group=self.groups['f']),
             'POR': Team(name='Portugal', abbreviation='POR', group=self.groups['f'])

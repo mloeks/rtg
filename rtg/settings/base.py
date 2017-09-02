@@ -137,7 +137,8 @@ TEMPLATES = [
 
 ########## MIDDLEWARE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#middleware-classes
-MIDDLEWARE_CLASSES = (
+# Migration cf. https://docs.djangoproject.com/en/1.11/topics/http/middleware/#upgrading-middleware
+MIDDLEWARE = (
     # Default Django middleware.
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

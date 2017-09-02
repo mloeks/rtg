@@ -4,6 +4,10 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from rest_auth.views import PasswordResetConfirmView
 from rest_auth.views import PasswordResetView
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
+
+from main.registration_overrides import rtg_register
+from main.views import contact_request
 
 admin.autodiscover()
 
@@ -20,15 +24,15 @@ urlpatterns = [
     # url(r'^password/change/$', PasswordChangeView.as_view(), name='rest_password_change'),
 
     # djangorestramework-jwt extension Authentication views
-    url(r'^api-token-auth/', 'rest_framework_jwt.views.obtain_jwt_token'),
-    url(r'^api-token-refresh/', 'rest_framework_jwt.views.refresh_jwt_token'),
-    url(r'^api-token-verify/', 'rest_framework_jwt.views.verify_jwt_token'),
+    url(r'^api-token-auth/', obtain_jwt_token),
+    url(r'^api-token-refresh/', refresh_jwt_token),
+    url(r'^api-token-verify/', verify_jwt_token),
 
     # custom extensions for registering new users in the JWT context
-    url(r'^api-token-register/', 'main.registration_overrides.rtg_register'),
+    url(r'^api-token-register/', rtg_register),
 
     # contact form endpoint
-    # url(r'^contact/$', 'rtg.views.contact_request', name='rtg_contact_request'),
+    url(r'^contact/$', contact_request, name='rtg_contact_request'),
 ]
 
 # Uncomment the next line to serve media files in dev.

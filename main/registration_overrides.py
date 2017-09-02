@@ -1,40 +1,18 @@
 # # -*- coding: utf-8 -*-
-#
-# from django.contrib.sites.models import RequestSite
-# from django.contrib.sites.models import Site
-# from django.contrib.auth.models import User
-#
-# from django.core.mail import send_mail, EmailMultiAlternatives
-# from django.conf import settings
-#
-# from django.template.loader import render_to_string
-#
-# from django.shortcuts import render
-# from django.views.decorators.csrf import csrf_exempt, csrf_protect
-# from registration.backends.default.views import RegistrationView
-# from registration import signals
-# from registration.models import RegistrationProfile, RegistrationManager
-#
-# from django.utils.translation import ugettext, ugettext_lazy as _
-#
 import re
 
+from allauth.account.adapter import get_adapter, DefaultAccountAdapter
 from django.conf import settings
-from django.contrib.sites.models import RequestSite
+from django.contrib.sites.requests import RequestSite
 from django.core.mail import send_mail
 from django.core.mail.message import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from rest_auth.registration.serializers import RegisterSerializer
-from allauth.account.adapter import get_adapter, DefaultAccountAdapter
 from rest_auth.serializers import PasswordResetConfirmSerializer
 from rest_framework import serializers
-from rest_framework.authtoken.models import Token
-from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework_jwt.compat import get_request_data
-from rest_framework_jwt.serializers import JSONWebTokenSerializer, User
-from rest_framework_jwt.views import ObtainJSONWebToken, jwt_response_payload_handler
+from rest_framework.response import Response
+from rest_framework_jwt.views import ObtainJSONWebToken
 
 
 class RtgRegisterSerializer(RegisterSerializer):

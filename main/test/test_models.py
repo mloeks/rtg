@@ -8,7 +8,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction, IntegrityError, DataError
 from django.test import TestCase
 from django.utils import timezone
-from rtg.test.utils import TestModelUtils as utils
+from main.test.utils import TestModelUtils as utils
 
 from main.models import Profile, TournamentGroup, TournamentRound, Game, Venue, Team, GameBet, GameBetResult, Extra, \
     ExtraChoice, ExtraBet, Post, Statistic

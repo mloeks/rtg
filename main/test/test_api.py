@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 # TODO test invalid requests (at least for bets)
 # TODO create some more advanced tests
-from rtg.test.utils import TestModelUtils
+from main.test.utils import TestModelUtils
 
 from main.models import TournamentGroup, TournamentRound, Team, Venue, Game, ExtraBet, Extra, ExtraChoice, \
     GameBet

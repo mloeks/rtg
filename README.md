@@ -7,23 +7,20 @@
 
 `pip install -r requirements/base.txt`
 
+## Erkenntnisse aus der Migration von Django 1.8 auf 1.11
+
+* v.a. package foo und Verzeichnisstruktur haben Probleme gemacht
+* DB ging einfacher als gedacht
+* DB Superuser im Nachhinein erstellen: `python manage.py createsuperuser`
+                                        https://docs.djangoproject.com/en/1.11/intro/tutorial02/#creating-an-admin-user
+* einige breaking changes in Django, REST Framework & Co., ggf. Changelogs genauer anschauen (wobei der Konsolen-Output auch meistens hilfreich ist)
+* Python sys.path und Auflösung von Packages verstehen!! 
+
 ## Aktuelle TODOs
-
-### Migration auf Python 3 & Django 1.11 (was: 1.8)
-
-* ANSCHLUSS: Server fährt hoch, findet aber noch gar keine URLs
-    * vermutlich verkonfiguriert, da ich überall das rtg. Prefix raus genommen habe
-    * urls.py hat sich auch etwas geändert in neuerer Django-Version
-    * api.html vom REST framework wird nicht gefunden?
-
-#### Datenbank
-
-* Migration lief auf Anhieb durch
-* gibt aber noch keinen Admin-User --> im Nachhinein erstellen?
 
 #### Tests
 
-* Haben noch Import-Probleme (rtg.rtg)
+* Laufen, es sind aber 51 rot :-/
 
 ### Migration auf generisches RTG-Projekt
 

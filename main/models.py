@@ -22,7 +22,7 @@ class TournamentGroup(models.Model):
     class Meta:
         ordering = ["name"]
 
-    def __unicode__(self):  # Python 3: def __str__(self):
+    def __str__(self):
         return self.name
 
 
@@ -68,7 +68,7 @@ class TournamentRound(models.Model):
     class Meta:
         ordering = ["display_order"]
 
-    def __unicode__(self):  # Python 3: def __str__(self):
+    def __str__(self):
         return str(self.name)
 
 
@@ -80,7 +80,7 @@ class Team(models.Model):
     class Meta:
         ordering = ["name"]
 
-    def __unicode__(self):  # Python 3: def __str__(self):
+    def __str__(self):
         return self.name
 
 
@@ -92,7 +92,7 @@ class Venue(models.Model):
     class Meta:
         ordering = ["name"]
 
-    def __unicode__(self):  # Python 3: def __str__(self):
+    def __str__(self):
         return self.name + " (" + self.city + ")"
 
 
@@ -180,7 +180,7 @@ class Game(models.Model):
                     raise ValidationError(_('This game is not possible. In a non knock-out round both teams '
                                             'must be part of the same group.'))
 
-    def __unicode__(self):  # Python 3: def __str__(self):
+    def __str__(self):
         return str(self.hometeam) + ' - ' + str(self.awayteam)
 
 
@@ -192,7 +192,7 @@ class GameBetResult(models.Model):
     class Meta:
         ordering = ["sort_id"]
 
-    def __unicode__(self):  # Python 3: def __str__(self):
+    def __str__(self):
         return self.type
 
 
@@ -284,7 +284,7 @@ class GameBet(models.Model):
         self.result_bet_type = niete
         self.save()
 
-    def __unicode__(self):  # Python 3: def __str__(self):
+    def __str__(self):
         return self.bet_str()
 
 
@@ -311,7 +311,7 @@ class Extra(models.Model):
     def get_reference_date(self):
         return settings.FAKE_DATE if hasattr(settings, 'FAKE_DATE') else timezone.now()
 
-    def __unicode__(self):  # Python 3: def __str__(self):
+    def __str__(self):
         return self.name
 
 
@@ -324,7 +324,7 @@ class ExtraChoice(models.Model):
         ordering = ['sort_index', 'name']
         unique_together = ('name', 'extra',)
 
-    def __unicode__(self):  # Python 3: def __str__(self):
+    def __str__(self):
         return self.name
 
 
@@ -362,7 +362,7 @@ class ExtraBet(models.Model):
         else:
             return 0
 
-    def __unicode__(self):  # Python 3: def __str__(self):
+    def __str__(self):
         return self.result_bet
 
 
@@ -428,7 +428,7 @@ class Statistic(models.Model):
     def pretty_print(self):
         return "%s (%i bets, %i Volltreffer, %i Points)" % (self.user, self.no_bets, self.no_volltreffer, self.points)
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s's statistics" % self.user
 
 
@@ -519,7 +519,7 @@ class Profile(models.Model):
                 open_bets.append(extra)
         return open_bets
 
-    def __unicode__(self):  # Python 3: def __str__(self):
+    def __str__(self):
         return str(self.user) + '\'s Profile'
 
 
@@ -543,7 +543,7 @@ class Post(models.Model):
         if not self.content:
             raise ValidationError(_('Content must not be empty.'))
 
-    def __unicode__(self):  # Python 3: def __str__(self):
+    def __str__(self):
         return u"Post by " + str(self.author)
 
 

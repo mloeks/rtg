@@ -4,21 +4,21 @@ from main.models import *
 
 
 class TournamentGroupAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'abbreviation')
+    list_display = ('__str__', 'abbreviation')
 
 
 class TournamentRoundAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'is_knock_out')
+    list_display = ('__str__', 'is_knock_out')
 
 
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'group')
+    list_display = ('__str__', 'group')
     list_filter = ['group']
     search_fields = ['name', 'abbreviation']
 
 
 class VenueAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'capacity')
+    list_display = ('__str__', 'capacity')
     search_fields = ['name', 'city']
 
 
@@ -26,7 +26,7 @@ class GameAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Game details', {'fields': ['round', 'kickoff', 'deadline', 'venue', 'hometeam', 'awayteam', 'homegoals', 'awaygoals']}),
     ]
-    list_display = ('__unicode__', 'round', 'kickoff', 'deadline', 'result_str', 'venue')
+    list_display = ('__str__', 'round', 'kickoff', 'deadline', 'result_str', 'venue')
     list_filter = ['round', 'kickoff', 'deadline', 'venue']
 
 
@@ -36,7 +36,7 @@ class GameBetResultAdmin(admin.ModelAdmin):
 
 class GameBetAdmin(admin.ModelAdmin):
     fields = ('user', 'game', 'homegoals', 'awaygoals')
-    list_display = ('__unicode__', 'user', 'game')
+    list_display = ('__str__', 'user', 'game')
     list_filter = ['user', 'game']
 
 
@@ -46,22 +46,22 @@ class ExtraChoiceInline(admin.TabularInline):
 
 
 class ExtraAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'points')
+    list_display = ('__str__', 'points')
     inlines = [ExtraChoiceInline]
 
 
 class ExtraChoiceAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'extra')
+    list_display = ('__str__', 'extra')
     list_filter = ['extra']
 
 
 class ExtraBetAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'user', 'extra')
+    list_display = ('__str__', 'user', 'extra')
     list_filter = ['result_bet', 'extra']
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'avatar_tag', 'has_paid')
+    list_display = ('__str__', 'avatar_tag', 'has_paid')
     fields = ['user', 'has_paid']
 
 
@@ -77,7 +77,7 @@ class StatisticAdmin(admin.ModelAdmin):
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('__unicode__', 'date_created')
+    list_display = ('__str__', 'date_created')
 
 ###########################
 

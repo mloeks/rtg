@@ -9,10 +9,10 @@ admin.autodiscover()
 
 urlpatterns = [
     # enable Django admin interface:
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
 
     # APP: rtg
-    url(r'^rtg/', include('rtg.urls', namespace='rtg')),
+    url(r'^rtg/', include('main.urls')),
 
     # use django-rest-auth extension views for password reset endpoints
     url(r'^rest-auth/password/reset/$', PasswordResetView.as_view(), name='rest_password_reset'),
@@ -25,10 +25,10 @@ urlpatterns = [
     url(r'^api-token-verify/', 'rest_framework_jwt.views.verify_jwt_token'),
 
     # custom extensions for registering new users in the JWT context
-    url(r'^api-token-register/', 'rtg.registration_overrides.rtg_register'),
+    url(r'^api-token-register/', 'main.registration_overrides.rtg_register'),
 
     # contact form endpoint
-    url(r'^contact/$', 'rtg.views.contact_request', name='rtg_contact_request'),
+    # url(r'^contact/$', 'rtg.views.contact_request', name='rtg_contact_request'),
 ]
 
 # Uncomment the next line to serve media files in dev.

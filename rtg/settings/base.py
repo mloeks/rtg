@@ -177,7 +177,7 @@ DJANGO_APPS = (
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
-    'rtg',
+    'main',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
@@ -249,11 +249,11 @@ WSGI_APPLICATION = 'wsgi.application'
 OLD_PASSWORD_FIELD_ENABLED = True
 LOGOUT_ON_PASSWORD_CHANGE = False
 REST_AUTH_SERIALIZERS = {
-    'PASSWORD_RESET_CONFIRM_SERIALIZER': 'rtg.registration_overrides.RtgPasswordResetConfirmSerializer'
+    'PASSWORD_RESET_CONFIRM_SERIALIZER': 'main.registration_overrides.RtgPasswordResetConfirmSerializer'
 }
 
 # all-auth settings
-ACCOUNT_ADAPTER = 'rtg.registration_overrides.RtgAccountAdapter'
+ACCOUNT_ADAPTER = 'main.registration_overrides.RtgAccountAdapter'
 # ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_EMAIL_VERIFICATION = "optional"
 ACCOUNT_USERNAME_MIN_LENGTH = 3

@@ -27,7 +27,6 @@ ALLOWED_HOSTS = [
 ########## END HOST CONFIGURATION
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 def tz_date(*args):
     return timezone.make_aware(datetime.datetime(*args), timezone.get_default_timezone())

@@ -16,8 +16,6 @@ def tz_date(*args):
 # FAKE_DATE = tz_date(2016, 10, 30, 9, 0, 0)
 # FAKE_DATE = tz_date(2016, 6, 10, 9, 0, 0)       # EURO begins! :-)
 
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#template-debug
-TEMPLATE_DEBUG = DEBUG
 ########## END DEBUG CONFIGURATION
 
 ALLOWED_HOSTS = [

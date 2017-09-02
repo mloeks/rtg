@@ -1,6 +1,6 @@
 from django.conf.urls import url, include
 from rest_framework.routers import DefaultRouter
-import views
+from . import views
 
 router = DefaultRouter()
 router.register(r'gamebets', views.GameBetViewSet)
@@ -20,6 +20,7 @@ router.register(r'profiles_admin', views.AdminProfileViewSet)
 router.register(r'posts', views.PostViewSet)
 router.register(r'statistics', views.StatisticViewSet)
 
+app_name = 'rtg'
 urlpatterns = [
     url(r'^', include(router.urls, namespace='rtg')),
 ]

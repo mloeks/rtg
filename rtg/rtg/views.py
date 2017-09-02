@@ -10,10 +10,10 @@ from rest_framework.decorators import parser_classes
 from rest_framework.parsers import FormParser, JSONParser
 from rest_framework.parsers import MultiPartParser
 
-import filters as rtgfilters
-import permissions as rtg_permissions
-from forms import RtgContactForm
-from serializers import *
+from . import filters as rtgfilters
+from . import permissions as rtg_permissions
+from .forms import RtgContactForm
+from .serializers import *
 
 
 class GameBetViewSet(viewsets.ModelViewSet):

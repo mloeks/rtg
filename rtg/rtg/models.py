@@ -10,9 +10,9 @@ from django.dispatch import receiver
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 
-from storage import OverwriteStorage
-import utils
-from validators import *
+from .storage import OverwriteStorage
+from . import utils
+from .validators import *
 
 
 class TournamentGroup(models.Model):

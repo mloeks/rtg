@@ -114,11 +114,11 @@ class TestModelUtils:
         return ExtraBet.objects.create(result_bet=result_bet, user=user, extra=extra)
 
     @staticmethod
-    def create_post(content=None, author=None, parent_post=None, sticky=False):
+    def create_post(content=None, author=None):
         content = content or TestModelUtils.create_random_string(100)
         author = author or TestModelUtils.create_user()
 
-        return Post.objects.create(content=content, author=author, parent_post=parent_post, sticky=sticky)
+        return Post.objects.create(content=content, author=author)
 
     @staticmethod
     def create_random_string(length=12):

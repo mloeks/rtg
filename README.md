@@ -18,9 +18,9 @@
 
 ## Aktuelle TODOs
 
-#### Tests
+### Tests
 
-* Laufen, es sind aber 51 rot :-/
+* noch 32 rote API Tests fixen
 
 ### Migration auf generisches RTG-Projekt
 

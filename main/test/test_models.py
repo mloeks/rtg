@@ -5,7 +5,8 @@ from random import randrange
 
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.db import transaction, IntegrityError, DataError
+from django.db import transaction, DataError
+from django.db.utils import IntegrityError
 from django.test import TestCase
 from django.utils import timezone
 from main.test.utils import TestModelUtils as utils
@@ -458,10 +459,10 @@ class GameBetTests(TestCase):
 
     def test_invalid_missing_fields(self):
         g, u = utils.create_game(), utils.create_user()
-        with self.assertRaises(ValueError):
+        with self.assertRaises(IntegrityError):
             with transaction.atomic():
                 GameBet.objects.create(game=g, user=None)
-        with self.assertRaises(ValueError):
+        with self.assertRaises(IntegrityError):
             with transaction.atomic():
                 GameBet.objects.create(game=None, user=u)
 
@@ -738,7 +739,7 @@ class ExtraChoiceTests(TestCase):
         with self.assertRaises(IntegrityError):
             with transaction.atomic():
                 ExtraChoice.objects.create(name=None, extra=e, sort_index='abc')
-        with self.assertRaises(ValueError):
+        with self.assertRaises(IntegrityError):
             with transaction.atomic():
                 ExtraChoice.objects.create(name='Schweden', extra=None, sort_index='def')
 
@@ -789,10 +790,10 @@ class ExtraBetTests(TestCase):
         with self.assertRaises(IntegrityError):
             with transaction.atomic():
                 ExtraBet.objects.create(result_bet=None, extra=e2, user=u)
-        with self.assertRaises(ValueError):
+        with self.assertRaises(IntegrityError):
             with transaction.atomic():
                 ExtraBet.objects.create(result_bet='Belgique', extra=None, user=u)
-        with self.assertRaises(ValueError):
+        with self.assertRaises(IntegrityError):
             with transaction.atomic():
                 ExtraBet.objects.create(result_bet='Luxembourg', extra=e1, user=None)
 
@@ -977,7 +978,7 @@ class StatisticTests(TestCase):
             game_save_end = time.clock()
             game_save_times.append(game_save_end - game_save_start)
 
-        avg_game_save = reduce(lambda x, y: x + y, game_save_times) / len(game_save_times)
+        avg_game_save = sum(game_save_times) / len(game_save_times)
 
         end_time = time.clock()
         duration = (end_time - start_time)
@@ -1014,7 +1015,7 @@ class ProfileTests(TestCase):
         self.assertListEqual([u1, u2, u3], [p.user for p in profiles])
 
     def test_invalid_missing_fields(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(IntegrityError):
             with transaction.atomic():
                 Profile.objects.create(user=None)
 

@@ -10,6 +10,7 @@ from main.models import *
 class GameBetResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = GameBetResult
+        fields = '__all__'
 
 
 class GameBetSerializer(serializers.ModelSerializer):
@@ -55,6 +56,7 @@ class ExtraBetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ExtraBet
+        fields = '__all__'
 
     def validate(self, attrs):
         if attrs['extra'].deadline_passed():
@@ -88,6 +90,7 @@ class TeamSerializer(serializers.ModelSerializer):
 class VenueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Venue
+        fields = '__all__'
 
 
 class GameSerializer(serializers.ModelSerializer):
@@ -97,6 +100,7 @@ class GameSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Game
+        fields = '__all__'
         extra_kwargs = {
             'venue': {'write_only': True}
         }
@@ -159,6 +163,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
+        fields = '__all__'
         extra_kwargs = {
             'author': {'write_only': True},
             'as_mail': {'write_only': True},
@@ -171,5 +176,6 @@ class StatisticSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Statistic
+        fields = '__all__'
 
 

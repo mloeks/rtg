@@ -4,6 +4,7 @@ from rest_framework import status
 
 from main.models import ExtraChoice
 from main.test.api.abstract_rtg_api_test import RtgApiTestCase
+from main.test.api.test_extra import ExtraApiTests
 
 
 class ExtraChoiceApiTests(RtgApiTestCase):

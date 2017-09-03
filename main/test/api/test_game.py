@@ -4,6 +4,9 @@ from rest_framework import status
 
 from main.models import Game
 from main.test.api.abstract_rtg_api_test import RtgApiTestCase
+from main.test.api.test_team import TeamApiTests
+from main.test.api.test_tournament_round import TournamentRoundApiTests
+from main.test.api.test_venue import VenueApiTests
 from main.test.utils import TestModelUtils
 
 

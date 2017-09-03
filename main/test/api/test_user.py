@@ -13,6 +13,9 @@ class UserApiTests(RtgApiTestCase):
         Users are read_only via the API, except for updates of the own user
     """
 
+    def setUp(self):
+        User.objects.all().delete()
+
     def test_user_create(self):
         self.create_test_user(admin=True)
         response = self.create_test_user_api()
@@ -35,30 +38,33 @@ class UserApiTests(RtgApiTestCase):
         self.assertIsNotNone(response.data['last_name'])
         self.assertIsNotNone(response.data['email'])
 
-        # other users may be read, but only their username
+        # other users may NOT be read (they are just not found)
         response = self.client.get('%s%i/' % (self.USERS_BASEURL, u2.pk))
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['username'], u2.username)
-        self.assertIsNone(response.data['first_name'])
-        self.assertIsNone(response.data['last_name'])
-        self.assertIsNone(response.data['email'])
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_user_read_list(self):
+        """
+            When a user requests the user list, they will only get their own in return.
+        """
         u1, u2, u3 = TestModelUtils.create_user(), TestModelUtils.create_user(), TestModelUtils.create_user()
 
         self.set_api_client(u1)
 
         response = self.client.get(self.USERS_BASEURL)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        users = json.loads(list(response)[0])
-        self.assertEqual(3, len(users))
+        self.assertEqual(1, len(response.data))
 
     def test_user_read_admin(self):
+        """
+            admins may read all user details, even of different users
+        """
         u1, u2 = TestModelUtils.create_user(), TestModelUtils.create_user()
 
         self.create_test_user(name=u1.username, admin=True)
 
-        # admins may read all user details, even of different users
+        users_list = self.client.get(self.USERS_BASEURL).data
+        self.assertEqual(len(users_list), 2)
+
         response = self.client.get('%s%i/' % (self.USERS_BASEURL, u2.pk))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['username'], u2.username)
@@ -75,7 +81,7 @@ class UserApiTests(RtgApiTestCase):
         u1 = self.create_test_user('u1')
         self.create_test_user('admin_user', admin=True)
 
-        response = self.client.put("%s%i/" % (self.USERS_BASEURL, u1.pk), {'username': 'newuser'}, format='json')
+        response = self.client.patch("%s%i/" % (self.USERS_BASEURL, u1.pk), {'username': 'newuser'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         updated_user = User.objects.get(username='newuser')
@@ -84,15 +90,21 @@ class UserApiTests(RtgApiTestCase):
         self.assertRaises(User.DoesNotExist, User.objects.get, username='u1')
 
     def test_user_update_other_user_forbidden(self):
+        """
+            If a user attempts to update a different user, they will just get a 404, because they cannot access
+            the resource of the other user
+        """
         u1 = self.create_test_user('u1')
         self.create_test_user('u2')
 
-        response = self.client.put("%s%i/" % (self.USERS_BASEURL, u1.pk), {'username': 'newuser'}, format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        response = self.client.patch("%s%i/" % (self.USERS_BASEURL, u1.pk), {'username': 'newuser'}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_user_update_self(self):
         u1 = self.create_test_user('u1')
-        response = self.client.put("%s%i/" % (self.USERS_BASEURL, u1.pk), {'username': 'newuser'}, format='json')
+        response = self.client.patch("%s%i/" % (self.USERS_BASEURL, u1.pk),
+                                     {'username': 'newuser'},
+                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         updated_user = User.objects.get(username='newuser')
@@ -102,7 +114,7 @@ class UserApiTests(RtgApiTestCase):
 
     def test_user_update_public(self):
         u1 = self.create_test_user('u1', auth=False)
-        response = self.client.put("%s%i/" % (self.USERS_BASEURL, u1.pk), {'username': 'newuser'}, format='json')
+        response = self.client.patch("%s%i/" % (self.USERS_BASEURL, u1.pk), {'username': 'newuser'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_user_delete_admin(self):
@@ -116,7 +128,9 @@ class UserApiTests(RtgApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def create_test_user_api(self):
-        return self.client.post(self.USERS_BASEURL, {'username': 'test_user'}, format='json')
+        return self.client.post(self.USERS_BASEURL, {'username': 'test_user_api', 'first_name': 'Testy',
+                                                     'last_name': 'McTestface', 'email': 'test_user@test.de'},
+                                format='json')
 
     def delete_test_user_api(self):
         test_user = self.create_test_user()

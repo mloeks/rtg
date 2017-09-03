@@ -18,9 +18,14 @@
 
 ## Aktuelle TODOs
 
-### Tests
+### Deployment
 
-* noch 32 rote API Tests fixen
+* angefangen, ANSCHLUSS: erster Test
+* Problem: DjangoServer mag keinen key-based SSH Zugriff mehr, will immer Passwort :-(
+
+### TODOs
+
+* checken, was davon wirklich wichtig ist und gemacht werden sollte
 
 ### Migration auf generisches RTG-Projekt
 

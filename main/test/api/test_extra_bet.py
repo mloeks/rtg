@@ -44,6 +44,17 @@ class ExtraBetApiTests(RtgApiTestCase):
         self.assertEqual(ExtraBet.objects.count(), 1)
         self.assertIsNotNone(ExtraBet.objects.get(result_bet='Lyoner'))
 
+    def test_extrabet_response_schema(self):
+        self.create_test_user()
+        response = self.get_test_extrabet_api().data
+
+        self.assertEqual(len(response), 5)
+        self.assertTrue('id' in response)
+        self.assertTrue('result_bet' in response)
+        self.assertTrue('extra' in response)
+        self.assertTrue('user' in response)
+        self.assertTrue('points' in response)
+
     def test_extrabet_read_allowed(self):
         u1, u2 = TestModelUtils.create_user(), TestModelUtils.create_user()
 

@@ -33,7 +33,7 @@ class Command(BaseCommand):
             'deutschland': Extra(name='Wie weit kommt Deutschland?', points=5, deadline='2016-06-10 21:00:00+02')
         }
         
-        for key, extra in extras.iteritems():
+        for key, extra in extras.items():
             extra.save()
         return extras
     

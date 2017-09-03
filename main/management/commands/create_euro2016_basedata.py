@@ -38,7 +38,7 @@ class Command(BaseCommand):
             'toulouse': Venue(city='Toulouse', name='Stadium Municipal', capacity=33150)
         }
 
-        for key, venue in venues.iteritems():
+        for key, venue in venues.items():
             venue.save()
         return venues
 
@@ -52,7 +52,7 @@ class Command(BaseCommand):
             'f': TournamentGroup(name='Gruppe F', abbreviation='F')
         }
 
-        for key, group in groups.iteritems():
+        for key, group in groups.items():
             group.save()
         return groups
 
@@ -65,7 +65,7 @@ class Command(BaseCommand):
             'finale': TournamentRound(name='Finale', is_knock_out=True, display_order='050', abbreviation='FIN'),
         }
 
-        for key, round in rounds.iteritems():
+        for key, round in rounds.items():
             round.save()
         return rounds
 
@@ -102,7 +102,7 @@ class Command(BaseCommand):
             'POR': Team(name='Portugal', abbreviation='POR', group=self.groups['f'])
         }
 
-        for key, team in teams.iteritems():
+        for key, team in teams.items():
             team.save()
         return teams
 

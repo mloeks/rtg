@@ -78,6 +78,14 @@ class TournamentRoundSerializer(serializers.ModelSerializer):
         model = TournamentRound
         fields = ('name', 'abbreviation', 'is_knock_out')
 
+    @staticmethod
+    def as_dict(obj):
+        return {
+            'name': obj.name,
+            'abbreviation': obj.abbreviation,
+            'is_knock_out': obj.is_knock_out
+        }
+
 
 class TeamSerializer(serializers.ModelSerializer):
     group = TournamentGroupSerializer()
@@ -94,19 +102,24 @@ class VenueSerializer(serializers.ModelSerializer):
 
 
 class GameSerializer(serializers.ModelSerializer):
-    city = CharField(source='venue.city', read_only=True)
-    round = TournamentRoundSerializer()
-    bets_open = serializers.SerializerMethodField(read_only=True)
-
     class Meta:
         model = Game
         fields = '__all__'
-        extra_kwargs = {
-            'venue': {'write_only': True}
-        }
 
-    def get_bets_open(self, obj):
-        return not obj.deadline_passed()
+    def to_representation(self, instance):
+        return {
+            'kickoff': instance.kickoff,
+            'deadline': instance.deadline,
+
+            'hometeam': instance.hometeam.name,
+            'awayteam': instance.awayteam.name,
+            'homegoals': instance.homegoals,
+            'awaygoals': instance.awaygoals,
+
+            'city': instance.venue.city,
+            'round_details': TournamentRoundSerializer.as_dict(instance.round),
+            'bets_open': not instance.deadline_passed()
+        }
 
 
 class UserSerializer(serializers.ModelSerializer):

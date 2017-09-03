@@ -34,6 +34,19 @@ class GameApiTests(RtgApiTestCase):
         self.assertEqual(Game.objects.count(), 1)
         self.assertIsNotNone(Game.objects.get(venue__name='RTG National Stadium'))
 
+    def test_game_response_schema(self):
+        self.create_test_user()
+        response = self.get_test_game_api('RTG National Stadium').data
+
+        self.assertTrue('round_details' in response and 'abbreviation' in response['round_details'])
+        self.assertTrue('round_details' in response and 'name' in response['round_details'])
+        self.assertTrue('round_details' in response and 'is_knock_out' in response['round_details'])
+        self.assertTrue('city' in response)
+        self.assertTrue('bets_open' in response)
+
+        self.assertFalse('venue' in response)
+        self.assertFalse('round' in response)
+
     def test_game_public_read(self):
         self.create_test_user(auth=False)
         response = self.get_test_game_api()

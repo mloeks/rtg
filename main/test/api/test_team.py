@@ -32,6 +32,16 @@ class TeamApiTests(RtgApiTestCase):
         self.assertEqual(Team.objects.count(), 1)
         self.assertIsNotNone(Team.objects.get(abbreviation='RFC'))
 
+    def test_team_response_schema(self):
+        self.create_test_user()
+        response = self.get_test_team_api().data
+
+        self.assertTrue('id' in response)
+        self.assertTrue('abbreviation' in response)
+        self.assertTrue('name' in response)
+        self.assertTrue('group' in response and 'name' in response['group'])
+        self.assertTrue('group' in response and 'abbreviation' in response['group'])
+
     def test_team_public_read(self):
         self.create_test_user(auth=False)
         response = self.get_test_team_api()

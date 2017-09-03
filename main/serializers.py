@@ -72,6 +72,13 @@ class TournamentGroupSerializer(serializers.ModelSerializer):
         model = TournamentGroup
         fields = ('name', 'abbreviation')
 
+    @staticmethod
+    def as_dict(obj):
+        return {
+            'name': obj.name,
+            'abbreviation': obj.abbreviation
+        }
+
 
 class TournamentRoundSerializer(serializers.ModelSerializer):
     class Meta:
@@ -88,11 +95,17 @@ class TournamentRoundSerializer(serializers.ModelSerializer):
 
 
 class TeamSerializer(serializers.ModelSerializer):
-    group = TournamentGroupSerializer()
-
     class Meta:
         model = Team
-        fields = ('id', 'name', 'abbreviation', 'group')
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        return {
+            'id': instance.pk,
+            'name': instance.name,
+            'abbreviation': instance.abbreviation,
+            'group': TournamentGroupSerializer.as_dict(instance.group),
+        }
 
 
 class VenueSerializer(serializers.ModelSerializer):

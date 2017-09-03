@@ -1,3 +1,5 @@
+from django.contrib.auth.models import User
+
 __author__ = 'mloeks'
 
 from rest_framework import permissions
@@ -48,14 +50,14 @@ class IsAdminOrSelf(permissions.BasePermission):
 
 class IsAdminOrSelfUpdateOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
-        permitted_methods = permissions.SAFE_METHODS + ('PUT',)
+        permitted_methods = permissions.SAFE_METHODS + ('PUT', 'PATCH')
         return request.user.is_authenticated() and request.method in permitted_methods
 
     def has_object_permission(self, request, view, obj):
         if request.user.is_authenticated():
             if request.method in permissions.SAFE_METHODS:
                 return True
-            elif request.method == 'PUT':
+            elif request.method in ['PUT', 'PATCH']:
                 return request.user.is_staff or obj == request.user
             else:
                 return False
@@ -64,14 +66,26 @@ class IsAdminOrSelfUpdateOrReadOnly(permissions.BasePermission):
 class UserPermissions(permissions.BasePermission):
     """
         Permissions for (complete) UserViewSet.
-        All methods are only permitted for the owner or an Administrator.
+        List access is read-only (safe methods) for authenticated users.
+        Object access is only permitted for the owner or an Administrator.
     """
 
     def has_permission(self, request, view):
-        return request.user.is_authenticated()
+        user = request.user
+        if user.is_authenticated:
+            if user.is_staff:
+                return True
+            else:
+                return request.method in permissions.SAFE_METHODS or \
+                       (request.method in ['PUT', 'PATCH'] and self.is_own_user_resource(user, view))
+        else:
+            return False
 
     def has_object_permission(self, request, view, obj):
         return request.user.is_authenticated and (request.user.is_staff or obj == request.user)
+
+    def is_own_user_resource(self, user, view):
+        return view.queryset.filter(username=user.username).exists()
 
 
 class ProfilePermissions(permissions.BasePermission):

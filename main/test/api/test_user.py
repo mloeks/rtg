@@ -19,12 +19,12 @@ class UserApiTests(RtgApiTestCase):
     def test_user_create(self):
         self.create_test_user(admin=True)
         response = self.create_test_user_api()
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_user_create_unauth(self):
-        self.create_test_user()
+        self.create_test_user(auth=False)
         response = self.create_test_user_api()
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_user_read(self):
         u1, u2 = TestModelUtils.create_user(), TestModelUtils.create_user()
@@ -90,10 +90,6 @@ class UserApiTests(RtgApiTestCase):
         self.assertRaises(User.DoesNotExist, User.objects.get, username='u1')
 
     def test_user_update_other_user_forbidden(self):
-        """
-            If a user attempts to update a different user, they will just get a 404, because they cannot access
-            the resource of the other user
-        """
         u1 = self.create_test_user('u1')
         self.create_test_user('u2')
 
@@ -102,9 +98,7 @@ class UserApiTests(RtgApiTestCase):
 
     def test_user_update_self(self):
         u1 = self.create_test_user('u1')
-        response = self.client.patch("%s%i/" % (self.USERS_BASEURL, u1.pk),
-                                     {'username': 'newuser'},
-                                     format='json')
+        response = self.client.patch("%s%i/" % (self.USERS_BASEURL, u1.pk), {'username': 'newuser'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         updated_user = User.objects.get(username='newuser')
@@ -118,6 +112,9 @@ class UserApiTests(RtgApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_user_delete_admin(self):
+        """
+            Even admins must not delete user via the REST API
+        """
         self.create_test_user(admin=True)
         response = self.delete_test_user_api()
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

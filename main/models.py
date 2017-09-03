@@ -11,8 +11,8 @@ from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 from main import utils
-from .storage import OverwriteStorage
-from .validators import *
+from main.storage import OverwriteStorage
+from main.validators import *
 
 
 class TournamentGroup(models.Model):
@@ -20,6 +20,7 @@ class TournamentGroup(models.Model):
     abbreviation =models.CharField(max_length=3, unique=True)
 
     class Meta:
+        app_label = 'main'
         ordering = ["name"]
 
     def __str__(self):

@@ -83,7 +83,7 @@ class TournamentGroupSerializer(serializers.ModelSerializer):
 class TournamentRoundSerializer(serializers.ModelSerializer):
     class Meta:
         model = TournamentRound
-        fields = ('name', 'abbreviation', 'is_knock_out')
+        fields = '__all__'
 
     @staticmethod
     def as_dict(obj):

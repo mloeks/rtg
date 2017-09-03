@@ -1,8 +1,5 @@
 #!/bin/bash
 
 source ${HOME}/dev/.pyve/rtg/bin/activate
-
-fab svn_commit      ## need only to execute if not already done manually
-fab deploy_prod     ## does a remote svn up and replaces the prod app
-
+fab deploy_prod     ## does a remote git pull and replaces the app on the server
 deactivate

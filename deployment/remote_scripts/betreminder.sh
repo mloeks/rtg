@@ -1,3 +1,3 @@
 #!/bin/bash
-cd ~/rtg/rtg/
+cd ~/rtg/
 ~/v/rtg/bin/python manage_prod.py betreminder

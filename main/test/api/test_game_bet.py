@@ -67,26 +67,22 @@ class GameBetApiTests(RtgApiTestCase):
 
         # reply only those bets that are owned by the user or deadline has passed
         self.create_test_user(u1.username)
-        response = list(self.client.get(self.GAMEBETS_BASEURL))[0]
-        bets = json.loads(response)
+        bets = self.client.get(self.GAMEBETS_BASEURL).data
         self.assertEqual(7, len(bets))
         self.assertEqual([gb.id for gb in [gb1, gb2, gb3, gb4, gb5, gb6, gb7]], [gb['id'] for gb in bets])
 
         # test filtering by user_id
-        response = list(self.client.get('%s?user_id=%i' % (self.GAMEBETS_BASEURL, u1.pk)))[0]
-        bets = json.loads(response)
+        bets = self.client.get('%s?user_id=%i' % (self.GAMEBETS_BASEURL, u1.pk)).data
         self.assertEqual(4, len(bets))
         self.assertEqual([gb.id for gb in [gb1, gb2, gb3, gb4]], [gb['id'] for gb in bets])
 
         # test filtering by user_id - foreign user
-        response = list(self.client.get('%s?user_id=%i' % (self.GAMEBETS_BASEURL, u2.pk)))[0]
-        bets = json.loads(response)
+        bets = self.client.get('%s?user_id=%i' % (self.GAMEBETS_BASEURL, u2.pk)).data
         self.assertEqual(3, len(bets))
         self.assertEqual([gb.id for gb in [gb5, gb6, gb7]], [gb['id'] for gb in bets])
 
         self.create_test_user(u2.username)
-        response = list(self.client.get(self.GAMEBETS_BASEURL))[0]
-        bets = json.loads(response)
+        bets = self.client.get(self.GAMEBETS_BASEURL).data
         self.assertEqual(7, len(bets))
         self.assertEqual([gb.id for gb in [gb1, gb2, gb5, gb6, gb7, gb8, gb9]], [gb['id'] for gb in bets])
 

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+from datetime import timedelta, datetime
 
+import pytz
 from rest_framework import status
 
 from main.models import Game
@@ -92,8 +94,9 @@ class GameApiTests(RtgApiTestCase):
         test_venue = TestModelUtils.create_venue(venue_name)
         test_round = TestModelUtils.create_round()
         # TODO deadline should not be required, but apparently is
-        test_game = Game(kickoff='2016-06-06 18:00:00+0000', deadline='2016-06-06 18:00:00+0000',
-                         hometeam=team_1, awayteam=team_2, venue=test_venue, round=test_round)
+        test_kickoff = datetime.now(pytz.utc) + timedelta(days=5)
+        test_game = Game(kickoff=test_kickoff, deadline=test_kickoff, venue=test_venue, round=test_round ,
+                         hometeam=team_1, awayteam=team_2)
         test_game.save()
         return test_game
 

@@ -74,14 +74,12 @@ class ExtraBetApiTests(RtgApiTestCase):
 
         # reply only those bets that are owned by the user or deadline has passed
         self.create_test_user(u1.username)
-        response = list(self.client.get(self.EXTRABETS_BASEURL))[0]
-        bets = json.loads(response)
+        bets = self.client.get(self.EXTRABETS_BASEURL).data
         self.assertEqual(5, len(bets))
         self.assertEqual([eb.id for eb in [eb1, eb2, eb3, eb7, eb8]], [eb['id'] for eb in bets])
 
         self.create_test_user(u2.username)
-        response = list(self.client.get(self.EXTRABETS_BASEURL))[0]
-        bets = json.loads(response)
+        bets = self.client.get(self.EXTRABETS_BASEURL).data
         self.assertEqual(6, len(bets))
         self.assertEqual([eb.id for eb in [eb1, eb3, eb5, eb6, eb7, eb8]], [eb['id'] for eb in bets])
 

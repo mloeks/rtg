@@ -20,8 +20,8 @@
 
 ### Deployment
 
-* angefangen, ANSCHLUSS: erster Test
-* Problem: DjangoServer mag keinen key-based SSH Zugriff mehr, will immer Passwort :-(
+* ANSCHLUSS: Demo Deployment läuft jetzt an sich, noch korrekte pip installation prüfen (lief ewig über fabric...)
+* secret key setzen
 
 ### TODOs
 

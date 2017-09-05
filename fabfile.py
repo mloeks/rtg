@@ -2,7 +2,6 @@ from __future__ import with_statement
 from fabric.api import env, cd, lcd, local, run
 
 env.user = 'muden'
-env.password = '<your_password_here>'  # DjangoEurope server forbids key-based authentication :-(
 env.hosts = ['s17.wservices.ch']
 
 local_user = 'mloeks'

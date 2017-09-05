@@ -20,8 +20,9 @@
 
 ### Deployment
 
-* ANSCHLUSS: Demo Deployment läuft jetzt an sich, noch korrekte pip installation prüfen (lief ewig über fabric...)
-* secret key setzen
+* ANSCHLUSS:
+* Es werden noch zu viele Ordner aus dem Repo ins Projektverzeichnis kopiert (deployment, fabfile usw.)
+* App fährt an sich hoch, aber SECRET KEY wird noch nicht gesourced??
 
 ### TODOs
 
@@ -30,3 +31,9 @@
 ### Migration auf generisches RTG-Projekt
 
 * Bislang alles naiv umbenannt, jegliche Funktionaliät (v.a. rund ums Deployment muss überprüft werden)
+
+## Neue Features
+
+### Logging
+
+### HTTPS

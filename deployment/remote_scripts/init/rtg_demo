@@ -10,12 +10,12 @@
 
 
 NAME="rtg"
-PROJECT_DIR="$HOME/${NAME}_demo/rtg"
+PROJECT_DIR="$HOME/${NAME}_demo"
 SETTINGS="$NAME.settings.test"
-PYTHONPATH="$HOME/django-${NAME}_demo:$HOME/${NAME}_demo/rtg"
+PYTHONPATH="$HOME/django-${NAME}_demo:$HOME/${NAME}_demo"
 
-PIDFILE="$PROJECT_DIR/$NAME.pid"
-SOCKET="$PROJECT_DIR/$NAME.sock"
+PIDFILE="$PROJECT_DIR/${NAME}_demo.pid"
+SOCKET="$PROJECT_DIR/${NAME}_demo.sock"
 DAEMON=$HOME/v/$NAME/bin/gunicorn
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 ERROR_LOG="$PROJECT_DIR/error.log"

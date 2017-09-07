@@ -55,6 +55,9 @@ def deploy(app_env):
         print("Remote SCM checkout of latest revision...")
         run('rm -rf /tmp/%s' % project_name)
         run('git clone %s /tmp/%s' % (GIT_URL, project_name,))
+        run('rm -rf /tmp/%s/deployment' % project_name)
+        run('rm -rf /tmp/%s/fabfile.py' % project_name)
+        run('rm -rf /tmp/%s/README.md' % project_name)
 
         print("Keeping media files and meta files of existing app...")
         with cd(app_env['dir']):

@@ -73,3 +73,13 @@ CACHES = {
 }
 ########## END CACHE CONFIGURATION
 
+########## REST FRAMEWORK CONFIGURATION
+REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += (
+    'rest_framework.authentication.SessionAuthentication',
+    'rest_framework.authentication.BasicAuthentication',
+)
+REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] += (
+    'rest_framework.renderers.BrowsableAPIRenderer',
+)
+########## END REST FRAMEWORK CONFIGURATION
+

@@ -4,7 +4,7 @@ from django.db import transaction
 from django.db.utils import IntegrityError
 from django.test import TestCase
 
-from main.models import Game, GameBet, GameBetResult
+from main.models import Game, GameBet, GameBetResult, Team
 from main.test.utils import TestModelUtils as utils
 
 
@@ -13,6 +13,7 @@ class GameBetTests(TestCase):
     def tearDown(self):
         Game.objects.all().delete()
         GameBet.objects.all().delete()
+        Team.objects.all().delete()
         utils.cleanup()
 
     def test_to_string(self):

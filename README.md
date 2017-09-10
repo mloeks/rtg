@@ -26,43 +26,37 @@
 
 * User aus rtg2016-Datenbank in generische DB übertragen (und deaktivieren bis zum ersten Login)
 
-## Neue Features
+# Neue Features 2018
 
-### Logging
+## HTTPS
 
-* einrichten, inkl. Log Rotation
-* freier Splunk oder Kibana Account?
+Damit der Browser die Seite als "Sicher" anzeigt und nicht nach der Ausnahme fragt, muss dass Zertifikat
+ein kommerzielles sein - Self-Signed reicht nicht.
 
-### HTTPS
+### Let's Encrypt
 
-#### DjangoEurope FAQ
+DjangoEurope hat eine neue Option, das einfach per Mausklick zu tun im "SSL"-Bereich.
+Die "Let's Encrypt" Option muss angehakt sein. Auch Subdomains können eingetragen werden
+(SSL-Zertifikate müssen für jede Subdomain ausgestellt werden, oder als Wildcard-Zertifikat).
 
-* HTTPS-Only kann manuell über die Website-Proxies eingestellt werden
-* DjangoEurope stellt per default nur Self-Signed Certificates aus, die faktisch keinen Mehrwert haben
-    * Warnung im Browser kommt
-    * Selbst ausgestellt, nicht von Certificate Authority
+### Erneuerung
 
-#### Kommerzielles CA-Zertifikat
+Die Let's Encrypt Zertifikate sind nur 90 Tage gültig und müssen entsprechend häufig
+erneuert werden. Scheinbar macht dies DjangoEurope automatisch? Am 09.12.17 checken...
 
-Kann scheinbar von [Let's Encrypt](https://letsencrypt.org/getting-started/) ausgestellt werden
+## Logging
 
-* 90 Tage gültig (also häufiger erneuern)
-* Kann nur im manual mode installiert werden, da DjangoEurope das nicht direkt unterstützt und das `certbot` CLI Tool nicht installiert ist
+Ich möchte Logfiles schreiben, inkl. Log Rotation (z.B. 10 Tage aufbewahren)
 
-##### Manual Mode
+### Recherche Auswertung
 
-https://certbot.eff.org/docs/using.html#manual
+Gibt es eine freie Auswertemöglichkeit über das reine Lesen der Logfiles selbst hinaus?
+Z.B. Splunk, Kibana ... ? 
 
-```text
-If your hosting provider doesn’t want to integrate Let’s Encrypt, 
-but does support uploading custom certificates, you can install 
-Certbot on your own computer and use it in manual mode. 
-In manual mode, you upload a specific file to your website to 
-prove your control. Certbot will then retrieve a certificate that 
-you can upload to your hosting provider. We don’t recommend this 
-option because it is time-consuming and you will need to repeat 
-it several times per year as your certificate expires. For most 
-people it is better to request Let’s Encrypt support from your 
-hosting provider, or switch providers if they do not plan to 
-implement it.
-```
+### Access Log
+
+* NGINX access log nehmen?
+* Log Rotation:
+    * https://serverfault.com/questions/209177/nginx-logrotate-config
+
+### Technical Log

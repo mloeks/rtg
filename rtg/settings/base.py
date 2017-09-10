@@ -208,6 +208,12 @@ LOGGING = {
             '()': 'django.utils.log.RequireDebugFalse'
         }
     },
+    'formatters': {
+        'default': {
+            # TODO less exact time format - more exact module name
+            'format': '%(asctime)s: [%(module)s] %(levelname)s - %(message)s'
+        },
+    },
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
@@ -215,11 +221,12 @@ LOGGING = {
             'class': 'django.utils.log.AdminEmailHandler'
         },
         'application_log': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(DJANGO_ROOT, 'rtg_app.log'),
+            'filename': os.path.join(SITE_ROOT, 'rtg_app.log'),
             'maxBytes': 1024*1024*15, # 15MB
             'backupCount': 10,
+            'formatter': 'default'
         },
     },
     'loggers': {
@@ -228,9 +235,9 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        'rtg_app': {
-            'handlers': ['application_log',],
-            'level': 'DEBUG',
+        'rtg': {
+            'handlers': ['application_log'],
+            'level': 'INFO',
         },
     }
 }

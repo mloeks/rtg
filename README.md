@@ -55,8 +55,13 @@ Z.B. Splunk, Kibana ... ?
 
 ### Access Log
 
-* NGINX access log nehmen?
-* Log Rotation:
-    * https://serverfault.com/questions/209177/nginx-logrotate-config
+NGINX access/error logs nehmen
 
-### Technical Log
+Log Rotation mit eigenem Shell-Script umsetzen
+
+### Application Log
+
+Gibt schon vorgefertigte Config: https://docs.djangoproject.com/en/dev/topics/logging/
+Erstmal in Projektverzeichnis mit größenbasierter Log Rotation
+
+**TODO**: jeder Eintrag wird noch 2x geloggt (root logger?)

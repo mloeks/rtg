@@ -1,4 +1,5 @@
 import json
+import logging
 
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
@@ -14,6 +15,8 @@ from main import filters as rtgfilters
 from . import permissions as rtg_permissions
 from .forms import RtgContactForm
 from .serializers import *
+
+LOG = logging.getLogger('rtg.' + __name__)
 
 
 class GameBetViewSet(viewsets.ModelViewSet):
@@ -143,10 +146,7 @@ class GameViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-
-    # TODO does not work as expected yet. cf. failing test
     permission_classes = (rtg_permissions.UserPermissions,)
-
     pagination_class = None
 
     filter_backends = (filters.OrderingFilter,)
@@ -158,6 +158,7 @@ class UserViewSet(viewsets.ModelViewSet):
             This is necessary because the LIST request cannot be globally restricted to admins (then the user cannot
             even request its own instance)
         """
+        LOG.info("<---------- info")
         queryset = User.objects.all()
         user = self.request.user
         if not user.is_staff:

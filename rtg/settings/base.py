@@ -210,8 +210,9 @@ LOGGING = {
     },
     'formatters': {
         'default': {
-            # TODO less exact time format - more exact module name
-            'format': '%(asctime)s: [%(module)s] %(levelname)s - %(message)s'
+            # possible attributes: https://docs.python.org/3/library/logging.html#logrecord-attributes
+            'format': '%(asctime)s [%(name)s] %(levelname)s - %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
         },
     },
     'handlers': {

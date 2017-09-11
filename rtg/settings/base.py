@@ -223,9 +223,9 @@ LOGGING = {
         },
         'application_log': {
             'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(SITE_ROOT, 'rtg_app.log'),
-            'maxBytes': 1024*1024*15, # 15MB
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(SITE_ROOT, 'log/rtg_app.log'),
+            'when': 'midnight',
             'backupCount': 10,
             'formatter': 'default'
         },

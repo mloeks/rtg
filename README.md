@@ -57,11 +57,10 @@ Z.B. Splunk, Kibana ... ?
 
 NGINX access/error logs nehmen
 
-Log Rotation mit eigenem Shell-Script umsetzen
+Log Rotation mit eigenem Shell-Script umsetzen.
+Gibt `logrotate` auf dem System, aber nicht user-spezifisch editierbar, auch nichts in den FAQ.
 
 ### Application Log
 
-Gibt schon vorgefertigte Config: https://docs.djangoproject.com/en/dev/topics/logging/
-Erstmal in Projektverzeichnis mit größenbasierter Log Rotation
-
-**TODO**: jeder Eintrag wird noch 2x geloggt (root logger?)
+**TODO**: jeder Eintrag wird noch 2x geloggt, trotz `propagate: False`.
+Debugger: Landet auch 2x im Request Breakpoint ...?

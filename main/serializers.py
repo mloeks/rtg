@@ -7,24 +7,19 @@ from .fields import Base64ImageField
 from main.models import *
 
 
-class GameBetResultSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = GameBetResult
-        fields = '__all__'
-
-
-class GameBetSerializer(serializers.ModelSerializer):
-    points = serializers.IntegerField(source='result_bet_type.points', read_only=True)
+class BetSerializer(serializers.ModelSerializer):
+    # TODO still required?
+    points = serializers.IntegerField(source='points', read_only=True)
 
     # needs to be specified explicitly with default because it is part of a unique_together relation in the model
     user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
 
     class Meta:
-        model = GameBet
+        model = Bet
         exclude = ('result_bet_type',)
 
     def validate(self, attrs):
-        if attrs['game'].deadline_passed():
+        if attrs['bettable'].deadline_passed():
             raise ValidationError('Die Deadline ist bereits abgelaufen.')
         return attrs
 
@@ -47,24 +42,6 @@ class ExtraSerializer(serializers.ModelSerializer):
 
     def get_open(self, obj):
         return not obj.deadline_passed()
-
-
-class ExtraBetSerializer(serializers.ModelSerializer):
-    points = serializers.SerializerMethodField()
-
-    user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
-
-    class Meta:
-        model = ExtraBet
-        fields = '__all__'
-
-    def validate(self, attrs):
-        if attrs['extra'].deadline_passed():
-            raise ValidationError('Die Deadline ist bereits abgelaufen.')
-        return attrs
-
-    def get_points(self, obj):
-        return obj.compute_points()
 
 
 class TournamentGroupSerializer(serializers.ModelSerializer):

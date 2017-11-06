@@ -1,9 +1,12 @@
+import inspect
 import os
 import re
+from enum import Enum
 
 import html2text
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
+from django.utils import timezone
 from django.utils.text import slugify
 
 from main.models import User
@@ -28,6 +31,9 @@ def jwt_response_payload_handler(token, user=None, request=None):
 def extract_homegoals_from_result(result):
     return re.match("^([0-9]{1,2}):[0-9]{1,2}", result).group(1)
 
+
+def get_reference_date():
+    return settings.FAKE_DATE if hasattr(settings, 'FAKE_DATE') else timezone.now()
 
 def extract_awaygoals_from_result(result):
     return re.match("^[0-9]{1,2}:([0-9]{1,2})", result).group(1)
@@ -72,3 +78,17 @@ def send_mail_to_users(post_instance, force_all=False):
 
     msg.attach_alternative(html_content, "text/html")
     msg.send()
+
+
+class ChoicesEnum(Enum):
+    """ cf. http://blog.richard.do/index.php/2014/02/how-to-use-enums-for-django-field-choices/ """
+
+    @classmethod
+    def choices(cls):
+        # get all members of the class
+        members = inspect.getmembers(cls, lambda m: not(inspect.isroutine(m)))
+        # filter down to just properties
+        props = [m for m in members if not(m[0][:2] == '__')]
+        # format into django choice tuple
+        choices = tuple([(str(p[1].value), p[0]) for p in props])
+        return choices

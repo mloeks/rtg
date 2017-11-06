@@ -18,6 +18,11 @@
 
 ## Aktuelle TODOs
 
+### Konzept generischer Bets
+
+* commands zum Laufen bringen, ANSCHLUSS: create_test_game_results
+* danach Tests anschauen + manuelle Tests
+
 ### TODOs
 
 * checken, was davon wirklich wichtig ist und gemacht werden sollte

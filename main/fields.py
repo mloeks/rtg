@@ -7,7 +7,7 @@ from rest_framework import serializers
 # cf. http://matthewdaly.co.uk/blog/2015/07/04/handling-images-as-base64-strings-with-django-rest-framework/
 class Base64ImageField(serializers.ImageField):
     def to_internal_value(self, data):
-        if isinstance(data, unicode) or isinstance(data, str) and data.startswith('data:image'):
+        if isinstance(data, str) and data.startswith('data:image'):
             # base64 encoded image - decode
             format, imgstr = data.split(';base64,') # format ~= data:image/X,
             ext = format.split('/')[-1] # guess file extension

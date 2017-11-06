@@ -4,15 +4,14 @@ from rest_framework.routers import DefaultRouter
 from main import views
 
 router = DefaultRouter()
-router.register(r'gamebets', views.GameBetViewSet)
-router.register(r'extras', views.ExtraViewSet)
-router.register(r'extrabets', views.ExtraBetViewSet)
+router.register(r'bets', views.BetViewSet)
 
 router.register(r'tournamentgroups', views.TournamentGroupViewSet)
 router.register(r'tournamentrounds', views.TournamentRoundViewSet)
 router.register(r'teams', views.TeamViewSet)
 router.register(r'venues', views.VenueViewSet)
 router.register(r'games', views.GameViewSet)
+router.register(r'extras', views.ExtraViewSet)
 
 router.register(r'users', views.UserViewSet)
 router.register(r'profiles', views.ProfileViewSet)

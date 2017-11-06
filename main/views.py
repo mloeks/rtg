@@ -19,41 +19,41 @@ from .serializers import *
 LOG = logging.getLogger('rtg.' + __name__)
 
 
-class GameBetViewSet(viewsets.ModelViewSet):
-    queryset = GameBet.objects.all()
-    serializer_class = GameBetSerializer
+class BetViewSet(viewsets.ModelViewSet):
+    queryset = Bet.objects.all()
+    serializer_class = BetSerializer
 
     permission_classes = (rtg_permissions.IsAdminOrOwner,)
 
-    # return all bets of the user and all other bets if game deadline has passed
-    filter_backends = (rtgfilters.IsOwnerOrGameDeadlinePassed, filters.OrderingFilter)
+    # return all bets of the user and all other bets if deadline has passed
+    filter_backends = (rtgfilters.IsOwnerOrDeadlinePassed, filters.OrderingFilter)
 
     # never use pagination for bets, since they should never be displayed paginated to the user in the UI
     pagination_class = None
 
-    ordering_fields = ('id', 'game')
+    ordering_fields = ('id', 'bettable')
     ordering = ('id',)
 
     def perform_create(self, serializer):
-        """ Always set the GameBet user to the current user. """
+        """ Always set the Bet user to the current user. """
         serializer.save(user=self.request.user)
 
     def perform_update(self, serializer):
-        """ Always set the GameBet user to the current user. """
+        """ Always set the Bet user to the current user. """
         serializer.save(user=self.request.user)
 
     def get_queryset(self):
         """
-            Optionally restricts the returned gamebets to a given user or game,
+            Optionally restricts the returned bets to a given user or game,
             by filtering against query parameters in the URL.
         """
-        queryset = GameBet.objects.all()
+        queryset = Bet.objects.all()
         user_id = self.request.query_params.get('user_id', None)
-        game_id = self.request.query_params.get('game_id', None)
+        bettable_id = self.request.query_params.get('bettable_id', None)
         if user_id is not None:
             queryset = queryset.filter(user__pk=user_id)
-        if game_id is not None:
-            queryset = queryset.filter(game__pk=game_id)
+        if bettable_id is not None:
+            queryset = queryset.filter(bettable__pk=bettable_id)
         return queryset
 
 
@@ -62,41 +62,6 @@ class ExtraViewSet(viewsets.ModelViewSet):
     serializer_class = ExtraSerializer
     permission_classes = (rtg_permissions.IsAdminOrAuthenticatedReadOnly,)
     pagination_class = None
-
-
-class ExtraBetViewSet(viewsets.ModelViewSet):
-    queryset = ExtraBet.objects.all()
-    serializer_class = ExtraBetSerializer
-
-    permission_classes = (rtg_permissions.IsAdminOrOwner,)
-
-    # return all bets of the user and all other bets if game deadline has passed
-    filter_backends = (rtgfilters.IsOwnerOrExtraDeadlinePassed, filters.OrderingFilter)
-
-    # never use pagination for bets, since they should never be displayed paginated to the user in the UI
-    pagination_class = None
-
-    ordering_fields = ('id', 'extra')
-    ordering = ('id',)
-
-    def perform_create(self, serializer):
-        """ Always set the GameBet user to the current user. """
-        serializer.save(user=self.request.user)
-
-    def perform_update(self, serializer):
-        """ Always set the GameBet user to the current user. """
-        serializer.save(user=self.request.user)
-
-    def get_queryset(self):
-        """
-            Optionally restricts the returned extrabets to a given user,
-            by filtering against a `user_id` query parameter in the URL.
-        """
-        queryset = ExtraBet.objects.all()
-        user_id = self.request.query_params.get('user_id', None)
-        if user_id is not None:
-            queryset = queryset.filter(user__pk=user_id)
-        return queryset
 
 
 class TournamentGroupViewSet(viewsets.ModelViewSet):
@@ -158,7 +123,6 @@ class UserViewSet(viewsets.ModelViewSet):
             This is necessary because the LIST request cannot be globally restricted to admins (then the user cannot
             even request its own instance)
         """
-        LOG.info("<---------- info")
         queryset = User.objects.all()
         user = self.request.user
         if not user.is_staff:
@@ -216,8 +180,9 @@ class StatisticViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ('-points', '-no_volltreffer', 'user__username')
 
 
-################## CONTACT FORM endpoint. Should go into a separate app, not into RTG REST API
+################## CONTACT FORM endpoint
 
+# TODO this should be moved into a separate app, not into the RTG REST API
 # TODO why does CORS_WHITELIST not work and @csrf_exempt is necessary?
 @csrf_exempt
 def contact_request(request):

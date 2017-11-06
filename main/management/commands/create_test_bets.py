@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+import random
 from random import randrange
 
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 
-from main.models import GameBet, Game
+from main.models import Bet, Game, Extra, ExtraChoice
 
 
 class Command(BaseCommand):
@@ -20,7 +21,7 @@ class Command(BaseCommand):
         self.create_bets(bet_percentage)
 
     def clear_data(self):
-        GameBet.objects.all().delete()
+        Bet.objects.all().delete()
 
     def create_bets(self, bet_percentage):
         nr_games = Game.objects.count()
@@ -29,4 +30,7 @@ class Command(BaseCommand):
 
         for user in User.objects.all():
             for game in Game.objects.all().order_by('?')[:game_ct_to_generate_bets]:
-                GameBet(user=user, game=game, homegoals=randrange(5), awaygoals=randrange(5)).save()
+                Bet(user=user, bettable=game, result_bet="%s:%s" % (randrange(5), randrange(5))).save()
+            for extra in Extra.objects.all():
+                extra_choices = ExtraChoice.objects.filter(extra=extra)
+                Bet(user=user, bettable=extra, result_bet=random.choice(extra_choices)).save()

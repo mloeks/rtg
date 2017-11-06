@@ -15,7 +15,7 @@ urlpatterns = [
     # enable Django admin interface:
     url(r'^admin/', admin.site.urls),
 
-    # APP: rtg
+    # APP: main
     url(r'^rtg/', include('main.urls')),
 
     # use django-rest-auth extension views for password reset endpoints

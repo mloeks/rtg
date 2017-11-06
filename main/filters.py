@@ -1,32 +1,22 @@
-from django.db.models import Q
-from django.conf import settings
-from django.utils import timezone
-from rest_framework import filters
-
 from django.core.exceptions import FieldDoesNotExist
+from django.db.models import Q
 from django.db.models.fields.related import ForeignObjectRel
+from rest_framework import filters
 from rest_framework.filters import OrderingFilter
 
+from main.utils import get_reference_date
 
-class IsOwnerOrGameDeadlinePassed(filters.BaseFilterBackend):
+
+class IsOwnerOrDeadlinePassed(filters.BaseFilterBackend):
     """
         Filter that only allows users to see their own bets
-        or bets from other users if the corresponding game bet deadline has passed already (bets are unchangeable and public then).
+        or bets from other users if the corresponding deadline has passed already (bets are unchangeable and public then).
     """
     def filter_queryset(self, request, queryset, view):
-        reference_date = settings.FAKE_DATE if hasattr(settings, 'FAKE_DATE') else timezone.now()
-        return queryset.filter(Q(user=request.user) | Q(game__deadline__lt=reference_date))
+        return queryset.filter(Q(user=request.user) | Q(bettable__deadline__lt=get_reference_date()))
 
 
-class IsOwnerOrExtraDeadlinePassed(filters.BaseFilterBackend):
-    """
-        Same as IsOwnerOrGameDeadlinePassed, only for ExtraBets
-    """
-    def filter_queryset(self, request, queryset, view):
-        reference_date = settings.FAKE_DATE if hasattr(settings, 'FAKE_DATE') else timezone.now()
-        return queryset.filter(Q(user=request.user) | Q(extra__deadline__lt=reference_date))
-
-
+# TODO maybe replace with generic BettableWithBetsOpen?
 class GamesWithBetsOpenIfParamSet(filters.BaseFilterBackend):
     """
         Return only games where bets can still be placed (deadline has not yet passed), if bets_open=true is set in the request
@@ -35,8 +25,7 @@ class GamesWithBetsOpenIfParamSet(filters.BaseFilterBackend):
         bets_open = request.query_params.get('bets_open', None)
         if bets_open is not None:
             if bets_open == 'true':
-                reference_date = settings.FAKE_DATE if hasattr(settings, 'FAKE_DATE') else timezone.now()
-                return queryset.filter(deadline__gt=reference_date)
+                return queryset.filter(deadline__gt=get_reference_date())
         return queryset
 
 

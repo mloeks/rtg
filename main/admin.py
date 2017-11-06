@@ -30,14 +30,14 @@ class GameAdmin(admin.ModelAdmin):
     list_filter = ['round', 'kickoff', 'deadline', 'venue']
 
 
-class GameBetResultAdmin(admin.ModelAdmin):
-    list_display = ('type', 'points')
+class BetAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'user', 'bettable')
+    list_filter = ['user', 'result_bet', 'bettable']
 
 
-class GameBetAdmin(admin.ModelAdmin):
-    fields = ('user', 'game', 'homegoals', 'awaygoals')
-    list_display = ('__str__', 'user', 'game')
-    list_filter = ['user', 'game']
+class BettableAdmin(admin.ModelAdmin):
+    list_display = ('name', 'deadline', 'result')
+    list_filter = ['name', 'deadline', 'result']
 
 
 class ExtraChoiceInline(admin.TabularInline):
@@ -53,11 +53,6 @@ class ExtraAdmin(admin.ModelAdmin):
 class ExtraChoiceAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'extra')
     list_filter = ['extra']
-
-
-class ExtraBetAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'user', 'extra')
-    list_filter = ['result_bet', 'extra']
 
 
 class ProfileAdmin(admin.ModelAdmin):
@@ -87,11 +82,11 @@ admin.site.register(Team, TeamAdmin)
 admin.site.register(Venue, VenueAdmin)
 admin.site.register(Game, GameAdmin)
 
-admin.site.register(GameBetResult, GameBetResultAdmin)
-admin.site.register(GameBet, GameBetAdmin)
 admin.site.register(Extra, ExtraAdmin)
 admin.site.register(ExtraChoice, ExtraChoiceAdmin)
-admin.site.register(ExtraBet, ExtraBetAdmin)
+
+admin.site.register(Bet, BetAdmin)
+admin.site.register(Bettable, BettableAdmin)
 
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Statistic, StatisticAdmin)

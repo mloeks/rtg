@@ -3,7 +3,7 @@
 from django.core.management.base import BaseCommand
 
 from main.models import Extra
-from main.models import ExtraChoice, GameBetResult
+from main.models import ExtraChoice
 
 
 class Command(BaseCommand):
@@ -11,21 +11,12 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.clear_data()
-        self.create_gamebetresults()
         self.extras = self.create_extras()
         self.create_extrachoices()
 
     def clear_data(self):
-        GameBetResult.objects.all().delete()
         Extra.objects.all().delete()
         ExtraChoice.objects.all().delete()
-        
-    def create_gamebetresults(self):
-        GameBetResult(type='volltreffer', points=5, sort_id='010').save()
-        GameBetResult(type='differenz', points=3, sort_id='020').save()
-        GameBetResult(type='remis-tendenz', points=2, sort_id='030').save()
-        GameBetResult(type='tendenz', points=1, sort_id='040').save()
-        GameBetResult(type='niete', points=0, sort_id='050').save()
         
     def create_extras(self):
         extras = {

@@ -1,5 +1,3 @@
-from django.contrib.auth.models import User
-
 __author__ = 'mloeks'
 
 from rest_framework import permissions
@@ -8,6 +6,7 @@ from rest_framework import permissions
 class IsAdmin(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.is_staff
+
 
 class IsAdminOrAuthenticatedReadOnly(permissions.BasePermission):
     """

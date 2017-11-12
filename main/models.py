@@ -75,7 +75,7 @@ class ResultBetType(utils.ChoicesEnum):
 class Bettable(models.Model):
     deadline = models.DateTimeField()
     name = models.CharField(max_length=50, unique=True)
-    result = models.CharField(blank=True, max_length=50)
+    result = models.CharField(blank=True, null=True, max_length=50)
 
     class Meta:
         ordering = ["deadline", "name"]
@@ -89,6 +89,10 @@ class Bettable(models.Model):
     @staticmethod
     def get_bettables_with_result():
         return Bettable.objects.exclude(result__isnull=True).exclude(result__exact='')
+
+    # def clean(self):
+    #     if hasattr(self, 'game') and self.game.has_result():
+    #         self.result = self.game.result if self.game.has_result else None
 
     def __str__(self):
         return str(self.name)
@@ -108,12 +112,15 @@ class Game(Bettable):
         ordering = ["kickoff"]
 
     def result_str(self):
-        if hasattr(self, 'homegoals') and self.homegoals != -1 and \
-                hasattr(self, 'awaygoals') and self.awaygoals != -1:
+        if self.has_result():
             return '%i:%i' % (self.homegoals, self.awaygoals)
         else:
             return '-:-'
     result_str.short_description = 'Result'
+
+    def has_result(self):
+        return hasattr(self, 'homegoals') and self.homegoals != -1 and \
+                hasattr(self, 'awaygoals') and self.awaygoals != -1
 
     def has_started(self):
         return utils.get_reference_date() > self.kickoff
@@ -184,7 +191,8 @@ class ExtraChoice(models.Model):
 
 class Bet(models.Model):
     result_bet = models.CharField(blank=True, max_length=50)
-    result_bet_type = models.CharField(blank=True, choices=ResultBetType.choices(), max_length=50)
+    result_bet_type = models.CharField(blank=True, null=True,
+                                       choices=ResultBetType.choices(), max_length=50)
     points = models.PositiveSmallIntegerField(blank=True, null=True)
 
     bettable = models.ForeignKey(Bettable)
@@ -356,7 +364,19 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Extra)
 def update_bet_results(sender, instance, created, **kwargs):
     for bet in Bet.get_bettable_bets(instance.pk):
-        bet.compute_gamebet_result_type()
+        bet.compute_points()
+
+    for user in User.objects.all():
+        user.statistic.recalculate()
+        user.statistic.update_no_bets()
+        user.statistic.save()
+
+
+@receiver(post_save, sender=Game)
+def update_bettable_result(sender, instance, created, **kwargs):
+    if hasattr(instance, 'bettable_ptr') and instance.has_result():
+        instance.bettable_ptr.result = instance.result_str()
+        instance.bettable_ptr.save()
 
 
 # update no_bets on user statistic
@@ -364,15 +384,6 @@ def update_bet_results(sender, instance, created, **kwargs):
 def update_statistic_no_bets(sender, instance, created, **kwargs):
     instance.user.statistic.update_no_bets()
     instance.user.statistic.save()
-
-
-@receiver(post_save, sender=Extra)
-@receiver(post_save, sender=Game)
-def update_user_statistics(sender, instance, created, **kwargs):
-    for user in User.objects.all():
-        user.statistic.recalculate()
-        user.statistic.update_no_bets()
-        user.statistic.save()
 
 
 class Profile(models.Model):

@@ -4,7 +4,7 @@ from random import randrange
 
 from django.core.management.base import BaseCommand
 
-from main.models import Game, Bettable, ExtraChoice
+from main.models import Bettable, ExtraChoice, Bet
 
 
 class Command(BaseCommand):
@@ -27,6 +27,10 @@ class Command(BaseCommand):
                 bettable.game.save()
             bettable.result = None
             bettable.save()
+
+        for bet in Bet.objects.all():
+            bet.points = None
+            bet.save()
 
     def create_bettable_results(self, bettable_percentage):
         nr_bettables = Bettable.objects.count()

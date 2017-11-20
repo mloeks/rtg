@@ -90,10 +90,6 @@ class Bettable(models.Model):
     def get_bettables_with_result():
         return Bettable.objects.exclude(result__isnull=True).exclude(result__exact='')
 
-    # def clean(self):
-    #     if hasattr(self, 'game') and self.game.has_result():
-    #         self.result = self.game.result if self.game.has_result else None
-
     def __str__(self):
         return str(self.name)
 
@@ -229,19 +225,19 @@ class Bet(models.Model):
             self.save()
             return
 
-        if isinstance(self.bettable, Extra):
+        if hasattr(self.bettable, 'extra'):
             if self.result_bet == self.bettable.result:
                 self.result_bet_type = ResultBetType.volltreffer
-                self.points = self.bettable.points
+                self.points = self.bettable.extra.points
             else:
                 self.result_bet_type = ResultBetType.niete
                 self.points = 0
             self.save()
-        elif isinstance(self.bettable, Game):
+        elif hasattr(self.bettable, 'game'):
             self.compute_points_of_game_bettable()
 
     def compute_points_of_game_bettable(self):
-        bettable_game = Game(self.bettable)
+        bettable_game = self.bettable.game
 
         # TODO hardcoded points... move to settings? or think about how to dynamically expose them via the API
         volltreffer = (ResultBetType.volltreffer, 5)
@@ -254,7 +250,7 @@ class Bet(models.Model):
         (bet_hg, bet_ag) = (int(bettable_game.homegoals), int(bettable_game.awaygoals))
 
         if game_hg == bet_hg and game_ag == bet_ag:
-            self.result_bet_type = volltreffer[0]
+            self.result_bet_type = volltreffer[0].name
             self.points = volltreffer[1]
             self.save()
             return
@@ -262,30 +258,30 @@ class Bet(models.Model):
         if (game_hg - game_ag) == (bet_hg - bet_ag):
             if game_hg == game_ag:
                 # game was a remis
-                self.result_bet_type = remis_tendenz[0]
+                self.result_bet_type = remis_tendenz[0].name
                 self.points = remis_tendenz[1]
                 self.save()
                 return
             else:
                 # game was no remis
-                self.result_bet_type = differenz[0]
+                self.result_bet_type = differenz[0].name
                 self.points = differenz[1]
                 self.save()
                 return
 
         if (game_hg - game_ag) * (bet_hg - bet_ag) > 0:
-            self.result_bet_type = tendenz[0]
+            self.result_bet_type = tendenz[0].name
             self.points = tendenz[1]
             self.save()
             return
 
         if game_hg is game_ag and bet_hg is bet_ag:
-            self.result_bet_type = tendenz[0]
+            self.result_bet_type = tendenz[0].name
             self.points = tendenz[1]
             self.save()
             return
 
-        self.result_bet_type = niete[0]
+        self.result_bet_type = niete[0].name
         self.points = niete[1]
         self.save()
 
@@ -363,20 +359,20 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Game)
 @receiver(post_save, sender=Extra)
 def update_bet_results(sender, instance, created, **kwargs):
+    print("UPDATE BETTABLE RESULT")
+    if isinstance(instance, Game) and instance.has_result() and hasattr(instance, 'bettable_ptr'):
+        instance.bettable_ptr.result = instance.result_str()
+        instance.bettable_ptr.save()
+
+    print("COMPUTE POINTS")
     for bet in Bet.get_bettable_bets(instance.pk):
         bet.compute_points()
 
-    for user in User.objects.all():
-        user.statistic.recalculate()
-        user.statistic.update_no_bets()
-        user.statistic.save()
-
-
-@receiver(post_save, sender=Game)
-def update_bettable_result(sender, instance, created, **kwargs):
-    if hasattr(instance, 'bettable_ptr') and instance.has_result():
-        instance.bettable_ptr.result = instance.result_str()
-        instance.bettable_ptr.save()
+    print("RECALCULATE STATS")
+    # for user in User.objects.all():
+    #     user.statistic.recalculate()
+    #     user.statistic.update_no_bets()
+    #     user.statistic.save()
 
 
 # update no_bets on user statistic

@@ -2,15 +2,12 @@
 from django.template.defaultfilters import filesizeformat
 from rest_framework import serializers
 from rest_framework.fields import CharField, IntegerField
-from .fields import Base64ImageField
 
 from main.models import *
+from .fields import Base64ImageField
 
 
 class BetSerializer(serializers.ModelSerializer):
-    # TODO still required?
-    points = serializers.IntegerField(source='points', read_only=True)
-
     # needs to be specified explicitly with default because it is part of a unique_together relation in the model
     user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
 
@@ -22,6 +19,12 @@ class BetSerializer(serializers.ModelSerializer):
         if attrs['bettable'].deadline_passed():
             raise ValidationError('Die Deadline ist bereits abgelaufen.')
         return attrs
+
+
+class BettableSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bettable
+        fields = '__all__'
 
 
 class ExtraChoiceNameField(serializers.RelatedField):

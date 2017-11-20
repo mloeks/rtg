@@ -5,6 +5,7 @@ from main import views
 
 router = DefaultRouter()
 router.register(r'bets', views.BetViewSet)
+router.register(r'bettables', views.BettableViewSet)
 
 router.register(r'tournamentgroups', views.TournamentGroupViewSet)
 router.register(r'tournamentrounds', views.TournamentRoundViewSet)

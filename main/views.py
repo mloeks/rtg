@@ -57,6 +57,18 @@ class BetViewSet(viewsets.ModelViewSet):
         return queryset
 
 
+class BettableViewSet(viewsets.ModelViewSet):
+    queryset = Bettable.objects.all()
+    serializer_class = BettableSerializer
+    permission_classes = (rtg_permissions.IsAdminOrAuthenticatedReadOnly,)
+    pagination_class = None
+
+    filter_backends = (filters.OrderingFilter, rtgfilters.GamesWithBetsOpenIfParamSet)
+
+    ordering_fields = ('id', 'deadline')
+    ordering = ('deadline',)
+
+
 class ExtraViewSet(viewsets.ModelViewSet):
     queryset = Extra.objects.all()
     serializer_class = ExtraSerializer

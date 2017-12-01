@@ -11,9 +11,14 @@ class BetSerializer(serializers.ModelSerializer):
     # needs to be specified explicitly with default because it is part of a unique_together relation in the model
     user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault())
 
+    bettable_type = serializers.SerializerMethodField(read_only=True)
+
     class Meta:
         model = Bet
         exclude = ('result_bet_type',)
+
+    def get_bettable_type(self, obj):
+        return lower(type(obj.bettable.get_related_child()).__name__)
 
     def validate(self, attrs):
         if attrs['bettable'].deadline_passed():

@@ -57,14 +57,10 @@ class BetViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class BettableViewSet(viewsets.ModelViewSet):
+class BettableViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Bettable.objects.all()
     serializer_class = BettableSerializer
     pagination_class = None
-
-    # Bettables are a convenient ReadOnly wrapper around concrete types of Bettables.
-    # It makes no sense to write a Bettable - instead instantiate the concrete implementations.
-    permission_classes = (rtg_permissions.ReadOnly,)
 
     filter_backends = (filters.OrderingFilter, rtgfilters.GamesWithBetsOpenIfParamSet)
 

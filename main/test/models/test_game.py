@@ -7,7 +7,7 @@ from django.db.utils import IntegrityError
 from django.test import TestCase
 from django.utils import timezone
 
-from main.models import Game, Team
+from main.models import Game, Team, Bettable
 from main.test.utils import TestModelUtils as utils
 
 
@@ -17,6 +17,7 @@ class GameTests(TestCase):
         pass
 
     def tearDown(self):
+        Bettable.objects.all().delete()
         Game.objects.all().delete()
         Team.objects.all().delete()
         utils.cleanup()
@@ -90,8 +91,8 @@ class GameTests(TestCase):
         now = timezone.now()
 
         # these should be OK
-        Game.objects.create(kickoff=now, deadline=now, hometeam=t1, awayteam=t3, venue=v1, round=r1).clean()
-        Game.objects.create(kickoff=now, deadline=now, hometeam=t1, awayteam=t2, venue=v1, round=r2).clean()
+        Game.objects.create(kickoff=now, deadline=now, hometeam=t1, awayteam=t3, name="g1", venue=v1, round=r1).clean()
+        Game.objects.create(kickoff=now, deadline=now, hometeam=t1, awayteam=t2, name="g2", venue=v1, round=r2).clean()
 
         # this game is not possible
         g1 = Game.objects.create(kickoff=now, deadline=now, hometeam=t1, awayteam=t2, venue=v1, round=r1)
@@ -133,22 +134,6 @@ class GameTests(TestCase):
         self.assertFalse(utils.create_game(homegoals=3).has_result())
         self.assertFalse(utils.create_game(awaygoals=0).has_result())
         self.assertTrue(utils.create_game(homegoals=4, awaygoals=1).has_result())
-
-    def test_get_finished_games(self):
-        g1 = utils.create_game()
-        g2 = utils.create_game(homegoals=3, awaygoals=0)
-        g3 = utils.create_game(homegoals=2)
-
-        self.assertListEqual([g2], list(Game.get_finished_games()))
-
-    def test_get_games_deadline_passed(self):
-        now = utils.create_datetime_from_now()
-        g1 = utils.create_game(kickoff=now)
-        g2 = utils.create_game(kickoff=now + timedelta(seconds=-1))
-        g3 = utils.create_game(kickoff=now + timedelta(seconds=1))
-        g4 = utils.create_game(kickoff=now + timedelta(hours=2))
-
-        self.assertListEqual([g2, g1], list(Game.get_games_deadline_passed()))
 
     def test_get_latest_finished_game(self):
         now = utils.create_datetime_from_now()

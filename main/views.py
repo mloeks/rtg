@@ -6,8 +6,9 @@ from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import viewsets, filters
+from rest_framework import viewsets
 from rest_framework.decorators import parser_classes
+from rest_framework.filters import OrderingFilter, DjangoFilterBackend
 from rest_framework.parsers import FormParser, JSONParser
 from rest_framework.parsers import MultiPartParser
 
@@ -26,7 +27,7 @@ class BetViewSet(viewsets.ModelViewSet):
     permission_classes = (rtg_permissions.IsAdminOrOwner,)
 
     # return all bets of the user and all other bets if deadline has passed
-    filter_backends = (rtgfilters.IsOwnerOrDeadlinePassed, filters.OrderingFilter)
+    filter_backends = (rtgfilters.IsOwnerOrDeadlinePassed, OrderingFilter)
 
     # never use pagination for bets, since they should never be displayed paginated to the user in the UI
     pagination_class = None
@@ -62,7 +63,7 @@ class BettableViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = BettableSerializer
     pagination_class = None
 
-    filter_backends = (filters.OrderingFilter, rtgfilters.GamesWithBetsOpenIfParamSet)
+    filter_backends = (OrderingFilter, rtgfilters.GamesWithBetsOpenIfParamSet)
 
     ordering_fields = ('id', 'deadline')
     ordering = ('deadline',)
@@ -94,7 +95,7 @@ class TeamViewSet(viewsets.ModelViewSet):
     serializer_class = TeamSerializer
     permission_classes = (rtg_permissions.IsAdminOrAuthenticatedReadOnly,)
     pagination_class = None
-    filter_backends = (filters.OrderingFilter,)
+    filter_backends = (OrderingFilter,)
 
     ordering_fields = ('id', 'name', 'abbreviation')
     ordering = ('name',)
@@ -113,7 +114,7 @@ class GameViewSet(viewsets.ModelViewSet):
     permission_classes = (rtg_permissions.IsAdminOrAuthenticatedReadOnly,)
     pagination_class = None
 
-    filter_backends = (filters.OrderingFilter, rtgfilters.GamesWithBetsOpenIfParamSet)
+    filter_backends = (OrderingFilter, rtgfilters.GamesWithBetsOpenIfParamSet)
 
     ordering_fields = ('id', 'kickoff', 'deadline', 'venue', 'round')
     ordering = ('kickoff',)
@@ -125,7 +126,7 @@ class UserViewSet(viewsets.ModelViewSet):
     permission_classes = (rtg_permissions.UserPermissions,)
     pagination_class = None
 
-    filter_backends = (filters.OrderingFilter,)
+    filter_backends = (OrderingFilter,)
     ordering = ('first_name', 'last_name', 'username',)
 
     def get_queryset(self):
@@ -177,7 +178,7 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     permission_classes = (rtg_permissions.IsAdminOrAuthenticatedReadOnly,)
 
-    filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter,)
+    filter_backends = (DjangoFilterBackend, OrderingFilter,)
     filter_fields = ('news_appear',)
     ordering = ('-date_created',)
 

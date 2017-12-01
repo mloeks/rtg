@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.template.defaultfilters import filesizeformat
+from django.template.defaultfilters import filesizeformat, lower
 from rest_framework import serializers
 from rest_framework.fields import CharField, IntegerField
 
@@ -25,6 +25,15 @@ class BettableSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bettable
         fields = '__all__'
+
+    def to_representation(self, instance):
+        return {
+            'id': instance.pk,
+            'deadline': instance.deadline,
+            'name': instance.name,
+            'result': instance.result,
+            'type': lower(type(instance.get_related_child()).__name__)
+        }
 
 
 class ExtraChoiceNameField(serializers.RelatedField):

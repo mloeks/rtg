@@ -8,6 +8,11 @@ class IsAdmin(permissions.BasePermission):
         return request.user.is_staff
 
 
+class ReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.method in permissions.SAFE_METHODS
+
+
 class IsAdminOrAuthenticatedReadOnly(permissions.BasePermission):
     """
         Allow unsafe methods for admin users only.

@@ -86,6 +86,13 @@ class Bettable(models.Model):
     def has_result(self):
         return self.result is not None and self.result != ''
 
+    def get_related_child(self):
+        if hasattr(self, 'game'):
+            return self.game
+        elif hasattr(self, 'extra'):
+            return self.extra
+        return None
+
     @staticmethod
     def get_bettables_with_result():
         return Bettable.objects.exclude(result__isnull=True).exclude(result__exact='')

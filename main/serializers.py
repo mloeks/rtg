@@ -22,18 +22,14 @@ class BetSerializer(serializers.ModelSerializer):
 
 
 class BettableSerializer(serializers.ModelSerializer):
+    type = serializers.SerializerMethodField()
+
     class Meta:
         model = Bettable
-        fields = '__all__'
+        fields = ('id', 'deadline', 'name', 'result', 'type')
 
-    def to_representation(self, instance):
-        return {
-            'id': instance.pk,
-            'deadline': instance.deadline,
-            'name': instance.name,
-            'result': instance.result,
-            'type': lower(type(instance.get_related_child()).__name__)
-        }
+    def get_type(self, obj):
+        return lower(type(obj.get_related_child()).__name__)
 
 
 class ExtraChoiceNameField(serializers.RelatedField):
@@ -104,24 +100,30 @@ class VenueSerializer(serializers.ModelSerializer):
 
 
 class GameSerializer(serializers.ModelSerializer):
+    city = serializers.SerializerMethodField()
+    bets_open = serializers.SerializerMethodField()
+    round_details = serializers.SerializerMethodField()
+
+    hometeam_name = serializers.CharField(source='hometeam.name', read_only=True)
+    awayteam_name = serializers.CharField(source='awayteam.name', read_only=True)
+
     class Meta:
         model = Game
-        fields = '__all__'
-
-    def to_representation(self, instance):
-        return {
-            'kickoff': instance.kickoff,
-            'deadline': instance.deadline,
-
-            'hometeam': instance.hometeam.name,
-            'awayteam': instance.awayteam.name,
-            'homegoals': instance.homegoals,
-            'awaygoals': instance.awaygoals,
-
-            'city': instance.venue.city,
-            'round_details': TournamentRoundSerializer.as_dict(instance.round),
-            'bets_open': not instance.deadline_passed()
+        fields = ('kickoff', 'deadline', 'hometeam', 'hometeam_name', 'awayteam', 'awayteam_name',
+                  'homegoals', 'awaygoals', 'city', 'round_details', 'bets_open')
+        extra_kwargs = {
+            'hometeam': {'write_only': True},
+            'awayteam': {'write_only': True},
         }
+
+    def get_bets_open(self, obj):
+        return not obj.deadline_passed()
+
+    def get_city(self, obj):
+        return obj.venue.city
+
+    def get_round_details(self, obj):
+        return TournamentRoundSerializer.as_dict(obj.round),
 
 
 class UserSerializer(serializers.ModelSerializer):

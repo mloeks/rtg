@@ -75,9 +75,9 @@ class GameBetTests(TestCase):
     def test_get_user_bets(self):
         u1, u2, u3 = utils.create_user(), utils.create_user(), utils.create_user()
 
-        u1_bets = [utils.create_gamebet(u1) for i in range(1, 5)]
-        u2_bets = [utils.create_gamebet(u2) for i in range(1, 3)]
-        u3_bets = [utils.create_gamebet(u3) for i in range(1, 8)]
+        u1_bets = [utils.create_bet(u1) for i in range(1, 5)]
+        u2_bets = [utils.create_bet(u2) for i in range(1, 3)]
+        u3_bets = [utils.create_bet(u3) for i in range(1, 8)]
 
         self.assertEqual(13, len(GameBet.objects.all()))
         self.assertListEqual(u1_bets, list(GameBet.get_user_bets(u1.pk)))
@@ -91,12 +91,12 @@ class GameBetTests(TestCase):
                      utils.create_game(), \
                      utils.create_game(homegoals=0, awaygoals=0)
 
-        gb1 = utils.create_gamebet(u1, g1, 2, 1)
-        gb2 = utils.create_gamebet(u1, g2, 2, 1)
-        gb3 = utils.create_gamebet(u1, g3)
-        gb4 = utils.create_gamebet(u2, g1, 0, 0)
-        gb5 = utils.create_gamebet(u2, g2, 0, 3)
-        gb6 = utils.create_gamebet(u2, g3, 2, 2)
+        gb1 = utils.create_bet(u1, g1, 2, 1)
+        gb2 = utils.create_bet(u1, g2, 2, 1)
+        gb3 = utils.create_bet(u1, g3)
+        gb4 = utils.create_bet(u2, g1, 0, 0)
+        gb5 = utils.create_bet(u2, g2, 0, 3)
+        gb6 = utils.create_bet(u2, g3, 2, 2)
 
         [gb.save() for gb in [gb1, gb2, gb3, gb4, gb5, gb6]]
         [g.save() for g in [g1, g2, g3]]
@@ -108,9 +108,9 @@ class GameBetTests(TestCase):
     def test_get_game_bets(self):
         g1, g2, g3 = utils.create_game(), utils.create_game(), utils.create_game()
 
-        g1_bets = [utils.create_gamebet(game=g1) for i in range(1, 2)]
-        g2_bets = [utils.create_gamebet(game=g2) for i in range(1, 5)]
-        g3_bets = [utils.create_gamebet(game=g3) for i in range(1, 7)]
+        g1_bets = [utils.create_bet(game=g1) for i in range(1, 2)]
+        g2_bets = [utils.create_bet(game=g2) for i in range(1, 5)]
+        g3_bets = [utils.create_bet(game=g3) for i in range(1, 7)]
 
         self.assertEqual(11, len(GameBet.objects.all()))
         self.assertListEqual(g1_bets, list(GameBet.get_game_bets(g1.pk)))
@@ -124,12 +124,12 @@ class GameBetTests(TestCase):
                      utils.create_game(), \
                      utils.create_game(homegoals=3, awaygoals=0)
 
-        gb1 = utils.create_gamebet(u1, g1, 2, 1)
-        gb2 = utils.create_gamebet(u1, g2, 2, 1)
-        gb3 = utils.create_gamebet(u1, g3)
-        gb4 = utils.create_gamebet(u2, g1, 0, 0)
-        gb5 = utils.create_gamebet(u2, g2, 0, 3)
-        gb6 = utils.create_gamebet(u2, g3, 2, 2)
+        gb1 = utils.create_bet(u1, g1, 2, 1)
+        gb2 = utils.create_bet(u1, g2, 2, 1)
+        gb3 = utils.create_bet(u1, g3)
+        gb4 = utils.create_bet(u2, g1, 0, 0)
+        gb5 = utils.create_bet(u2, g2, 0, 3)
+        gb6 = utils.create_bet(u2, g3, 2, 2)
 
         [gb.save() for gb in [gb1, gb2, gb3, gb4, gb5, gb6]]
         [g.save() for g in [g1, g2, g3]]
@@ -143,9 +143,9 @@ class GameBetTests(TestCase):
         u1, u2 = utils.create_user(), utils.create_user()
         g1, g2 = utils.create_game(), utils.create_game()
 
-        gb1 = utils.create_gamebet(u1, g1)
-        gb2 = utils.create_gamebet(u1, g2)
-        gb3 = utils.create_gamebet(u2, g1)
+        gb1 = utils.create_bet(u1, g1)
+        gb2 = utils.create_bet(u1, g2)
+        gb3 = utils.create_bet(u2, g1)
 
         self.assertEqual(gb1, GameBet.get_user_game_bet(u1.pk, g1.pk))
         self.assertEqual(gb2, GameBet.get_user_game_bet(u1.pk, g2.pk))
@@ -156,12 +156,12 @@ class GameBetTests(TestCase):
         u, g, g_r = utils.create_user(), utils.create_game(), utils.create_game(homegoals=3, awaygoals=1)
 
         # game has no result
-        gb1 = utils.create_gamebet(u, g, homegoals=3, awaygoals=1)
+        gb1 = utils.create_bet(u, g, homegoals=3, awaygoals=1)
         gb1.compute_gamebet_result_type()
         self.assertIsNone(gb1.result_bet_type)
 
         # no bet was set
-        gb2 = utils.create_gamebet(u, g_r)
+        gb2 = utils.create_bet(u, g_r)
         gb2.compute_gamebet_result_type()
         self.assertIsNone(gb2.result_bet_type)
 
@@ -170,11 +170,11 @@ class GameBetTests(TestCase):
         u, g, g_r = utils.create_user(), utils.create_game(homegoals=3, awaygoals=1), \
                     utils.create_game(homegoals=1, awaygoals=1)
 
-        gb = utils.create_gamebet(u, g, homegoals=3, awaygoals=1)
+        gb = utils.create_bet(u, g, homegoals=3, awaygoals=1)
         gb.compute_gamebet_result_type()
         self.assertEqual('volltreffer', gb.result_bet_type.type)
 
-        gb = utils.create_gamebet(u, g_r, homegoals=1, awaygoals=1)
+        gb = utils.create_bet(u, g_r, homegoals=1, awaygoals=1)
         gb.compute_gamebet_result_type()
         self.assertEqual('volltreffer', gb.result_bet_type.type)
 
@@ -182,7 +182,7 @@ class GameBetTests(TestCase):
         utils.create_gamebet_result_types()
         u, g = utils.create_user(), utils.create_game(homegoals=4, awaygoals=0)
 
-        gb = utils.create_gamebet(u, g, homegoals=6, awaygoals=2)
+        gb = utils.create_bet(u, g, homegoals=6, awaygoals=2)
         gb.compute_gamebet_result_type()
         self.assertEqual('differenz', gb.result_bet_type.type)
 
@@ -190,7 +190,7 @@ class GameBetTests(TestCase):
         utils.create_gamebet_result_types()
         u, g = utils.create_user(), utils.create_game(homegoals=1, awaygoals=1)
 
-        gb = utils.create_gamebet(u, g, homegoals=3, awaygoals=3)
+        gb = utils.create_bet(u, g, homegoals=3, awaygoals=3)
         gb.compute_gamebet_result_type()
         self.assertEqual('remis-tendenz', gb.result_bet_type.type)
 
@@ -198,13 +198,13 @@ class GameBetTests(TestCase):
         utils.create_gamebet_result_types()
         u, g = utils.create_user(), utils.create_game(homegoals=2, awaygoals=0)
 
-        gb = utils.create_gamebet(u, g, homegoals=3, awaygoals=0)
+        gb = utils.create_bet(u, g, homegoals=3, awaygoals=0)
         gb.compute_gamebet_result_type()
         self.assertEqual('tendenz', gb.result_bet_type.type)
 
         GameBet.objects.all().delete()
 
-        gb = utils.create_gamebet(u, g, homegoals=3, awaygoals=2)
+        gb = utils.create_bet(u, g, homegoals=3, awaygoals=2)
         gb.compute_gamebet_result_type()
         self.assertEqual('tendenz', gb.result_bet_type.type)
 
@@ -213,10 +213,10 @@ class GameBetTests(TestCase):
         u, g, g_r = utils.create_user(), utils.create_game(homegoals=2, awaygoals=1), \
                     utils.create_game(homegoals=0, awaygoals=0)
 
-        gb = utils.create_gamebet(u, g, homegoals=0, awaygoals=1)
+        gb = utils.create_bet(u, g, homegoals=0, awaygoals=1)
         gb.compute_gamebet_result_type()
         self.assertEqual('niete', gb.result_bet_type.type)
 
-        gb = utils.create_gamebet(u, g_r, homegoals=1, awaygoals=2)
+        gb = utils.create_bet(u, g_r, homegoals=1, awaygoals=2)
         gb.compute_gamebet_result_type()
         self.assertEqual('niete', gb.result_bet_type.type)

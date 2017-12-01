@@ -54,16 +54,16 @@ class GameBetApiTests(RtgApiTestCase):
                                         deadline=TestModelUtils.create_datetime_from_now(timedelta(hours=-1)))
         g5 = TestModelUtils.create_game(kickoff=TestModelUtils.create_datetime_from_now(timedelta(days=12)))
 
-        gb1 = TestModelUtils.create_gamebet(u1, g1, 2, 1)
-        gb2 = TestModelUtils.create_gamebet(u1, g2, 0, 1)
-        gb3 = TestModelUtils.create_gamebet(u1, g3, 1, 3)
-        gb4 = TestModelUtils.create_gamebet(u1, g5, 1, 3)
+        gb1 = TestModelUtils.create_bet(u1, g1, 2, 1)
+        gb2 = TestModelUtils.create_bet(u1, g2, 0, 1)
+        gb3 = TestModelUtils.create_bet(u1, g3, 1, 3)
+        gb4 = TestModelUtils.create_bet(u1, g5, 1, 3)
 
-        gb5 = TestModelUtils.create_gamebet(u2, g2, 2, 2)
-        gb6 = TestModelUtils.create_gamebet(u2, g4, 1, 1)
-        gb7 = TestModelUtils.create_gamebet(u2, g1, 0, 3)
-        gb8 = TestModelUtils.create_gamebet(u2, g3, 4, 2)
-        gb9 = TestModelUtils.create_gamebet(u2, g5, 0, 0)
+        gb5 = TestModelUtils.create_bet(u2, g2, 2, 2)
+        gb6 = TestModelUtils.create_bet(u2, g4, 1, 1)
+        gb7 = TestModelUtils.create_bet(u2, g1, 0, 3)
+        gb8 = TestModelUtils.create_bet(u2, g3, 4, 2)
+        gb9 = TestModelUtils.create_bet(u2, g5, 0, 0)
 
         # reply only those bets that are owned by the user or deadline has passed
         self.create_test_user(u1.username)
@@ -142,8 +142,8 @@ class GameBetApiTests(RtgApiTestCase):
         g1 = TestModelUtils.create_game()    # kicks off NOW
         g2 = TestModelUtils.create_game(kickoff=TestModelUtils.create_datetime_from_now(timedelta(hours=2)))
 
-        gb1 = TestModelUtils.create_gamebet(u1, g1, 2, 1)
-        gb2 = TestModelUtils.create_gamebet(u1, g2)
+        gb1 = TestModelUtils.create_bet(u1, g1, 2, 1)
+        gb2 = TestModelUtils.create_bet(u1, g2)
 
         self.create_test_user(u1.username)
         update_disallowed = self.client.put("%s%i/" % (self.GAMEBETS_BASEURL, gb1.pk),
@@ -162,7 +162,7 @@ class GameBetApiTests(RtgApiTestCase):
         u1, u2 = TestModelUtils.create_user(), TestModelUtils.create_user()
 
         g1 = TestModelUtils.create_game(kickoff=TestModelUtils.create_datetime_from_now(timedelta(hours=2)))  # bets open
-        gb1 = TestModelUtils.create_gamebet(u1, g1, 2, 1)
+        gb1 = TestModelUtils.create_bet(u1, g1, 2, 1)
 
         self.create_test_user(u2.username)
         update_disallowed = self.client.put("%s%i/" % (self.GAMEBETS_BASEURL, gb1.pk),
@@ -177,7 +177,7 @@ class GameBetApiTests(RtgApiTestCase):
         u1, u2 = TestModelUtils.create_user(), TestModelUtils.create_user()
 
         g1 = TestModelUtils.create_game(kickoff=TestModelUtils.create_datetime_from_now(timedelta(hours=2)))  # bets open
-        gb1 = TestModelUtils.create_gamebet(u1, g1, 2, 1)
+        gb1 = TestModelUtils.create_bet(u1, g1, 2, 1)
 
         self.create_test_user(u2.username)
         delete_disallowed = self.client.delete("%s%i/" % (self.GAMEBETS_BASEURL, gb1.pk))

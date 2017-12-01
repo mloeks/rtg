@@ -6,8 +6,7 @@ from string import ascii_uppercase
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-from main.models import TournamentGroup, TournamentRound, Game, Venue, Team, GameBet, GameBetResult, Extra, ExtraChoice, \
-    ExtraBet, Post
+from main.models import TournamentGroup, TournamentRound, Game, Venue, Team, Extra, ExtraChoice, Post, Bet
 
 
 class TestModelUtils:
@@ -47,20 +46,12 @@ class TestModelUtils:
                                    hometeam=hometeam, awayteam=awayteam, venue=venue, round=round)
 
     @staticmethod
-    def create_gamebet(user=None, game=None, homegoals=-1, awaygoals=-1, result_bet_type=None):
+    def create_bet(user=None, game=None, homegoals=-1, awaygoals=-1, result_bet_type=None):
         user = user or TestModelUtils.create_user()
         game = game or TestModelUtils.create_game()
 
-        return GameBet.objects.create(user=user, game=game, homegoals=homegoals, awaygoals=awaygoals,
-                                      result_bet_type=result_bet_type)
-
-    @staticmethod
-    def create_gamebet_result_types():
-        GameBetResult.objects.create(type='volltreffer', points=5, sort_id='a')
-        GameBetResult.objects.create(type='differenz', points=3, sort_id='b')
-        GameBetResult.objects.create(type='remis-tendenz', points=2, sort_id='c')
-        GameBetResult.objects.create(type='tendenz', points=1, sort_id='d')
-        GameBetResult.objects.create(type='niete', points=0, sort_id='e')
+        return Bet.objects.create(user=user, bettable=game, result_bet="%s:%s" % (homegoals, awaygoals),
+                                  result_bet_type=result_bet_type)
 
     @staticmethod
     def create_venue(name=None, city=None, capacity=None):

@@ -31,12 +31,6 @@ class ExtraTests(TestCase):
             with transaction.atomic():
                 Extra.objects.create(name='RTG-Meister', points=123, deadline=None, result='Die Königin')
 
-        # result may be blank but not null
-        Extra.objects.create(name='RTG-Meister', deadline=timezone.now(), result='')
-        with self.assertRaises(IntegrityError):
-            with transaction.atomic():
-                Extra.objects.create(name='RTG-Zweiter', deadline=timezone.now(), result=None)
-
     def test_invalid_fields(self):
         with self.assertRaises(DataError):
             with transaction.atomic():

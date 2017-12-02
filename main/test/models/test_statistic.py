@@ -27,7 +27,6 @@ class StatisticTests(TestCase):
         self.assertEqual(0, s.points)
 
     def test_recalculate(self):
-        utils.create_gamebet_result_types()
         u1, u2 = utils.create_user('Queen'), utils.create_user('King')
 
         g1 = utils.create_game(homegoals=3, awaygoals=1)
@@ -40,15 +39,15 @@ class StatisticTests(TestCase):
         utils.create_extrachoice(name='Deutschland', extra=e1)
         utils.create_extrachoice(name='Schweiz', extra=e1)
 
-        gb1 = utils.create_bet(u1, g1, 3, 1)
-        gb2 = utils.create_bet(u1, g2, 1, 1)
-        gb3 = utils.create_bet(u1, g3, 3, 0)
-        gb4 = utils.create_bet(u1, g4, 2, 2)
-        gb5 = utils.create_bet(u1, g5, 0, 2)
-        eb1 = utils.create_extrabet('Deutschland', e1, u1)
+        gb1 = utils.create_bet(u1, g1, "3:1")
+        gb2 = utils.create_bet(u1, g2, "1:1")
+        gb3 = utils.create_bet(u1, g3, "3:0")
+        gb4 = utils.create_bet(u1, g4, "2:2")
+        gb5 = utils.create_bet(u1, g5, "0:2")
+        eb1 = utils.create_bet(u1, e1, 'Deutschland')
 
-        gb6 = utils.create_bet(u2, g1, 4, 2)
-        eb2 = utils.create_extrabet('Schweiz', e1, u2)
+        gb6 = utils.create_bet(u2, g1, "4:2")
+        eb2 = utils.create_bet(u2, e1, 'Schweiz')
 
         # statistics should be recalculated when games or extras are saved
         [g.save() for g in [g1, g2, g3, g4, g5]]
@@ -66,8 +65,6 @@ class StatisticTests(TestCase):
         self.assertEqual(10, u2_stats.points)
 
     def test_many_users(self):
-        utils.create_gamebet_result_types()
-
         USERS=20
         GAMES=10
         BET_AMOUNT=0.6
@@ -89,11 +86,11 @@ class StatisticTests(TestCase):
                                            awayteam=utils.create_team(name='A%i' % i, group=g),
                                            round=r))
 
-        # create gamebets for the given amount of the games for all users and save them
+        # create bets for the given amount of the games for all users and save them
         bets = []
         for u in users:
             for g in games[0:int(BET_AMOUNT*len(games))]:
-                bet = utils.create_bet(u, g, randrange(6), randrange(6))
+                bet = utils.create_bet(u, g, "%s:%s" % (randrange(6), randrange(6)))
                 bet.save()
                 bets.append(bet)
 

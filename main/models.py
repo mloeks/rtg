@@ -251,6 +251,7 @@ class Bet(models.Model):
 
     def compute_points(self):
         if not self.bettable or not self.bettable.has_result() or not self.has_bet():
+            self.points = None
             self.result_bet_type = None
             self.save()
             return

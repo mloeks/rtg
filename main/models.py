@@ -205,7 +205,7 @@ class Bet(models.Model):
         unique_together = ('bettable', 'user',)
 
     def bet_str(self):
-        if hasattr(self, 'result_bet') and self.result_bet:
+        if hasattr(self, 'result_bet') and self.has_bet():
             return self.result_bet
         else:
             return '---'
@@ -213,13 +213,36 @@ class Bet(models.Model):
     def has_bet(self):
         return self.result_bet is not None and self.result_bet != ''
 
+    def get_gamebet_goals(self):
+        if self.has_bet():
+            return [int(it) for it in self.result_bet.split(":")]
+        else:
+            return -1, -1
+
+    # TODO DRY up
     @staticmethod
-    def get_user_bets(user_id):
-        return Bet.objects.filter(user__pk=user_id)
+    def get_user_bets(user_id, bettable_has_result = False):
+        bets_set = Bet.objects.filter(user__pk=user_id)
+        if bettable_has_result:
+            return filter(lambda bet: bet.bettable.has_result(),
+                          list(bets_set
+                               .exclude(result_bet__isnull=True)
+                               .exclude(result_bet__exact='')
+                               .order_by('bettable__deadline', 'bettable__name')))
+        else:
+            return bets_set.order_by('bettable__deadline', 'bettable__name')
 
     @staticmethod
-    def get_bettable_bets(bettable_id):
-        return Bet.objects.filter(bettable__pk=bettable_id)
+    def get_bets_for_bettable(bettable_id, bettable_has_result = False):
+        bets_set = Bet.objects.filter(bettable__pk=bettable_id)
+        if bettable_has_result:
+            return filter(lambda bet: bet.bettable.has_result(),
+                          list(bets_set
+                               .exclude(result_bet__isnull=True)
+                               .exclude(result_bet__exact='')
+                               .order_by('bettable__deadline', 'bettable__name')))
+        else:
+            return bets_set.order_by('bettable__deadline', 'bettable__name')
 
     @staticmethod
     def get_user_bettable_bet(user_id, bettable_id):
@@ -244,6 +267,9 @@ class Bet(models.Model):
             self.compute_points_of_game_bettable()
 
     def compute_points_of_game_bettable(self):
+        if not self.has_bet() or not self.bettable.has_result():
+            return
+
         bettable_game = self.bettable.game
 
         # TODO hardcoded points... move to settings? or think about how to dynamically expose them via the API
@@ -254,7 +280,7 @@ class Bet(models.Model):
         niete = (ResultBetType.niete, 0)
 
         (game_hg, game_ag) = (int(bettable_game.homegoals), int(bettable_game.awaygoals))
-        (bet_hg, bet_ag) = (int(bettable_game.homegoals), int(bettable_game.awaygoals))
+        (bet_hg, bet_ag) = self.get_gamebet_goals()
 
         if game_hg == bet_hg and game_ag == bet_ag:
             self.result_bet_type = volltreffer[0].name
@@ -293,7 +319,7 @@ class Bet(models.Model):
         self.save()
 
     def __str__(self):
-        return self.result_bet
+        return self.bet_str()
 
 
 class Statistic(models.Model):
@@ -317,20 +343,19 @@ class Statistic(models.Model):
             self.no_tendenz, self.no_niete = 0, 0, 0, 0, 0, 0
 
         if Game.tournament_has_started():
-            for bet in Bet.get_user_bets(self.user.pk):
-                if bet.bettable.has_result():
-                    self.points += bet.points
-                    result_bet_type = bet.result_bet_type
-                    if result_bet_type == ResultBetType.volltreffer:
-                        self.no_volltreffer += 1
-                    elif result_bet_type == ResultBetType.differenz:
-                        self.no_differenz += 1
-                    elif result_bet_type == ResultBetType.remis_tendenz:
-                        self.no_remis_tendenz += 1
-                    elif result_bet_type == ResultBetType.tendenz:
-                        self.no_tendenz += 1
-                    elif result_bet_type == ResultBetType.niete:
-                        self.no_niete += 1
+            for bet in Bet.get_user_bets(self.user.pk, True):
+                self.points += bet.points
+                result_bet_type = bet.result_bet_type
+                if result_bet_type == ResultBetType.volltreffer:
+                    self.no_volltreffer += 1
+                elif result_bet_type == ResultBetType.differenz:
+                    self.no_differenz += 1
+                elif result_bet_type == ResultBetType.remis_tendenz:
+                    self.no_remis_tendenz += 1
+                elif result_bet_type == ResultBetType.tendenz:
+                    self.no_tendenz += 1
+                elif result_bet_type == ResultBetType.niete:
+                    self.no_niete += 1
 
 
     def update_no_bets(self):
@@ -366,16 +391,15 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Game)
 @receiver(post_save, sender=Extra)
 def update_bet_results(sender, instance, created, **kwargs):
-    print("UPDATE BETTABLE RESULT")
     if isinstance(instance, Game) and instance.has_result() and hasattr(instance, 'bettable_ptr'):
         instance.bettable_ptr.result = instance.result_str()
         instance.bettable_ptr.save()
 
     print("COMPUTE POINTS")
-    for bet in Bet.get_bettable_bets(instance.pk):
+    for bet in Bet.get_bets_for_bettable(instance.pk):
         bet.compute_points()
 
-    print("RECALCULATE STATS")
+    # print("RECALCULATE STATS")
     # for user in User.objects.all():
     #     user.statistic.recalculate()
     #     user.statistic.update_no_bets()
@@ -385,6 +409,7 @@ def update_bet_results(sender, instance, created, **kwargs):
 # update no_bets on user statistic
 @receiver(post_save, sender=Bet)
 def update_statistic_no_bets(sender, instance, created, **kwargs):
+    print("POST_SAVE BET, update bet count stats")
     instance.user.statistic.update_no_bets()
     instance.user.statistic.save()
 

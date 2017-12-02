@@ -345,18 +345,19 @@ class Statistic(models.Model):
 
         if Game.tournament_has_started():
             for bet in Bet.get_user_bets(self.user.pk, True):
-                self.points += bet.points
-                result_bet_type = bet.result_bet_type
-                if result_bet_type == ResultBetType.volltreffer:
-                    self.no_volltreffer += 1
-                elif result_bet_type == ResultBetType.differenz:
-                    self.no_differenz += 1
-                elif result_bet_type == ResultBetType.remis_tendenz:
-                    self.no_remis_tendenz += 1
-                elif result_bet_type == ResultBetType.tendenz:
-                    self.no_tendenz += 1
-                elif result_bet_type == ResultBetType.niete:
-                    self.no_niete += 1
+                if bet.points is not None:
+                    self.points += bet.points
+                    result_bet_type = bet.result_bet_type
+                    if result_bet_type == ResultBetType.volltreffer:
+                        self.no_volltreffer += 1
+                    elif result_bet_type == ResultBetType.differenz:
+                        self.no_differenz += 1
+                    elif result_bet_type == ResultBetType.remis_tendenz:
+                        self.no_remis_tendenz += 1
+                    elif result_bet_type == ResultBetType.tendenz:
+                        self.no_tendenz += 1
+                    elif result_bet_type == ResultBetType.niete:
+                        self.no_niete += 1
 
 
     def update_no_bets(self):
@@ -396,21 +397,18 @@ def update_bet_results(sender, instance, created, **kwargs):
         instance.bettable_ptr.result = instance.result_str()
         instance.bettable_ptr.save()
 
-    print("COMPUTE POINTS")
     for bet in Bet.get_bets_for_bettable(instance.pk):
         bet.compute_points()
 
-    # print("RECALCULATE STATS")
-    # for user in User.objects.all():
-    #     user.statistic.recalculate()
-    #     user.statistic.update_no_bets()
-    #     user.statistic.save()
+    for user in User.objects.all():
+        user.statistic.recalculate()
+        user.statistic.update_no_bets()
+        user.statistic.save()
 
 
 # update no_bets on user statistic
 @receiver(post_save, sender=Bet)
 def update_statistic_no_bets(sender, instance, created, **kwargs):
-    print("POST_SAVE BET, update bet count stats")
     instance.user.statistic.update_no_bets()
     instance.user.statistic.save()
 

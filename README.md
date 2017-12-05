@@ -20,13 +20,10 @@
 
 ### Konzept generischer Bets
 
-* commands zum Laufen bringen, 
-    * ANSCHLUSS: create_test_bettable_results, recalculate klappt noch nicht
-    * berechnet überall Volltreffer, weil Spiele -1:-1 sind?
-* danach Tests anschauen
-    * Unit Tests anpassen aber auch kürzen
-    * API Tests wirklich gut und richtig machen, auch Dokumentation! darüber soll alles funktionieren und abgedeckt sein
+* API Tests grün machen
+* ggf. Unit Tests eindampfen
 * manuelle Tests
+* Performance bei Updates (ist langsam geworden...)
 
 ### TODOs
 

@@ -270,14 +270,15 @@ class Bet(models.Model):
 
         if hasattr(self.bettable, 'extra'):
             if self.result_bet == self.bettable.result:
-                self.result_bet_type = ResultBetType.volltreffer
+                self.result_bet_type = ResultBetType.volltreffer.name
                 self.points = self.bettable.extra.points
             else:
-                self.result_bet_type = ResultBetType.niete
+                self.result_bet_type = ResultBetType.niete.name
                 self.points = 0
             self.save()
         elif hasattr(self.bettable, 'game'):
             self.compute_points_of_game_bettable()
+            self.save()
 
     def compute_points_of_game_bettable(self):
         if not self.has_bet() or not self.bettable.has_result():
@@ -298,7 +299,6 @@ class Bet(models.Model):
         if game_hg == bet_hg and game_ag == bet_ag:
             self.result_bet_type = volltreffer[0].name
             self.points = volltreffer[1]
-            self.save()
             return
 
         if (game_hg - game_ag) == (bet_hg - bet_ag):
@@ -306,30 +306,25 @@ class Bet(models.Model):
                 # game was a remis
                 self.result_bet_type = remis_tendenz[0].name
                 self.points = remis_tendenz[1]
-                self.save()
                 return
             else:
                 # game was no remis
                 self.result_bet_type = differenz[0].name
                 self.points = differenz[1]
-                self.save()
                 return
 
         if (game_hg - game_ag) * (bet_hg - bet_ag) > 0:
             self.result_bet_type = tendenz[0].name
             self.points = tendenz[1]
-            self.save()
             return
 
         if game_hg is game_ag and bet_hg is bet_ag:
             self.result_bet_type = tendenz[0].name
             self.points = tendenz[1]
-            self.save()
             return
 
         self.result_bet_type = niete[0].name
         self.points = niete[1]
-        self.save()
 
     def __str__(self):
         return self.bet_str()
@@ -357,22 +352,22 @@ class Statistic(models.Model):
 
         if Game.tournament_has_started():
             for bet in Bet.get_by_user_and_has_bet_and_bettable_has_result(self.user.pk):
-                # TODO why does it happen that a bet with a bettables which has a result has no points?
-                if bet.points is not None:
-                    self.points += bet.points
-                    result_bet_type = bet.result_bet_type
-                    if result_bet_type == ResultBetType.volltreffer:
-                        self.no_volltreffer += 1
-                    elif result_bet_type == ResultBetType.differenz:
-                        self.no_differenz += 1
-                    elif result_bet_type == ResultBetType.remis_tendenz:
-                        self.no_remis_tendenz += 1
-                    elif result_bet_type == ResultBetType.tendenz:
-                        self.no_tendenz += 1
-                    elif result_bet_type == ResultBetType.niete:
-                        self.no_niete += 1
-                else:
-                    print("<-------------------------")
+                # TODO investigate why it happens that a bet with a bettables which has a result has no points?
+                if not bet.points:
+                    bet.compute_points()
+
+                self.points += bet.points
+                result_bet_type = bet.result_bet_type
+                if result_bet_type == ResultBetType.volltreffer.name:
+                    self.no_volltreffer += 1
+                elif result_bet_type == ResultBetType.differenz.name:
+                    self.no_differenz += 1
+                elif result_bet_type == ResultBetType.remis_tendenz.name:
+                    self.no_remis_tendenz += 1
+                elif result_bet_type == ResultBetType.tendenz.name:
+                    self.no_tendenz += 1
+                elif result_bet_type == ResultBetType.niete.name:
+                    self.no_niete += 1
 
     def update_no_bets(self):
         """

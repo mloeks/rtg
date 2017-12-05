@@ -39,15 +39,15 @@ class StatisticTests(TestCase):
         utils.create_extrachoice(name='Deutschland', extra=e1)
         utils.create_extrachoice(name='Schweiz', extra=e1)
 
-        gb1 = utils.create_bet(u1, g1, "3:1")
-        gb2 = utils.create_bet(u1, g2, "1:1")
-        gb3 = utils.create_bet(u1, g3, "3:0")
-        gb4 = utils.create_bet(u1, g4, "2:2")
-        gb5 = utils.create_bet(u1, g5, "0:2")
-        eb1 = utils.create_bet(u1, e1, 'Deutschland')
+        utils.create_bet(u1, g1, "3:1")
+        utils.create_bet(u1, g2, "1:1")
+        utils.create_bet(u1, g3, "3:0")
+        utils.create_bet(u1, g4, "2:2")
+        utils.create_bet(u1, g5, "0:2")
+        utils.create_bet(u1, e1, 'Deutschland')
 
-        gb6 = utils.create_bet(u2, g1, "4:2")
-        eb2 = utils.create_bet(u2, e1, 'Schweiz')
+        utils.create_bet(u2, g1, "4:2")
+        utils.create_bet(u2, e1, 'Schweiz')
 
         # statistics should be recalculated when games or extras are saved
         [g.save() for g in [g1, g2, g3, g4, g5]]

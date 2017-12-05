@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import *
+from time import sleep
 
 from django.contrib.auth.models import User
 from django.db import models, utils
@@ -115,10 +116,8 @@ class Game(Bettable):
         ordering = ["kickoff"]
 
     def result_str(self):
-        if self.has_result():
-            return '%i:%i' % (self.homegoals, self.awaygoals)
-        else:
-            return '-:-'
+        return '%i:%i' % (self.homegoals, self.awaygoals) if self.has_result() else None
+
     result_str.short_description = 'Result'
 
     def has_result(self):
@@ -219,30 +218,43 @@ class Bet(models.Model):
         else:
             return -1, -1
 
-    # TODO DRY up
     @staticmethod
-    def get_user_bets(user_id, bettable_has_result = False):
-        bets_set = Bet.objects.filter(user__pk=user_id)
-        if bettable_has_result:
-            return filter(lambda bet: bet.bettable.has_result(),
-                          list(bets_set
-                               .exclude(result_bet__isnull=True)
-                               .exclude(result_bet__exact='')
-                               .order_by('bettable__deadline', 'bettable__name')))
-        else:
-            return bets_set.order_by('bettable__deadline', 'bettable__name')
+    def get_by_user(user_id):
+        return Bet.objects \
+            .filter(user__pk=user_id) \
+            .order_by('bettable__deadline', 'bettable__name')
 
     @staticmethod
-    def get_bets_for_bettable(bettable_id, bettable_has_result = False):
-        bets_set = Bet.objects.filter(bettable__pk=bettable_id)
-        if bettable_has_result:
-            return filter(lambda bet: bet.bettable.has_result(),
-                          list(bets_set
-                               .exclude(result_bet__isnull=True)
-                               .exclude(result_bet__exact='')
-                               .order_by('bettable__deadline', 'bettable__name')))
-        else:
-            return bets_set.order_by('bettable__deadline', 'bettable__name')
+    def get_by_user_and_bettable_has_result(user_id):
+        return Bet.get_by_user(user_id) \
+            .exclude(bettable__result__isnull=True) \
+            .exclude(bettable__result__exact='')
+
+    @staticmethod
+    def get_by_user_and_has_bet(user_id):
+        return Bet.get_by_user(user_id) \
+            .exclude(result_bet__isnull=True) \
+            .exclude(result_bet__exact='')
+
+    @staticmethod
+    def get_by_user_and_has_bet_and_bettable_has_result(user_id):
+        return Bet.get_by_user_and_has_bet(user_id) \
+            .exclude(bettable__result__isnull=True) \
+            .exclude(bettable__result__exact='')
+
+    @staticmethod
+    def get_by_bettable(bettable_id):
+        return Bet.objects\
+            .filter(bettable__pk=bettable_id)\
+            .order_by('bettable__deadline', 'bettable__name')
+
+    @staticmethod
+    def get_by_bettable_and_has_result_and_bettable_has_result(bettable_id):
+        return Bet.get_by_bettable(bettable_id)\
+            .exclude(result_bet__isnull=True)\
+            .exclude(result_bet__exact='')\
+            .exclude(bettable__result__isnull=True)\
+            .exclude(bettable__result__exact='')
 
     @staticmethod
     def get_user_bettable_bet(user_id, bettable_id):
@@ -344,7 +356,8 @@ class Statistic(models.Model):
             self.no_tendenz, self.no_niete = 0, 0, 0, 0, 0, 0
 
         if Game.tournament_has_started():
-            for bet in Bet.get_user_bets(self.user.pk, True):
+            for bet in Bet.get_by_user_and_has_bet_and_bettable_has_result(self.user.pk):
+                # TODO why does it happen that a bet with a bettables which has a result has no points?
                 if bet.points is not None:
                     self.points += bet.points
                     result_bet_type = bet.result_bet_type
@@ -358,18 +371,16 @@ class Statistic(models.Model):
                         self.no_tendenz += 1
                     elif result_bet_type == ResultBetType.niete:
                         self.no_niete += 1
-
+                else:
+                    print("<-------------------------")
 
     def update_no_bets(self):
         """
             Count number of bets this user has placed
         """
-        self.no_bets = 0
-        # TODO this can probably be simplified? Result set filter, count?
-        if Game.tournament_has_started():
-            for bet in Bet.get_user_bets(self.user.pk):
-                if bet.has_bet():
-                    self.no_bets += 1
+        # TODO before the tournament has started, no-one should be able to see the number of bets of other users
+        # however, this should not be handled here, because the user themselves should see their placed bets counter
+        self.no_bets = 0 if not Game.tournament_has_started() else Bet.get_by_user_and_has_bet(self.user.pk).count()
 
     def pretty_print(self):
         return "%s (%i bets, %i Volltreffer, %i Points)" % (self.user, self.no_bets, self.no_volltreffer, self.points)
@@ -393,11 +404,12 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Game)
 @receiver(post_save, sender=Extra)
 def update_bet_results(sender, instance, created, **kwargs):
+    # update result field on bettables that are games
     if isinstance(instance, Game) and instance.has_result() and hasattr(instance, 'bettable_ptr'):
         instance.bettable_ptr.result = instance.result_str()
         instance.bettable_ptr.save()
 
-    for bet in Bet.get_bets_for_bettable(instance.pk):
+    for bet in Bet.get_by_bettable_and_has_result_and_bettable_has_result(instance.pk):
         bet.compute_points()
 
     for user in User.objects.all():

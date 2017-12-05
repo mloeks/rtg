@@ -103,7 +103,7 @@ class GameTests(TestCase):
         g2_noresult = utils.create_game(homegoals=-1, awaygoals=-1)
 
         self.assertEqual('4:2', g1_result.result_str())
-        self.assertEqual('-:-', g2_noresult.result_str())
+        self.assertIsNone(g2_noresult.result_str())
 
     def test_has_started(self):
         now = utils.create_datetime_from_now()

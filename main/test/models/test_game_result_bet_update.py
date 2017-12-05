@@ -44,7 +44,6 @@ class GameResultBetUpdateTests(TestCase):
         self.assertEqual(3, updated_bet.points)
         self.assertEqual('differenz', updated_bet.result_bet_type)
 
-    # TODO why is this test green? I would expect it to be red.
     def test_remove_game_result_resets_bettable(self):
         # GIVEN: some game with a result
         some_game = TestModelUtils.create_game(homegoals=3, awaygoals=2)

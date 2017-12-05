@@ -409,7 +409,7 @@ def update_bet_results(sender, instance, created, **kwargs):
         instance.bettable_ptr.result = instance.result_str()
         instance.bettable_ptr.save()
 
-    for bet in Bet.get_by_bettable_and_has_result_and_bettable_has_result(instance.pk):
+    for bet in Bet.get_by_bettable(instance.pk):
         bet.compute_points()
 
     for user in User.objects.all():

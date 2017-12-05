@@ -261,6 +261,7 @@ class Bet(models.Model):
         bettables = Bet.objects.filter(user__pk=user_id).filter(bettable__pk=bettable_id)
         return bettables.first() if bettables else None
 
+    # TODO do I use the ResultBetType enum concept correctly? I always have to access its name field...
     def compute_points(self):
         if not self.bettable or not self.bettable.has_result() or not self.has_bet():
             self.points = None
@@ -400,7 +401,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Extra)
 def update_bet_results(sender, instance, created, **kwargs):
     # update result field on bettables that are games
-    if isinstance(instance, Game) and instance.has_result() and hasattr(instance, 'bettable_ptr'):
+    if isinstance(instance, Game) and hasattr(instance, 'bettable_ptr'):
         instance.bettable_ptr.result = instance.result_str()
         instance.bettable_ptr.save()
 

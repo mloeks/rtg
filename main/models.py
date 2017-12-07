@@ -268,7 +268,6 @@ class Bet(models.Model):
         bettables = Bet.objects.filter(user__pk=user_id).filter(bettable__pk=bettable_id)
         return bettables.first() if bettables else None
 
-    # TODO do I use the ResultBetType enum concept correctly? I always have to access its name field...
     def compute_points(self):
         if not self.bettable or not self.bettable.has_result() or not self.has_bet():
             self.points = None
@@ -298,44 +297,38 @@ class Bet(models.Model):
         bettable_game = self.bettable.game
 
         # TODO hardcoded points... move to settings? or think about how to dynamically expose them via the API
-        volltreffer = (ResultBetType.volltreffer, 5)
-        differenz = (ResultBetType.differenz, 3)
-        remis_tendenz = (ResultBetType.remis_tendenz, 2)
-        tendenz = (ResultBetType.tendenz, 1)
-        niete = (ResultBetType.niete, 0)
+        volltreffer = (ResultBetType.volltreffer.name, 5)
+        differenz = (ResultBetType.differenz.name, 3)
+        remis_tendenz = (ResultBetType.remis_tendenz.name, 2)
+        tendenz = (ResultBetType.tendenz.name, 1)
+        niete = (ResultBetType.niete.name, 0)
 
         (game_hg, game_ag) = (int(bettable_game.homegoals), int(bettable_game.awaygoals))
         (bet_hg, bet_ag) = self.get_gamebet_goals()
 
         if game_hg == bet_hg and game_ag == bet_ag:
-            self.result_bet_type = volltreffer[0].name
-            self.points = volltreffer[1]
+            self.result_bet_type, self.points = volltreffer
             return
 
         if (game_hg - game_ag) == (bet_hg - bet_ag):
             if game_hg == game_ag:
                 # game was a remis
-                self.result_bet_type = remis_tendenz[0].name
-                self.points = remis_tendenz[1]
+                self.result_bet_type, self.points = remis_tendenz
                 return
             else:
                 # game was no remis
-                self.result_bet_type = differenz[0].name
-                self.points = differenz[1]
+                self.result_bet_type, self.points = differenz
                 return
 
         if (game_hg - game_ag) * (bet_hg - bet_ag) > 0:
-            self.result_bet_type = tendenz[0].name
-            self.points = tendenz[1]
+            self.result_bet_type, self.points = tendenz
             return
 
         if game_hg is game_ag and bet_hg is bet_ag:
-            self.result_bet_type = tendenz[0].name
-            self.points = tendenz[1]
+            self.result_bet_type, self.points = tendenz
             return
 
-        self.result_bet_type = niete[0].name
-        self.points = niete[1]
+        self.result_bet_type, self.points = niete
 
     def __str__(self):
         return self.bet_str()

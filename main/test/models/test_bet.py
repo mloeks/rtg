@@ -84,9 +84,6 @@ class BetTests(TestCase):
         bet5 = utils.create_bet(u2, g2, "0:3")
         bet6 = utils.create_bet(u2, g3, "2:2")
 
-        [gb.save() for gb in [bet1, bet2, bet3, bet4, bet5, bet6]]
-        [g.save() for g in [g1, g2, g3]]
-
         self.assertEqual(6, len(Bet.objects.all()))
         self.assertItemsEqual([bet1], list(Bet.get_by_user_and_has_bet_and_bettable_has_result(u1.pk)))
         self.assertItemsEqual([bet4, bet6], list(Bet.get_by_user_and_has_bet_and_bettable_has_result(u2.pk)))
@@ -113,9 +110,6 @@ class BetTests(TestCase):
         bet4 = utils.create_bet(u2, g1, "0:0")
         bet5 = utils.create_bet(u2, g2, "0:3")
         bet6 = utils.create_bet(u2, g3, "2:2")
-
-        [gb.save() for gb in [bet1, bet2, bet3, bet4, bet5, bet6]]
-        [g.save() for g in [g1, g2, g3]]
 
         self.assertEqual(6, len(Bet.objects.all()))
         self.assertItemsEqual([bet4, bet1], list(Bet.get_by_bettable_and_has_result_and_bettable_has_result(g1.pk)))

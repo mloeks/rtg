@@ -130,10 +130,10 @@ class BetTests(TestCase):
         bet2 = utils.create_bet(u1, g2)
         bet3 = utils.create_bet(u2, g1)
 
-        self.assertEqual(bet1, Bet.get_user_bettable_bet(u1.pk, g1.pk))
-        self.assertEqual(bet2, Bet.get_user_bettable_bet(u1.pk, g2.pk))
-        self.assertEqual(bet3, Bet.get_user_bettable_bet(u2.pk, g1.pk))
-        self.assertIsNone(Bet.get_user_bettable_bet(u2.pk, g2.pk))
+        self.assertEqual(bet1, Bet.get_by_user_and_bettable(u1.pk, g1.pk))
+        self.assertEqual(bet2, Bet.get_by_user_and_bettable(u1.pk, g2.pk))
+        self.assertEqual(bet3, Bet.get_by_user_and_bettable(u2.pk, g1.pk))
+        self.assertIsNone(Bet.get_by_user_and_bettable(u2.pk, g2.pk))
 
     def test_compute_points_of_game_bettable_none(self):
         u, g, g_r = utils.create_user(), utils.create_game(), utils.create_game(homegoals=3, awaygoals=1)

@@ -4,6 +4,7 @@ from time import sleep
 
 from django.contrib.auth.models import User
 from django.db import models, utils
+from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext as _
@@ -93,6 +94,12 @@ class Bettable(models.Model):
         elif hasattr(self, 'extra'):
             return self.extra
         return None
+
+    @staticmethod
+    def get_open_bettables_for_user(user_id):
+        return Bettable.objects\
+            .filter(deadline__gte=utils.get_reference_date())\
+            .exclude(Q(bet__user=user_id) & Q(bet__result_bet__isnull=False) & ~Q(bet__result_bet__exact=''))
 
     @staticmethod
     def get_bettables_with_result():
@@ -257,7 +264,7 @@ class Bet(models.Model):
             .exclude(bettable__result__exact='')
 
     @staticmethod
-    def get_user_bettable_bet(user_id, bettable_id):
+    def get_by_user_and_bettable(user_id, bettable_id):
         bettables = Bet.objects.filter(user__pk=user_id).filter(bettable__pk=bettable_id)
         return bettables.first() if bettables else None
 
@@ -270,16 +277,19 @@ class Bet(models.Model):
             return
 
         if hasattr(self.bettable, 'extra'):
-            if self.result_bet == self.bettable.result:
-                self.result_bet_type = ResultBetType.volltreffer.name
-                self.points = self.bettable.extra.points
-            else:
-                self.result_bet_type = ResultBetType.niete.name
-                self.points = 0
-            self.save()
+            self.compute_points_of_extra_bettable()
         elif hasattr(self.bettable, 'game'):
             self.compute_points_of_game_bettable()
-            self.save()
+
+        self.save()
+
+    def compute_points_of_extra_bettable(self):
+        if self.result_bet == self.bettable.result:
+            self.result_bet_type = ResultBetType.volltreffer.name
+            self.points = self.bettable.extra.points
+        else:
+            self.result_bet_type = ResultBetType.niete.name
+            self.points = 0
 
     def compute_points_of_game_bettable(self):
         if not self.has_bet() or not self.bettable.has_result():
@@ -448,16 +458,6 @@ class Profile(models.Model):
             return '<img src="%s" />' % self.avatar.url
         else:
             return 'No avatar.'
-
-    # TODO add to model tests!
-    def get_open_bettables(self):
-        open_bettables = []
-        for bettable in Bettable.objects.all():
-            bet = Bet.get_user_bettable_bet(self.user.pk, bettable.pk)
-            if not bettable.deadline_passed():
-                if not bet or (bet and not bet.has_bet()):
-                    open_bettables.append(bettable)
-        return open_bettables
 
     def __str__(self):
         return str(self.user) + '\'s Profile'

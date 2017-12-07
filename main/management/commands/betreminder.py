@@ -6,7 +6,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 
-from main.models import User
+from main.models import User, Bettable
 from main.utils import get_reference_date
 
 
@@ -36,7 +36,7 @@ class Command(BaseCommand):
     def get_open_bettables(user):
         ret = []
         ref_date = get_reference_date()
-        for open_bettable in user.profile.get_open_bettables():
+        for open_bettable in Bettable.get_open_bettables_for_user(user.pk):
             delta = open_bettable.deadline - ref_date
             if 0 <= delta.days < 1 and 0 < delta.seconds <= 24*3600:
                 ret.append(open_bettable)

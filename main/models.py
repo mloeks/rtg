@@ -88,6 +88,14 @@ class Bettable(models.Model):
     def has_result(self):
         return self.result is not None and self.result != ''
 
+    def set_result(self, result):
+        self.result = result
+        self.save()
+
+    def remove_result(self):
+        self.result = None
+        self.save()
+
     def get_related_child(self):
         if hasattr(self, 'game'):
             return self.game
@@ -136,6 +144,18 @@ class Game(Bettable):
 
     def is_over(self):
         return utils.get_reference_date() > (self.kickoff + timedelta(hours=1, minutes=45))
+
+    def set_result_goals(self, homegoals, awaygoals):
+        self.homegoals = homegoals
+        self.awaygoals = awaygoals
+        super().set_result(self.result_str())
+        self.save()
+
+    def remove_result(self):
+        self.homegoals = -1
+        self.awaygoals = -1
+        super().remove_result()
+        self.save()
 
     def update_bettable_result_field(self):
         self.bettable_ptr.result = self.result_str()
@@ -411,7 +431,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Game)
 @receiver(post_save, sender=Extra)
 def update_bet_results(sender, instance, created, **kwargs):
-    # update result field on bettables that are games
+    # update result field on Game bettables, which are stored by setting the goals, but not the result string
     if isinstance(instance, Game) and hasattr(instance, 'bettable_ptr'):
         instance.update_bettable_result_field()
 

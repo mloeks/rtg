@@ -115,10 +115,12 @@ class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
         fields = ('kickoff', 'deadline', 'hometeam', 'hometeam_name', 'awayteam', 'awayteam_name',
-                  'homegoals', 'awaygoals', 'city', 'round_details', 'bets_open')
+                  'homegoals', 'awaygoals', 'city', 'round', 'round_details', 'venue', 'bets_open')
         extra_kwargs = {
             'hometeam': {'write_only': True},
             'awayteam': {'write_only': True},
+            'round': {'write_only': True},
+            'venue': {'write_only': True},
         }
 
     def get_bets_open(self, obj):
@@ -128,7 +130,7 @@ class GameSerializer(serializers.ModelSerializer):
         return obj.venue.city
 
     def get_round_details(self, obj):
-        return TournamentRoundSerializer.as_dict(obj.round),
+        return TournamentRoundSerializer.as_dict(obj.round)
 
 
 class UserSerializer(serializers.ModelSerializer):

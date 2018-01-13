@@ -20,8 +20,8 @@
 
 ### Konzept generischer Bets
 
-* manuelle Tests
-* Performance bei Updates (ist langsam geworden...)
+* Einige neue API Tests schreiben für Bettables
+* ggf. Performance bei Updates (ist langsam geworden...)
 
 ### TODOs
 

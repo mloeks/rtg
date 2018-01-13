@@ -1,50 +1,51 @@
 # -*- coding: utf-8 -*-
-import json
 from datetime import timedelta
 
+from django.contrib.auth.models import User
 from rest_framework import status
 
-from main.models import GameBet
+from main.models import Bet, Bettable
 from main.test.api.abstract_rtg_api_test import RtgApiTestCase
 from main.test.api.test_game import GameApiTests
 from main.test.utils import TestModelUtils
 
 
-class GameBetApiTests(RtgApiTestCase):
+class BetApiTests(RtgApiTestCase):
 
-    def tearDown(self):
-        pass
+    def setUp(self):
+        User.objects.all().delete()
+        Bettable.objects.all().delete()
+        Bet.objects.all().delete()
 
-    def test_gamebet_create_admin(self):
-        self.create_test_user(admin=True)
-        response = self.create_test_gamebet_api()
+    def test_bet_create_admin(self):
+        u1 = self.create_test_user(admin=True)
+        response = self.create_test_bet_api()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(GameBet.objects.count(), 1)
-        self.assertIsNotNone(GameBet.objects.get(homegoals=5))
+        self.assertEqual(Bet.objects.count(), 1)
+        self.assertIsNotNone(Bet.objects.get(user=u1))
 
-    def test_gamebet_create(self):
+    def test_bet_create(self):
         u1 = TestModelUtils.create_user()
         self.create_test_user(u1.username)
-        response = self.create_test_gamebet_api()
+        response = self.create_test_bet_api()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(GameBet.objects.count(), 1)
-        self.assertIsNotNone(GameBet.objects.get(homegoals=5))
-        self.assertEqual(u1.pk, GameBet.objects.get(homegoals=5).user.id)
+        self.assertEqual(Bet.objects.count(), 1)
+        self.assertEqual(u1, Bet.objects.get(user=u1).user)
 
-    def test_gamebet_create_public(self):
+    def test_bet_create_public(self):
         self.create_test_user(auth=False)
-        response = self.create_test_gamebet_api()
+        response = self.create_test_bet_api()
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_gamebet_read(self):
+    def test_bet_read(self):
         # TODO apply restrictions when trying to read bets created by other users
-        self.create_test_user()
-        response = self.get_test_gamebet_api()
+        u1 = self.create_test_user()
+        response = self.get_test_bet_api()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(GameBet.objects.count(), 1)
-        self.assertIsNotNone(GameBet.objects.get(homegoals=4))
+        self.assertEqual(Bet.objects.count(), 1)
+        self.assertIsNotNone(Bet.objects.get(user=u1))
 
-    def test_gamebet_read_allowed_filtered(self):
+    def test_bet_read_allowed_filtered(self):
         u1, u2 = TestModelUtils.create_user(), TestModelUtils.create_user()
 
         g1 = TestModelUtils.create_game(kickoff=TestModelUtils.create_datetime_from_now(timedelta(days=-2)))
@@ -86,14 +87,14 @@ class GameBetApiTests(RtgApiTestCase):
         self.assertEqual(7, len(bets))
         self.assertEqual([gb.id for gb in [gb1, gb2, gb5, gb6, gb7, gb8, gb9]], [gb['id'] for gb in bets])
 
-    def test_gamebet_public_read(self):
+    def test_bet_public_read(self):
         self.create_test_user(auth=False)
-        response = self.get_test_gamebet_api()
+        response = self.get_test_bet_api()
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_gamebet_create_deadlines(self):
+    def test_bet_create_deadlines(self):
         """
-            A user must not be able to create a bet for a game where the deadline has passed already
+            A user must not be able to create a bet for a bettable where the deadline has passed already
             The attempt will raise a 400 (Bad Request), because POSTing itself is allowed, but validation will fail
         """
         u1 = TestModelUtils.create_user()
@@ -102,15 +103,15 @@ class GameBetApiTests(RtgApiTestCase):
         g2 = TestModelUtils.create_game(kickoff=TestModelUtils.create_datetime_from_now(timedelta(hours=2)))
 
         self.create_test_user(u1.username)
-        create_disallowed = self.client.post(self.BETS_BASEURL, {'homegoals': 3, 'awaygoals': 2, 'game': g1.pk},
+        create_disallowed = self.client.post(self.BETS_BASEURL, {'result_bet': '3:2', 'bettable': g1.pk},
                                              format='json')
         self.assertEqual(status.HTTP_400_BAD_REQUEST, create_disallowed.status_code)
 
-        create_allowed = self.client.post(self.BETS_BASEURL, {'homegoals': 0, 'awaygoals': 0, 'game': g2.pk},
+        create_allowed = self.client.post(self.BETS_BASEURL, {'result_bet': '0:0', 'bettable': g2.pk},
                                           format='json')
         self.assertEqual(status.HTTP_201_CREATED, create_allowed.status_code)
 
-    def test_gamebet_create_other(self):
+    def test_bet_create_other(self):
         """
             A user may not create a bet for a user other than himself. He can try to, but the user will always be
             automatically set to himself, because it is not writable and set to the request user by default
@@ -120,22 +121,22 @@ class GameBetApiTests(RtgApiTestCase):
         g1 = TestModelUtils.create_game(kickoff=TestModelUtils.create_datetime_from_now(timedelta(hours=2)))  # bets open
 
         self.create_test_user(u2.username)
-        create_unsuccessful = self.client.post(self.BETS_BASEURL, {'homegoals': 0, 'awaygoals': 2, 'game': g1.pk,
-                                                                       'user': u1.pk}, format='json')
+        create_unsuccessful = self.client.post(self.BETS_BASEURL, {'result_bet': '0:2', 'bettable': g1.pk,
+                                                                   'user': u1.pk}, format='json')
         self.assertEqual(status.HTTP_201_CREATED, create_unsuccessful.status_code)
-        self.assertEqual(u2.pk, GameBet.objects.get(game__pk=g1.pk).user.id)        # user has been overwritten by self!
+        self.assertEqual(u2.pk, Bet.objects.get(bettable__pk=g1.pk).user.id)        # user has been overwritten by self!
 
-        GameBet.objects.all().delete()
+        Bet.objects.all().delete()
 
-        create_successful = self.client.post(self.BETS_BASEURL, {'homegoals': 3, 'awaygoals': 2, 'game': g1.pk,
-                                                                     'user': u2.pk}, format='json')
+        create_successful = self.client.post(self.BETS_BASEURL, {'result_bet': '3:2', 'bettable': g1.pk,
+                                                                 'user': u2.pk}, format='json')
         self.assertEqual(status.HTTP_201_CREATED, create_successful.status_code)
-        self.assertEqual(u2.pk, GameBet.objects.get(game__pk=g1.pk).user.id)
+        self.assertEqual(u2.pk, Bet.objects.get(bettable__pk=g1.pk).user.id)
 
 
-    def test_gamebet_update_deadlines(self):
+    def test_bet_update_deadlines(self):
         """
-            An authenticated user must not be allowed to update his bet for a game where the deadline has passed already
+            An authenticated user must not be allowed to update his bet for a bettable where the deadline has passed already
         """
         u1 = TestModelUtils.create_user()
 
@@ -147,14 +148,14 @@ class GameBetApiTests(RtgApiTestCase):
 
         self.create_test_user(u1.username)
         update_disallowed = self.client.put("%s%i/" % (self.BETS_BASEURL, gb1.pk),
-                                            {'homegoals': 3, 'awaygoals': 2, 'game': g1.pk}, format='json')
+                                            {'result_bet': '3:2', 'bettable': g1.pk}, format='json')
         self.assertEqual(status.HTTP_400_BAD_REQUEST, update_disallowed.status_code)
 
         update_allowed = self.client.put("%s%i/" % (self.BETS_BASEURL, gb2.pk),
-                                         {'homegoals': 0, 'awaygoals': 0, 'game': g2.pk}, format='json')
+                                         {'result_bet': '0:0', 'bettable': g2.pk}, format='json')
         self.assertEqual(status.HTTP_200_OK, update_allowed.status_code)
 
-    def test_gamebet_update_other(self):
+    def test_bet_update_other(self):
         """
             A user must not be allowed to update a bet of a different user.
             The attempt will receive a 404 because not owned bets are excluded from the viewset using a filter.
@@ -166,10 +167,10 @@ class GameBetApiTests(RtgApiTestCase):
 
         self.create_test_user(u2.username)
         update_disallowed = self.client.put("%s%i/" % (self.BETS_BASEURL, gb1.pk),
-                                            {'homegoals': 3, 'awaygoals': 2, 'game': g1.pk}, format='json')
+                                            {'result_bet': '3:2', 'bettable': g1.pk}, format='json')
         self.assertEqual(status.HTTP_404_NOT_FOUND, update_disallowed.status_code)
 
-    def test_gamebet_delete_other(self):
+    def test_bet_delete_other(self):
         """
             A user may only delete his own bet.
             A DELETE request on another user's bet actually returns a 404 (Not Found), because it's filtered out by the viewset.
@@ -187,49 +188,48 @@ class GameBetApiTests(RtgApiTestCase):
         delete_disallowed = self.client.delete("%s%i/" % (self.BETS_BASEURL, gb1.pk))
         self.assertEqual(status.HTTP_204_NO_CONTENT, delete_disallowed.status_code)
 
-    def test_gamebet_update(self):
+    def test_bet_update(self):
         self.create_test_user()
-        response = self.update_test_gamebet_api()
+        response = self.update_test_bet_api()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_gamebet_delete_admin(self):
+    def test_bet_delete_admin(self):
         self.create_test_user(admin=True)
-        response = self.delete_test_gamebet_api()
+        response = self.delete_test_bet_api()
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(GameBet.objects.count(), 0)
+        self.assertEqual(Bet.objects.count(), 0)
 
-    def test_gamebet_delete(self):
+    def test_bet_delete(self):
         self.create_test_user()
-        response = self.delete_test_gamebet_api()
+        response = self.delete_test_bet_api()
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-    def test_gamebet_delete_public(self):
+    def test_bet_delete_public(self):
         self.create_test_user(auth=False)
-        response = self.delete_test_gamebet_api()
+        response = self.delete_test_bet_api()
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     @staticmethod
-    def create_test_gamebet(user):
-        test_game = GameApiTests.create_test_game()
-        test_gamebet = GameBet(homegoals=4, awaygoals=2, game=test_game, user=user)
-        test_gamebet.save()
-        return test_gamebet
+    def create_test_bet(user):
+        test_bettable = GameApiTests.create_test_game()
+        test_bet = Bet(result_bet='4:2', bettable=test_bettable, user=user)
+        test_bet.save()
+        return test_bet
 
-    def get_test_gamebet_api(self):
-        test_gamebet = self.create_test_gamebet(self.test_user)
-        return self.client.get('%s%i/' % (self.BETS_BASEURL, test_gamebet.pk))
+    def get_test_bet_api(self):
+        test_bet = self.create_test_bet(self.test_user)
+        return self.client.get('%s%i/' % (self.BETS_BASEURL, test_bet.pk))
 
-    def create_test_gamebet_api(self):
-        test_game = GameApiTests.create_test_game()
-        return self.client.post(self.BETS_BASEURL, {'homegoals': 5, 'awaygoals': 1, 'game': test_game.pk},
-                                format='json')
+    def create_test_bet_api(self):
+        test_bettable = GameApiTests.create_test_game()
+        return self.client.post(self.BETS_BASEURL, {'result_bet': '5:1', 'bettable': test_bettable.pk}, format='json')
 
-    def update_test_gamebet_api(self):
-        test_gamebet = self.create_test_gamebet(self.test_user)
-        test_game = GameApiTests.create_test_game()
-        return self.client.put("%s%i/" % (self.BETS_BASEURL, test_gamebet.pk),
-                               {'homegoals': 3, 'awaygoals': 2, 'game': test_game.pk}, format='json')
+    def update_test_bet_api(self):
+        test_bet = self.create_test_bet(self.test_user)
+        test_bettable = GameApiTests.create_test_game()
+        return self.client.put("%s%i/" % (self.BETS_BASEURL, test_bet.pk),
+                               {'result_bet': '3:2', 'bettable': test_bettable.pk}, format='json')
 
-    def delete_test_gamebet_api(self):
-        test_gamebet = self.create_test_gamebet(self.test_user)
-        return self.client.delete("%s%i/" % (self.BETS_BASEURL, test_gamebet.pk))
+    def delete_test_bet_api(self):
+        test_bet = self.create_test_bet(self.test_user)
+        return self.client.delete("%s%i/" % (self.BETS_BASEURL, test_bet.pk))

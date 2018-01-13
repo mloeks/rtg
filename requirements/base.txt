@@ -2,7 +2,7 @@ Django==1.11.4
 djangorestframework==3.6.4
 
 fabric3==1.13.1.post1
-psycopg2==2.7.3
+psycopg2==2.7.3.2
 path.py==10.3.1
 unipath==1.1
 pytest==3.2.1

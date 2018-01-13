@@ -32,8 +32,8 @@ def tz_date(*args):
     return timezone.make_aware(datetime.datetime(*args), timezone.get_default_timezone())
 
 # simulate that "now" is a different date
-# FAKE_DATE = tz_date(2016, 10, 30, 9, 0, 0)
-# FAKE_DATE = tz_date(2016, 6, 10, 9, 0, 0)       # EURO begins! :-)
+# FAKE_DATE = tz_date(2018, 10, 30, 9, 0, 0)
+# FAKE_DATE = tz_date(2018, 6, 14, 17, 0, 0)       # World Cup 2018 begins! :-)
 
 CORS_ORIGIN_REGEX_WHITELIST = ('^(https?://)?(\w+\.)?demo.royale-tippgemeinschaft\.de$', )
 

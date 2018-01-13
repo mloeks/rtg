@@ -90,12 +90,13 @@ class GameTests(TestCase):
         v1 = utils.create_venue()
         now = timezone.now()
 
-        # these should be OK
-        Game.objects.create(kickoff=now, deadline=now, hometeam=t1, awayteam=t3, name="g1", venue=v1, round=r1).clean()
-        Game.objects.create(kickoff=now, deadline=now, hometeam=t1, awayteam=t2, name="g2", venue=v1, round=r2).clean()
+        # these should be OK, because the teams are either in the same group or it's a knockout round
+        Game.objects.create(kickoff=now, deadline=now, hometeam=t1, awayteam=t3, venue=v1, round=r1).clean()
+        Game.objects.create(kickoff=now, deadline=now, hometeam=t1, awayteam=t2, venue=v1, round=r2).clean()
 
-        # this game is not possible
-        g1 = Game.objects.create(kickoff=now, deadline=now, hometeam=t1, awayteam=t2, venue=v1, round=r1)
+        # this game is not allowed, because the round should be a non knockout round but the teams are not in the
+        # same group
+        g1 = Game.objects.create(kickoff=now, deadline=now, hometeam=t2, awayteam=t3, venue=v1, round=r1)
         self.assertRaises(ValidationError, g1.clean)
 
     def test_result_str(self):

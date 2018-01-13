@@ -148,6 +148,5 @@ class Command(BaseCommand):
     def a_game(self, home, away, kickoff, venue, deadline='2016-06-10 21:00:00+02'):
         hometeam = self.teams[home]
         awayteam = self.teams[away]
-        display_name = "%s - %s" % (hometeam, awayteam)
-        Game(kickoff=kickoff, deadline=deadline, round=self.rounds['vorrunde'], name=display_name,
+        Game(kickoff=kickoff, deadline=deadline, round=self.rounds['vorrunde'],
              hometeam=hometeam, awayteam=awayteam, venue=self.venues[venue]).save()

@@ -16,6 +16,7 @@ class BetSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bet
         exclude = ('result_bet_type',)
+        read_only_fields = ('points',)
 
     def get_bettable_type(self, obj):
         return lower(type(obj.bettable.get_related_child()).__name__)

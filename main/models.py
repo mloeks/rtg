@@ -157,6 +157,10 @@ class Game(Bettable):
         super().remove_result()
         self.save()
 
+    def update_bettable_name(self):
+        self.bettable_ptr.name = "%s - %s" % (self.hometeam, self.awayteam,)
+        self.bettable_ptr.save()
+
     def update_bettable_result_field(self):
         self.bettable_ptr.result = self.result_str()
         self.bettable_ptr.save()
@@ -433,6 +437,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 def update_bet_results(sender, instance, created, **kwargs):
     # update result field on Game bettables, which are stored by setting the goals, but not the result string
     if isinstance(instance, Game) and hasattr(instance, 'bettable_ptr'):
+        instance.update_bettable_name()
         instance.update_bettable_result_field()
 
     [bet.compute_points() for bet in Bet.get_by_bettable(instance.pk)]

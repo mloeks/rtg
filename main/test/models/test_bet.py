@@ -73,9 +73,9 @@ class BetTests(TestCase):
 
     def test_get_bets_by_user_and_has_bet_and_bettable_has_result(self):
         u1, u2 = utils.create_user(), utils.create_user()
-        g1, g2, g3 = utils.create_game(name="g1", homegoals=3, awaygoals=2), \
-                     utils.create_game(name="g2"), \
-                     utils.create_game(name="g3", homegoals=0, awaygoals=0)
+        g1, g2, g3 = utils.create_game(homegoals=3, awaygoals=2), \
+                     utils.create_game(), \
+                     utils.create_game(homegoals=0, awaygoals=0)
 
         bet1 = utils.create_bet(u1, g1, "2:1")
         bet2 = utils.create_bet(u1, g2, "2:1")
@@ -100,9 +100,9 @@ class BetTests(TestCase):
 
     def test_get_bets_by_bettable_and_bettable_has_result(self):
         u1, u2 = utils.create_user(), utils.create_user()
-        g1, g2, g3 = utils.create_game(name="g1", homegoals=1, awaygoals=2), \
-                     utils.create_game(name="g2"), \
-                     utils.create_game(name="g3", homegoals=3, awaygoals=0)
+        g1, g2, g3 = utils.create_game(homegoals=1, awaygoals=2), \
+                     utils.create_game(), \
+                     utils.create_game(homegoals=3, awaygoals=0)
 
         bet1 = utils.create_bet(u1, g1, "2:1")
         bet2 = utils.create_bet(u1, g2, "2:1")

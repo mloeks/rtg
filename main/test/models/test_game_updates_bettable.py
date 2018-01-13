@@ -15,6 +15,14 @@ class GameResultBetUpdateTests(TestCase):
         Game.objects.all().delete()
         Bet.objects.all().delete()
 
+    def test_new_game_creates_bettable_with_name(self):
+        # WHEN: some game is created
+        some_game = TestModelUtils.create_game(hometeam=TestModelUtils.create_team("Heim"),
+                                               awayteam=TestModelUtils.create_team("Gast"))
+
+        # THEN: the parent bettable should have the correct name set
+        self.assertEqual('Heim - Gast', Bettable.objects.get(pk=some_game.pk).name)
+
     def test_new_game_result_updates_bettable(self):
         # GIVEN: some game
         some_game = TestModelUtils.create_game()

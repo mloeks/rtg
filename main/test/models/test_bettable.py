@@ -16,9 +16,9 @@ class BettableTests(TestCase):
 
     def test_get_open_bettables(self):
         u1, u2 = utils.create_user(), utils.create_user()
-        g1, g2, g3 = utils.create_game(name="g1", deadline=datetime.now() - timedelta(hours=2)), \
-                     utils.create_game(name="g2", deadline=datetime.now() + timedelta(minutes=5)), \
-                     utils.create_game(name="g3", deadline=datetime.now() + timedelta(days=1))
+        g1, g2, g3 = utils.create_game(deadline=datetime.now() - timedelta(hours=2)), \
+                     utils.create_game(deadline=datetime.now() + timedelta(minutes=5)), \
+                     utils.create_game(deadline=datetime.now() + timedelta(days=1))
 
         utils.create_bet(u1, g1, "2:1")
         utils.create_bet(u1, g3)

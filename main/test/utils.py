@@ -34,18 +34,16 @@ class TestModelUtils:
         return User.objects.create(username=username, first_name=first_name, last_name=last_name)
 
     @staticmethod
-    def create_game(hometeam=None, awayteam=None, name=None, kickoff=None, deadline=None, venue=None, round=None, homegoals=-1, awaygoals=-1):
+    def create_game(hometeam=None, awayteam=None, kickoff=None, deadline=None, venue=None, round=None, homegoals=-1, awaygoals=-1):
         hometeam = hometeam or TestModelUtils.create_team()
         awayteam = awayteam or TestModelUtils.create_team()
         kickoff = kickoff or timezone.now()
         deadline = deadline or kickoff
-        name = name or "%s - %s" % (hometeam, awayteam)
         venue = venue or TestModelUtils.create_venue()
         round = round or TestModelUtils.create_round()
 
         return Game.objects.create(kickoff=kickoff, deadline=deadline, homegoals=homegoals, awaygoals=awaygoals,
-                                   hometeam=hometeam, awayteam=awayteam, name=name,
-                                   venue=venue, round=round)
+                                   hometeam=hometeam, awayteam=awayteam, venue=venue, round=round)
 
     @staticmethod
     def create_bet(user=None, bettable=None, result_bet='', result_bet_type=None, points=None):

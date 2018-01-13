@@ -273,7 +273,6 @@ class Bet(models.Model):
         return bettables.first() if bettables else None
 
     def compute_points(self):
-        print("<--------------- COMPUTING POINTS for bet %s" % self)
         if not self.bettable or not self.bettable.has_result() or not self.has_bet():
             self.points = None
             self.result_bet_type = None
@@ -353,7 +352,6 @@ class Statistic(models.Model):
     points = models.PositiveSmallIntegerField(default=0)
 
     def update(self):
-        print("<---------- UPDATING STATISTICS")
         self.recalculate()
         self.update_no_bets()
         self.save()
@@ -369,28 +367,19 @@ class Statistic(models.Model):
             self.no_tendenz, self.no_niete = 0, 0, 0, 0, 0, 0
 
         for bet in Bet.get_by_user_and_has_bet_and_bettable_has_result(self.user.pk):
-            # TODO investigate why it happens that a bet with a bettables which has a result has no points?
-            # TODO this can happen when a bettable has a result but its post_save point computation was not yet invoked
-            # still this should be ok and the calculation should be consistent in the end, but it's not - the statistics
-            # test fails unless we re-calculate here... (with no result bet types set AT ALL)
-            if not bet.points:
-                print("********** NO POINTS present for user %s bet %s" % (self.user.pk, bet))
-                return
-                # print("<--------------- IN RECALCULATE calculate points for bet %s" % bet)
-                # bet.compute_points()
-
-            self.points += bet.points
-            result_bet_type = bet.result_bet_type
-            if result_bet_type == ResultBetType.volltreffer.name:
-                self.no_volltreffer += 1
-            elif result_bet_type == ResultBetType.differenz.name:
-                self.no_differenz += 1
-            elif result_bet_type == ResultBetType.remis_tendenz.name:
-                self.no_remis_tendenz += 1
-            elif result_bet_type == ResultBetType.tendenz.name:
-                self.no_tendenz += 1
-            elif result_bet_type == ResultBetType.niete.name:
-                self.no_niete += 1
+            if bet.points is not None:
+                self.points += bet.points
+                result_bet_type = bet.result_bet_type
+                if result_bet_type == ResultBetType.volltreffer.name:
+                    self.no_volltreffer += 1
+                elif result_bet_type == ResultBetType.differenz.name:
+                    self.no_differenz += 1
+                elif result_bet_type == ResultBetType.remis_tendenz.name:
+                    self.no_remis_tendenz += 1
+                elif result_bet_type == ResultBetType.tendenz.name:
+                    self.no_tendenz += 1
+                elif result_bet_type == ResultBetType.niete.name:
+                    self.no_niete += 1
 
     def update_no_bets(self):
         """
@@ -422,7 +411,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Game)
 @receiver(post_save, sender=Extra)
 def update_bet_results(sender, instance, created, **kwargs):
-    print("######## POST SAVE HOOK")
     # update result field on bettables that are games
     if isinstance(instance, Game) and hasattr(instance, 'bettable_ptr'):
         instance.update_bettable_result_field()

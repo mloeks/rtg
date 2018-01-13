@@ -48,10 +48,11 @@ class TestModelUtils:
                                    venue=venue, round=round)
 
     @staticmethod
-    def create_bet(user=None, bettable=None, result_bet='', result_bet_type=None):
+    def create_bet(user=None, bettable=None, result_bet='', result_bet_type=None, points=None):
         user = user or TestModelUtils.create_user()
         bettable = bettable or TestModelUtils.create_game()
-        return Bet.objects.create(user=user, bettable=bettable, result_bet=result_bet, result_bet_type=result_bet_type)
+        return Bet.objects.create(user=user, bettable=bettable, result_bet=result_bet, result_bet_type=result_bet_type,
+                                  points=points)
 
     @staticmethod
     def create_venue(name=None, city=None, capacity=None):

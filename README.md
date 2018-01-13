@@ -20,8 +20,6 @@
 
 ### Konzept generischer Bets
 
-* API Tests grün machen
-* ggf. Unit Tests eindampfen
 * manuelle Tests
 * Performance bei Updates (ist langsam geworden...)
 

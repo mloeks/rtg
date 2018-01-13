@@ -46,7 +46,7 @@ class ExtraChoiceInline(admin.TabularInline):
 
 
 class ExtraAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'points')
+    list_display = ('__str__', 'points', 'deadline')
     inlines = [ExtraChoiceInline]
 
 

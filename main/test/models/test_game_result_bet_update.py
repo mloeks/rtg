@@ -46,10 +46,10 @@ class GameResultBetUpdateTests(TestCase):
 
     # TODO write API test for this scenario as this test was green when it actually didn't work when tested manually via the API browser
     def test_remove_game_result_resets_bettable(self):
-        # GIVEN: some game with a result
+        # WHEN: some game with a result is created
         some_game = TestModelUtils.create_game(homegoals=3, awaygoals=2)
 
-        # THEN: the bettable should have the result set
+        # THEN: the corresponding bettable should have that result set
         self.assertEquals("3:2", Bettable.objects.get(pk=some_game.pk).result)
 
         # WHEN: the game's result is reset
@@ -74,7 +74,7 @@ class GameResultBetUpdateTests(TestCase):
         some_game.awaygoals = -1
         some_game.save()
 
-        # THEN: the bet should reset it's points
+        # THEN: the bet should reset it's points to None (not 0)
         updated_bet = Bet.objects.get(pk=some_bet.pk)
         self.assertIsNone(updated_bet.points)
         self.assertNotEqual(0, updated_bet.points)

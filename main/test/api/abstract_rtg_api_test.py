@@ -13,7 +13,7 @@ class RtgApiTestCase(APITestCase):
     TEAMS_BASEURL = '/rtg/teams/'
     VENUES_BASEURL = '/rtg/venues/'
     GAMES_BASEURL = '/rtg/games/'
-    BETTABLESS_BASEURL = '/rtg/bettables/'
+    BETTABLES_BASEURL = '/rtg/bettables/'
     BETS_BASEURL = '/rtg/bets/'
     EXTRAS_BASEURL = '/rtg/extras/'
     EXTRACHOICES_BASEURL = '/rtg/extrachoices/'

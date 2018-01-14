@@ -21,4 +21,6 @@ class Command(BaseCommand):
 
     def create_users(self, number):
         for i in range(1, number+1):
-            User(username='User %i' % i, first_name='Ben', last_name='Utzer %i' % i, email='testuser%i@rtg.de' % i).save()
+            email_and_password = 'user%i@rtg.de' % i
+            User.objects.create_user(username='User %i' % i, first_name='Ben', last_name='Utzer %i' % i,
+                                     email=email_and_password, password=email_and_password)

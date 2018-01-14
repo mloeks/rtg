@@ -22,7 +22,7 @@ ALLOWED_HOSTS = [
     'localhost'
 ]
 
-CORS_ORIGIN_REGEX_WHITELIST = ('^(https?://)?localhost:8888$', )
+CORS_ORIGIN_REGEX_WHITELIST = ('^(https?://)?localhost:3000$', )
 
 ########## EMAIL CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend

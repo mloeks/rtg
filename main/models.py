@@ -473,6 +473,15 @@ class Profile(models.Model):
         full_name = self.user.get_full_name()
         return full_name if full_name else self.user.username
 
+    def get_open_bettables(self):
+        ret = []
+        ref_date = utils.get_reference_date()
+        for open_bettable in Bettable.get_open_bettables_for_user(self.user.pk):
+            delta = open_bettable.deadline - ref_date
+            if 0 <= delta.days < 1 and 0 < delta.seconds <= 24*3600:
+                ret.append(open_bettable)
+        return ret
+
     def avatar_tag(self):
         if self.avatar:
             return '<img src="%s" />' % self.avatar.url

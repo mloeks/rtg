@@ -1,9 +1,9 @@
 # # -*- coding: utf-8 -*-
 import re
 
-from allauth.account.adapter import get_adapter, DefaultAccountAdapter
 from django.conf import settings
 from django.contrib.sites.requests import RequestSite
+from django.core import validators
 from django.core.mail import send_mail
 from django.core.mail.message import EmailMultiAlternatives
 from django.template.loader import render_to_string
@@ -19,17 +19,9 @@ class RtgRegisterSerializer(RegisterSerializer):
     """
     Serializer for rest-auth registration. Include user's first and last name as mandatory fields (RTG needs to know).
     """
-    first_name = serializers.CharField(required=True)
+    first_name = serializers.CharField(required=True, min_length=2)
     last_name = serializers.CharField(required=True, min_length=2)
     email = serializers.EmailField(required=True)
-
-    def validate_first_name(self, first_name):
-        first_name = get_adapter().clean_first_name(first_name)
-        return first_name
-
-    def validate_last_name(self, last_name):
-        last_name = get_adapter().clean_last_name(last_name)
-        return last_name
 
     def get_cleaned_data(self):
         return {
@@ -42,19 +34,13 @@ class RtgRegisterSerializer(RegisterSerializer):
         }
 
 
-class RtgAccountAdapter(DefaultAccountAdapter):
+class RtgUsernameValidator(validators.RegexValidator):
+    regex = r'^[\w\säöüÄÖÜéèáàß.@+-]+$'
+    message = 'Dein Username darf nur aus Buchstaben, Zahlen, Leerzeichen und @/./+/-/_. bestehen.'
+    flags = re.ASCII
 
-    def clean_username(self, username, shallow=False):
-        self.username_regex = re.compile(r'^[\w\säöüÄÖÜéèáàß.@+-]+$')
-        self.error_messages['invalid_username'] = \
-            'Dein Username darf nur aus Buchstaben, Zahlen, Leerzeichen und @/./+/-/_. bestehen.'
-        return super(RtgAccountAdapter, self).clean_username(username, shallow)
 
-    def clean_first_name(self, first_name):
-        return first_name
-
-    def clean_last_name(self, last_name):
-        return last_name
+rtg_username_validators = [RtgUsernameValidator()]
 
 
 class RtgRegisterView(ObtainJSONWebToken):

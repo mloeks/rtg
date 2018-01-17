@@ -259,11 +259,11 @@ REST_AUTH_SERIALIZERS = {
 }
 
 # all-auth settings
-ACCOUNT_ADAPTER = 'main.registration_overrides.RtgAccountAdapter'
 # ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_EMAIL_VERIFICATION = "optional"
 ACCOUNT_USERNAME_MIN_LENGTH = 3
 ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_USERNAME_VALIDATORS = 'main.registration_overrides.rtg_username_validators'
 
 # allow for e-mail as user name (EmailBackend)
 AUTHENTICATION_BACKENDS = (

@@ -115,7 +115,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            normpath(join(SITE_ROOT, 'templates')),
+            normpath(join(SITE_ROOT, 'rtg/templates')),
         ],
         'APP_DIRS': True,
         'OPTIONS': {

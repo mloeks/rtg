@@ -26,8 +26,9 @@ class RtgRegisterSerializer(RegisterSerializer):
     def get_cleaned_data(self):
         return {
             'username': self.validated_data.get('username', ''),
-            'password': self.validated_data.get('password1', ''),       # both passwords are needed for UserSerializer and JSONWebTokenSerializer
-            'password1': self.validated_data.get('password1', ''),
+            'password': self.validated_data.get('password', ''),
+            'password1': self.validated_data.get('password', ''),
+            'password2': self.validated_data.get('password2', ''),
             'email': self.validated_data.get('email', ''),
             'first_name': self.validated_data.get('first_name', ''),
             'last_name': self.validated_data.get('last_name', '')
@@ -52,7 +53,13 @@ class RtgRegisterView(ObtainJSONWebToken):
                 status=status.HTTP_403_FORBIDDEN
             )
 
-        serializer = RtgRegisterSerializer(data=request.data)
+        # the RegisterSerializer expects the two passwords to be in fields named password1 and password2
+        # However, the JWT serializer later on expects a password field to be present
+        # We'd like to send the schema password/password2 in the payload, so we need to enhance the
+        # serialized and validated data with password1 here in order to satisfy the RegisterSerializer
+        request_data_with_password1_field = {**request.data, **{'password1': request.data['password']}}
+
+        serializer = RtgRegisterSerializer(data=request_data_with_password1_field)
         serializer.is_valid(raise_exception=True)
         user = serializer.save(self.request)
 

@@ -8,34 +8,44 @@ from main.test.api.abstract_rtg_api_test import RtgApiTestCase
 
 class RegistrationApiTests(RtgApiTestCase):
 
-    def tearDown(self):
+    def setUp(self):
         User.objects.all().delete()
         Profile.objects.all().delete()
 
     def test_register_valid_user(self):
         register_payload = {
-            'username': 'Her Royal Highness', 'email': 'hrh@windsor.co.uk', 'first_name': 'Margaret', 'last_name': 'Windsor',
-            'password': 'shirley1', 'password1': 'shirley1', 'password2': 'shirley1'
+            'username': 'Her Royal Highness', 'first_name': 'Margaret', 'last_name': 'Windsor',
+            'password': 'shirley1', 'password2': 'shirley1', 'email': 'hrh@windsor.co.uk'
         }
         response = self.client.post(self.REGISTER_URL, register_payload, format='json')
+        print(response.data)
         self.assertEqual(HTTP_200_OK, response.status_code)
         self.assertTrue('token' in response.data)
 
-    def test_register_invalid_user_with_field_error(self):
-        """ Test that response contains a field_error for an invalid email """
+    def test_register_invalid_user_with_invalid_email(self):
         register_payload = {
-            'username': 'Her Royal Highness', 'email': 'nomail', 'first_name': 'Margaret', 'last_name': 'Windsor',
-            'password': 'shirley1', 'password1': 'shirley1', 'password2': 'shirley1'
+            'username': 'Her Royal Highness', 'first_name': 'Margaret', 'last_name': 'Windsor',
+            'password': 'shirley1', 'password2': 'shirley1', 'email': 'nomail'
         }
         response = self.client.post(self.REGISTER_URL, register_payload, format='json')
         self.assertEqual(HTTP_400_BAD_REQUEST, response.status_code)
         self.assertTrue('email' in response.data)
 
-    def test_register_invalid_user_with_non_field_error(self):
-        """ Test that response contains non_field_errors when both passwords are not identical. """
+    def test_register_invalid_user_with_invalid_password(self):
         register_payload = {
-            'username': 'Her Royal Highness', 'email': 'hrh@windsor.co.uk', 'first_name': 'Margaret', 'last_name': 'Windsor',
-            'password': 'shirley1', 'password1': 'shirley1', 'password2': 'shirley2'
+            'username': 'Her Royal Highness', 'first_name': 'Margaret', 'last_name': 'Windsor',
+            'password': 'short', 'password2': 'short', 'email': 'hrh@windsor.co.uk'
+        }
+        response = self.client.post(self.REGISTER_URL, register_payload, format='json')
+        self.assertEqual(HTTP_400_BAD_REQUEST, response.status_code)
+        # Unfortunately, the RegisterSerializer validates the password1/password2 fields and returns errors for these
+        # fields accordingly
+        self.assertTrue('password1' in response.data)
+
+    def test_register_invalid_user_with_non_matching_passwords(self):
+        register_payload = {
+            'username': 'Her Royal Highness', 'first_name': 'Margaret', 'last_name': 'Windsor',
+            'password': 'shirley1', 'password2': 'shirley2', 'email': 'hrh@windsor.co.uk'
         }
         response = self.client.post(self.REGISTER_URL, register_payload, format='json')
         self.assertEqual(HTTP_400_BAD_REQUEST, response.status_code)

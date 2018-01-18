@@ -26,8 +26,8 @@ class RtgRegisterSerializer(RegisterSerializer):
     def get_cleaned_data(self):
         return {
             'username': self.validated_data.get('username', ''),
-            'password': self.validated_data.get('password', ''),
-            'password1': self.validated_data.get('password', ''),
+            'password': self.validated_data.get('password1', ''),
+            'password1': self.validated_data.get('password1', ''),
             'password2': self.validated_data.get('password2', ''),
             'email': self.validated_data.get('email', ''),
             'first_name': self.validated_data.get('first_name', ''),

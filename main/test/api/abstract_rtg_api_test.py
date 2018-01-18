@@ -20,6 +20,8 @@ class RtgApiTestCase(APITestCase):
     USERS_BASEURL = '/rtg/users/'
     PROFILES_BASEURL = '/rtg/profiles/'
 
+    REGISTER_URL = '/api-token-register/'
+
     def create_test_user(self, name='test_user', auth=True, admin=False):
         try:
             user = User.objects.get(username=name)

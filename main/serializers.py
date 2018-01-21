@@ -115,7 +115,7 @@ class GameSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Game
-        fields = ('kickoff', 'deadline', 'hometeam', 'hometeam_name', 'awayteam', 'awayteam_name',
+        fields = ('id', 'kickoff', 'deadline', 'hometeam', 'hometeam_name', 'awayteam', 'awayteam_name',
                   'homegoals', 'awaygoals', 'city', 'round', 'round_details', 'venue', 'bets_open')
         extra_kwargs = {
             'hometeam': {'write_only': True},

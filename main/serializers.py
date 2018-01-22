@@ -109,6 +109,7 @@ class GameSerializer(serializers.ModelSerializer):
     city = serializers.SerializerMethodField()
     bets_open = serializers.SerializerMethodField()
     round_details = serializers.SerializerMethodField()
+    group = serializers.SerializerMethodField(allow_null=True)
 
     hometeam_name = serializers.CharField(source='hometeam.name', read_only=True)
     awayteam_name = serializers.CharField(source='awayteam.name', read_only=True)
@@ -116,7 +117,7 @@ class GameSerializer(serializers.ModelSerializer):
     class Meta:
         model = Game
         fields = ('id', 'kickoff', 'deadline', 'hometeam', 'hometeam_name', 'awayteam', 'awayteam_name',
-                  'homegoals', 'awaygoals', 'city', 'round', 'round_details', 'venue', 'bets_open')
+                  'homegoals', 'awaygoals', 'city', 'round', 'group', 'round_details', 'venue', 'bets_open')
         extra_kwargs = {
             'hometeam': {'write_only': True},
             'awayteam': {'write_only': True},
@@ -132,6 +133,9 @@ class GameSerializer(serializers.ModelSerializer):
 
     def get_round_details(self, obj):
         return TournamentRoundSerializer.as_dict(obj.round)
+
+    def get_group(self, obj):
+        return TournamentGroupSerializer.as_dict(obj.hometeam.group) if not obj.round.is_knock_out else None
 
 
 class UserSerializer(serializers.ModelSerializer):

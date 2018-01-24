@@ -39,12 +39,6 @@ class ExtraTests(TestCase):
             with transaction.atomic():
                 Extra.objects.create(name='RTG-Meister', deadline=timezone.now(), result=51*'y')
 
-        # name must be unique
-        Extra.objects.create(name='RTG-Meister', deadline=timezone.now())
-        with self.assertRaises(IntegrityError):
-            with transaction.atomic():
-                Extra.objects.create(name='RTG-Meister', deadline=timezone.now())
-
     def test_has_result(self):
         e1, e2 = utils.create_extra(), utils.create_extra(result='Die Königin!')
 

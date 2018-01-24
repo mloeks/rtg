@@ -14,13 +14,9 @@ from main.test.utils import TestModelUtils as utils
 class GameTests(TestCase):
 
     def setUp(self):
-        pass
-
-    def tearDown(self):
         Bettable.objects.all().delete()
         Game.objects.all().delete()
         Team.objects.all().delete()
-        utils.cleanup()
 
     def test_to_string(self):
         t1, t2 = utils.create_team(), utils.create_team()
@@ -154,3 +150,41 @@ class GameTests(TestCase):
         g4 = utils.create_game(kickoff=now + timedelta(hours=2))
 
         self.assertEqual(g2, Game.get_first_game())
+
+    def test_two_identical_games_in_same_round_should_be_forbidden(self):
+        # GIVEN: a round
+        now = utils.create_datetime_from_now()
+        a_round = utils.create_round('My Round')
+
+        # AND: two teams
+        t1 = utils.create_team('Team 1', 'TM1')
+        t2 = utils.create_team('Team 2', 'TM2')
+
+        # AND: a game in the given round
+        utils.create_game(hometeam=t1, awayteam=t2, round=a_round)
+
+        # WHEN: the same game is created again in the same round
+        # THEN: an IntegrityError should be raised
+        with self.assertRaises(IntegrityError):
+            utils.create_game(hometeam=t1, awayteam=t2, round=a_round)
+
+    def test_two_identical_games_in_different_rounds_should_be_allowed(self):
+        # GIVEN: two rounds
+        vor, af = utils.create_round('Vorrunde'), utils.create_round('Achtelfinale', True)
+
+        # AND: two teams
+        t1 = utils.create_team('Team 1', 'TM1')
+        t2 = utils.create_team('Team 2', 'TM2')
+
+        # AND: a game in the Vorrunde
+        g1 = utils.create_game(hometeam=t1, awayteam=t2, round=vor)
+
+        # WHEN: the same game is created in a different round
+        g2 = utils.create_game(hometeam=t1, awayteam=t2, round=af)
+
+        # THEN: no error should occur and both games should have been created
+        self.assertIsNotNone(Game.objects.get(pk=g1.pk))
+        self.assertEqual(vor, Game.objects.get(pk=g1.pk).round)
+
+        self.assertIsNotNone(Game.objects.get(pk=g2.pk))
+        self.assertEqual(af, Game.objects.get(pk=g2.pk).round)

@@ -76,7 +76,7 @@ class ResultBetType(utils.ChoicesEnum):
 
 class Bettable(models.Model):
     deadline = models.DateTimeField()
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
     result = models.CharField(blank=True, null=True, max_length=50)
 
     class Meta:
@@ -129,6 +129,7 @@ class Game(Bettable):
 
     class Meta:
         ordering = ["kickoff"]
+        unique_together = ('hometeam', 'awayteam', 'round')
 
     def result_str(self):
         return '%i:%i' % (self.homegoals, self.awaygoals) if self.has_result() else None

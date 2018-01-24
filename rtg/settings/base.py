@@ -283,7 +283,7 @@ REST_FRAMEWORK = {
 }
 REST_SESSION_LOGIN = False
 JWT_AUTH = {
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=60),
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=12),
     'JWT_AUTH_HEADER_PREFIX': 'Token',
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'main.utils.jwt_response_payload_handler',
 }

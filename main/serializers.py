@@ -114,10 +114,14 @@ class GameSerializer(serializers.ModelSerializer):
     hometeam_name = serializers.CharField(source='hometeam.name', read_only=True)
     awayteam_name = serializers.CharField(source='awayteam.name', read_only=True)
 
+    hometeam_abbreviation = serializers.CharField(source='hometeam.abbreviation', read_only=True)
+    awayteam_abbreviation = serializers.CharField(source='awayteam.abbreviation', read_only=True)
+
     class Meta:
         model = Game
-        fields = ('id', 'kickoff', 'deadline', 'hometeam', 'hometeam_name', 'awayteam', 'awayteam_name',
-                  'homegoals', 'awaygoals', 'city', 'round', 'group', 'round_details', 'venue', 'bets_open')
+        fields = ('id', 'kickoff', 'deadline', 'hometeam', 'hometeam_name', 'hometeam_abbreviation',
+                  'awayteam', 'awayteam_name', 'awayteam_abbreviation', 'homegoals', 'awaygoals',
+                  'city', 'round', 'group', 'round_details', 'venue', 'bets_open')
         extra_kwargs = {
             'hometeam': {'write_only': True},
             'awayteam': {'write_only': True},

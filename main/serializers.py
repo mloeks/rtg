@@ -50,9 +50,6 @@ class ExtraSerializer(serializers.ModelSerializer):
     class Meta:
         model = Extra
         fields = ('id', 'name', 'points', 'deadline', 'result', 'choices', 'open')
-        extra_kwargs = {
-            'points': {'write_only': True}
-        }
 
     def get_open(self, obj):
         return not obj.deadline_passed()

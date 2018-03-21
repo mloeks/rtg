@@ -147,7 +147,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-    permission_classes = (rtg_permissions.ProfilePermissions,)
+    permission_classes = (rtg_permissions.IsAdminOrSelfUpdateOrReadOnly,)
     pagination_class = None
 
     def get_queryset(self):

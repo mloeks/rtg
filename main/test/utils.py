@@ -6,7 +6,7 @@ from string import ascii_uppercase
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-from main.models import TournamentGroup, TournamentRound, Game, Venue, Team, Extra, ExtraChoice, Post, Bet
+from main.models import TournamentGroup, TournamentRound, Game, Venue, Team, Extra, ExtraChoice, Post, Bet, Profile
 
 
 class TestModelUtils:
@@ -32,6 +32,14 @@ class TestModelUtils:
         last_name = last_name or TestModelUtils.create_random_string(8)
 
         return User.objects.create(username=username, first_name=first_name, last_name=last_name)
+
+    @staticmethod
+    def create_profile(user=None, email2=None, about=None, location=None, has_paid=False, reminder_emails=True,
+                       daily_emails=True, avatar=None, avatar_cropped=None):
+        user = user or TestModelUtils.create_user()
+        return Profile.objects.create(user=user, email2=email2, about=about, location=location, has_paid=has_paid,
+                                      reminder_emails=reminder_emails, daily_emails=daily_emails, avatar=avatar,
+                                      avatar_cropped=avatar_cropped)
 
     @staticmethod
     def create_game(hometeam=None, awayteam=None, kickoff=None, deadline=None, venue=None, round=None, homegoals=-1, awaygoals=-1):

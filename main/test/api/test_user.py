@@ -132,20 +132,3 @@ class UserApiTests(RtgApiTestCase):
     def delete_test_user_api(self):
         test_user = self.create_test_user()
         return self.client.delete("%s%i/" % (self.USERS_BASEURL, test_user.pk))
-
-
-        # class ProfileApiTests(RtgApiTestCase):
-        #
-        #     def setUp(self):
-        #         self.create_test_user(admin=True)
-        #
-        #     def test_profile_being_created(self):
-        #         response = self.client.post(self.USERS_BASEURL, {'username': 'jacklondon'}, format='json')
-        #         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        #
-        #         user_pk = User.objects.get(username='jacklondon').pk
-        #         response = self.client.get('%s%i/' % (self.PROFILES_BASEURL, user_pk))
-        #         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        #
-        #         self.assertIsNotNone(Profile.objects.get(user__pk=user_pk))
-        #         self.assertEqual('jacklondon', response.data['user']['username'])

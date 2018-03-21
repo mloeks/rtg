@@ -62,7 +62,7 @@ class IsAdminOrSelfUpdateOrReadOnly(permissions.BasePermission):
             if request.method in permissions.SAFE_METHODS:
                 return True
             elif request.method in ['PUT', 'PATCH']:
-                return request.user.is_staff or obj == request.user
+                return request.user.is_staff or obj == request.user or (hasattr(obj, 'user') and obj.user == request.user)
             else:
                 return False
 
@@ -90,16 +90,3 @@ class UserPermissions(permissions.BasePermission):
 
     def is_own_user_resource(self, user, view):
         return view.queryset.filter(username=user.username).exists()
-
-
-class ProfilePermissions(permissions.BasePermission):
-    """
-        Permissions for (complete) ProfileViewSet.
-        All methods are only permitted for the owner or an Administrator.
-    """
-
-    def has_permission(self, request, view):
-        return request.user.is_authenticated()
-
-    def has_object_permission(self, request, view, obj):
-        return request.user.is_authenticated and (request.user.is_staff or obj.user == request.user)

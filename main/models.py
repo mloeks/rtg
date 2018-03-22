@@ -454,7 +454,7 @@ def update_statistic_no_bets(sender, instance, created, **kwargs):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, primary_key=True)
-    email2 = models.EmailField(blank=True)
+    email2 = models.EmailField(blank=True, default='')
 
     avatar = models.ImageField(upload_to=utils.get_avatar_path, storage=OverwriteStorage(), blank=True, null=True)
     avatar_cropped = models.ImageField(upload_to=utils.get_thumb_path, storage=OverwriteStorage(), blank=True, null=True)

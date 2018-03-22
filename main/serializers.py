@@ -139,52 +139,66 @@ class GameSerializer(serializers.ModelSerializer):
         return TournamentGroupSerializer.as_dict(obj.hometeam.group) if not obj.round.is_knock_out else None
 
 
+# Combining custom Profile with User, cf. https://stackoverflow.com/a/28733782
 class UserSerializer(serializers.ModelSerializer):
-    profile_id = IntegerField(source='profile.pk', read_only=True)
-
     email = serializers.EmailField(allow_blank=False)
+    email2 = serializers.EmailField(source='profile.email2', required=False, allow_null=True)
+    avatar = Base64ImageField(source='profile.avatar', required=False, allow_null=True)
+    avatar_cropped = Base64ImageField(source='profile.avatar_cropped', required=False, allow_null=True)
+    about = serializers.CharField(source='profile.about', required=False, allow_null=True)
+    location = serializers.CharField(source='profile.location', required=False, allow_null=True)
+    reminder_emails = serializers.BooleanField(source='profile.reminder_emails', default=True)
+    daily_emails = serializers.BooleanField(source='profile.daily_emails', default=True)
 
     class Meta:
         model = User
-        fields = ('pk', 'username', 'first_name', 'last_name', 'email', 'profile_id')
+        fields = ('pk', 'username', 'first_name', 'last_name', 'email', 'email2', 'avatar', 'avatar_cropped',
+                  'about', 'location', 'reminder_emails', 'daily_emails')
 
     def create(self, validated_data):
-        user = User.objects.create(**validated_data)
+        profile_data = validated_data.pop('profile', None)
+        user = super(UserSerializer, self).create(validated_data)
+        self.update_or_create_profile(user, profile_data)
         return user
 
+    def update(self, instance, validated_data):
+        profile_data = validated_data.pop('profile', None)
+        self.update_or_create_profile(instance, profile_data)
+        return super(UserSerializer, self).update(instance, validated_data)
 
-class ProfileSerializer(serializers.ModelSerializer):
-    avatar_cropped = Base64ImageField(required=False)
+    def update_or_create_profile(self, user, profile_data):
+        # This always creates a Profile if the User is missing one;
+        # change the logic here if that's not right for your app
+        Profile.objects.update_or_create(user=user, defaults=profile_data)
+
+    # TODO P1 check if this still works for avatar uploads
+    # def validate(self, attrs):
+    #     if 'avatar' in attrs:
+    #         avatar = attrs['avatar']
+    #         if avatar and len(avatar) > settings.MAX_UPLOAD_SIZE:
+    #             raise ValidationError('Bitte ein Bild mit max. %s hochladen.' % filesizeformat(settings.MAX_UPLOAD_SIZE))
+    #     if 'avatar_cropped' in attrs:
+    #         avatar_cropped = attrs['avatar_cropped']
+    #         if avatar_cropped and len(avatar_cropped) > settings.MAX_UPLOAD_SIZE:
+    #             raise ValidationError('Bitte ein Bild mit max. %s hochladen.' % filesizeformat(settings.MAX_UPLOAD_SIZE))
+    #
+    #     return attrs
+
+
+class PublicUserSerializer(serializers.ModelSerializer):
+    about = serializers.CharField(source='profile.about', required=False)
+    location = serializers.CharField(source='profile.location', required=False)
+    avatar_cropped = Base64ImageField(source='profile.avatar_cropped', required=False)
 
     class Meta:
-        model = Profile
-        fields = ('pk', 'email2', 'location', 'about', 'reminder_emails', 'daily_emails', 'avatar', 'avatar_cropped')
-
-    def validate(self, attrs):
-        if 'avatar' in attrs:
-            avatar = attrs['avatar']
-            if avatar and len(avatar) > settings.MAX_UPLOAD_SIZE:
-                raise ValidationError('Bitte ein Bild mit max. %s hochladen.' % filesizeformat(settings.MAX_UPLOAD_SIZE))
-        if 'avatar_cropped' in attrs:
-            avatar_cropped = attrs['avatar_cropped']
-            if avatar_cropped and len(avatar_cropped) > settings.MAX_UPLOAD_SIZE:
-                raise ValidationError('Bitte ein Bild mit max. %s hochladen.' % filesizeformat(settings.MAX_UPLOAD_SIZE))
-
-        return attrs
+        model = User
+        fields = ('pk', 'username', 'about', 'location', 'avatar_cropped')
 
 
-class PublicProfileSerializer(serializers.ModelSerializer):
-    user_pk = IntegerField(source='user.pk', read_only=True)
-    username = CharField(source='user.username', read_only=True)
-
+# TODO include all fields here, how to avoid copying them from UserSerializer?
+class AdminUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Profile
-        fields = ('pk', 'location', 'about', 'avatar_cropped', 'user_pk', 'username')
-
-
-class AdminProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Profile
+        model = User
         fields = ('pk', 'email2', 'location', 'about', 'has_paid', 'avatar_cropped')
 
 

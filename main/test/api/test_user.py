@@ -6,6 +6,7 @@ from rest_framework import status
 
 from main.test.api.abstract_rtg_api_test import RtgApiTestCase
 from main.test.utils import TestModelUtils
+from main.models import Profile
 
 
 class UserApiTests(RtgApiTestCase):
@@ -20,6 +21,11 @@ class UserApiTests(RtgApiTestCase):
         self.create_test_user(admin=True)
         response = self.create_test_user_api()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_user_create_non_admin(self):
+        self.create_test_user()
+        response = self.create_test_user_api()
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_user_create_unauth(self):
         self.create_test_user(auth=False)
@@ -98,7 +104,9 @@ class UserApiTests(RtgApiTestCase):
 
     def test_user_update_self(self):
         u1 = self.create_test_user('u1')
-        response = self.client.patch("%s%i/" % (self.USERS_BASEURL, u1.pk), {'username': 'newuser'}, format='json')
+        response = self.client.patch("%s%i/" % (self.USERS_BASEURL, u1.pk),
+                                     {'username': 'newuser', 'about': 'This is me!', 'location': 'Köln'},
+                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         updated_user = User.objects.get(username='newuser')
@@ -106,9 +114,23 @@ class UserApiTests(RtgApiTestCase):
         self.assertEqual(updated_user.username, 'newuser')
         self.assertRaises(User.DoesNotExist, User.objects.get, username='u1')
 
+    def test_user_update_self_profile_updates(self):
+        u1 = self.create_test_user('u1')
+        response = self.client.patch("%s%i/" % (self.USERS_BASEURL, u1.pk),
+                                   {'email2': 'mail@mail2.de', 'location': 'Kölle', 'about': 'It\'s me',
+                                    'avatar': None, 'reminder_emails': False}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        updated_profile = Profile.objects.get(pk=u1.pk)
+        self.assertEqual('mail@mail2.de', updated_profile.email2)
+        self.assertEqual('Kölle', updated_profile.location)
+        self.assertEqual('It\'s me', updated_profile.about)
+        self.assertFalse(updated_profile.reminder_emails)
+
     def test_user_update_public(self):
         u1 = self.create_test_user('u1', auth=False)
-        response = self.client.patch("%s%i/" % (self.USERS_BASEURL, u1.pk), {'username': 'newuser'}, format='json')
+        response = self.client.patch("%s%i/" % (self.USERS_BASEURL, u1.pk),
+                                     {'username': 'newuser', 'location': 'Buxtehude'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_user_delete_admin(self):

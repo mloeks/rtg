@@ -52,26 +52,12 @@ class IsAdminOrSelf(permissions.BasePermission):
                 return request.user.is_staff or obj == request.user
 
 
-class IsAdminOrSelfUpdateOrReadOnly(permissions.BasePermission):
-    def has_permission(self, request, view):
-        permitted_methods = permissions.SAFE_METHODS + ('PUT', 'PATCH')
-        return request.user.is_authenticated() and request.method in permitted_methods
-
-    def has_object_permission(self, request, view, obj):
-        if request.user.is_authenticated():
-            if request.method in permissions.SAFE_METHODS:
-                return True
-            elif request.method in ['PUT', 'PATCH']:
-                return request.user.is_staff or obj == request.user or (hasattr(obj, 'user') and obj.user == request.user)
-            else:
-                return False
-
-
 class UserPermissions(permissions.BasePermission):
     """
         Permissions for (complete) UserViewSet.
         List access is read-only (safe methods) for authenticated users.
         Object access is only permitted for the owner or an Administrator.
+        POSTing a new User should only be allowed for admin users.
     """
 
     def has_permission(self, request, view):

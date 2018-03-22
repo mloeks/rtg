@@ -121,6 +121,8 @@ class GameViewSet(viewsets.ModelViewSet):
     ordering = ('kickoff',)
 
 
+# TODO may be needed for avatar upload
+# @parser_classes((JSONParser, FormParser, MultiPartParser,))
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -143,33 +145,17 @@ class UserViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-@parser_classes((JSONParser, FormParser, MultiPartParser,))
-class ProfileViewSet(viewsets.ModelViewSet):
+# how the public can see users
+class PublicUserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-    permission_classes = (rtg_permissions.IsAdminOrSelfUpdateOrReadOnly,)
-    pagination_class = None
-
-    def get_queryset(self):
-        """
-            cf. UserViewSet
-        """
-        queryset = Profile.objects.all()
-        user = self.request.user
-        if not user.is_staff:
-            queryset = queryset.filter(user__pk=user.pk)
-        return queryset
-
-
-class PublicProfileViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Profile.objects.all()
-    serializer_class = PublicProfileSerializer
+    serializer_class = PublicUserSerializer
     pagination_class = None
 
 
-class AdminProfileViewSet(viewsets.ModelViewSet):
+# how admin users can see all users
+class AdminUserViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
-    serializer_class = AdminProfileSerializer
+    serializer_class = AdminUserSerializer
     permission_classes = (rtg_permissions.IsAdmin,)
     pagination_class = None
 

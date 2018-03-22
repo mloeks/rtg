@@ -15,9 +15,6 @@ router.register(r'games', views.GameViewSet)
 router.register(r'extras', views.ExtraViewSet)
 
 router.register(r'users', views.UserViewSet)
-router.register(r'profiles', views.ProfileViewSet, 'profiles')
-router.register(r'profiles_public', views.PublicProfileViewSet, 'profiles_public')
-router.register(r'profiles_admin', views.AdminProfileViewSet, 'profiles_admin')
 router.register(r'posts', views.PostViewSet)
 router.register(r'statistics', views.StatisticViewSet)
 

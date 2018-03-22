@@ -147,14 +147,14 @@ class UserViewSet(viewsets.ModelViewSet):
 
 # how the public can see users
 class PublicUserViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Profile.objects.all()
+    queryset = User.objects.all()
     serializer_class = PublicUserSerializer
     pagination_class = None
 
 
 # how admin users can see all users
 class AdminUserViewSet(viewsets.ModelViewSet):
-    queryset = Profile.objects.all()
+    queryset = User.objects.all()
     serializer_class = AdminUserSerializer
     permission_classes = (rtg_permissions.IsAdmin,)
     pagination_class = None

@@ -195,11 +195,12 @@ class PublicUserSerializer(serializers.ModelSerializer):
         fields = ('pk', 'username', 'about', 'location', 'avatar_cropped')
 
 
-# TODO include all fields here, how to avoid copying them from UserSerializer?
 class AdminUserSerializer(serializers.ModelSerializer):
+    has_paid = serializers.BooleanField(source='profile.has_paid', default=True)
+
     class Meta:
         model = User
-        fields = ('pk', 'email2', 'location', 'about', 'has_paid', 'avatar_cropped')
+        fields = ('pk', 'username', 'first_name', 'last_name', 'has_paid')
 
 
 class PostSerializer(serializers.ModelSerializer):

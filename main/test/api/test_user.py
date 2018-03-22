@@ -16,6 +16,7 @@ class UserApiTests(RtgApiTestCase):
 
     def setUp(self):
         User.objects.all().delete()
+        Profile.objects.all().delete()
 
     def test_user_create(self):
         self.create_test_user(admin=True)
@@ -126,6 +127,30 @@ class UserApiTests(RtgApiTestCase):
         self.assertEqual('Kölle', updated_profile.location)
         self.assertEqual('It\'s me', updated_profile.about)
         self.assertFalse(updated_profile.reminder_emails)
+
+    def test_user_update_username_valid(self):
+        user = self.create_test_user()
+        response = self.client.patch("%s%i/" % (self.USERS_BASEURL, user.pk),
+                                     {'username': 'Hans im Glück'}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_user_update_username_too_short(self):
+        user = self.create_test_user()
+        response = self.client.patch("%s%i/" % (self.USERS_BASEURL, user.pk), {'username': 'ei'}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_user_update_username_invalid(self):
+        user = self.create_test_user()
+        response = self.client.patch("%s%i/" % (self.USERS_BASEURL, user.pk),
+                                     {'username': 'semikolon;;;'}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_user_update_first_name_too_long(self):
+        user = self.create_test_user()
+        response = self.client.patch("%s%i/" % (self.USERS_BASEURL, user.pk),
+                                     {'first_name': 'aaaaaaaaa max. 30 characters aaaaaaaaaaaaaaaaaaaaaaaa'},
+                                     format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_user_update_public(self):
         u1 = self.create_test_user('u1', auth=False)

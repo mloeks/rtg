@@ -3,6 +3,7 @@ from django.template.defaultfilters import filesizeformat, lower
 from rest_framework import serializers
 from rest_framework.fields import CharField, IntegerField
 
+import registration_overrides
 from main.models import *
 from .fields import Base64ImageField
 
@@ -141,6 +142,9 @@ class GameSerializer(serializers.ModelSerializer):
 
 # Combining custom Profile with User, cf. https://stackoverflow.com/a/28733782
 class UserSerializer(serializers.ModelSerializer):
+    # TODO P3 where does the min_length 3 requirement actually come from?
+    username = serializers.CharField(validators=registration_overrides.rtg_username_validators,
+                                     min_length=3, max_length=150)
     email = serializers.EmailField(allow_blank=False)
     email2 = serializers.EmailField(source='profile.email2', required=False, allow_null=True)
     avatar = Base64ImageField(source='profile.avatar', required=False, allow_null=True)

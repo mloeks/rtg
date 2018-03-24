@@ -146,11 +146,11 @@ class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(validators=registration_overrides.rtg_username_validators,
                                      min_length=3, max_length=150)
     email = serializers.EmailField(allow_blank=False)
-    email2 = serializers.EmailField(source='profile.email2', required=False, allow_null=True)
+    email2 = serializers.EmailField(source='profile.email2', required=False, allow_blank=True)
     avatar = Base64ImageField(source='profile.avatar', required=False, allow_null=True)
     avatar_cropped = Base64ImageField(source='profile.avatar_cropped', required=False, allow_null=True)
-    about = serializers.CharField(source='profile.about', required=False, allow_null=True)
-    location = serializers.CharField(source='profile.location', required=False, allow_null=True)
+    about = serializers.CharField(source='profile.about', required=False, allow_blank=True)
+    location = serializers.CharField(source='profile.location', required=False, allow_blank=True)
     reminder_emails = serializers.BooleanField(source='profile.reminder_emails', default=True)
     daily_emails = serializers.BooleanField(source='profile.daily_emails', default=True)
 

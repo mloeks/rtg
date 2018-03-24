@@ -131,7 +131,18 @@ class UserApiTests(RtgApiTestCase):
     def test_user_update_username_valid(self):
         user = self.create_test_user()
         response = self.client.patch("%s%i/" % (self.USERS_BASEURL, user.pk),
-                                     {'username': 'Hans im Glück'}, format='json')
+                                     {'username': 'Hans im Glück', 'first_name': 'Hans', 'last_name': ''},
+                                     format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        updated_user = User.objects.get(pk=user.pk)
+        self.assertEqual('Hans', updated_user.first_name)
+        self.assertEqual('', updated_user.last_name)
+
+    def test_user_update_empty_fields(self):
+        user = self.create_test_user()
+        response = self.client.patch("%s%i/" % (self.USERS_BASEURL, user.pk),
+                                     {'about': '', 'location': '', 'email2': ''}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_user_update_username_too_short(self):

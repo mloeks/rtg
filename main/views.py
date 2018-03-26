@@ -154,7 +154,8 @@ class UserViewSet(viewsets.ModelViewSet):
             upload = request.data['upload']
             user.profile.avatar.save(upload.name, upload)
 
-            return Response(status=HTTP_201_CREATED, headers={'Location': user.profile.avatar.url}, data=user)
+            return Response(status=HTTP_201_CREATED, headers={'Location': user.profile.avatar.url},
+                            data=UserSerializer(user).data)
         else:
             return Response(status=HTTP_400_BAD_REQUEST)
 

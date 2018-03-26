@@ -1,6 +1,7 @@
 import inspect
 import os
 import re
+import uuid
 from enum import Enum
 
 import html2text
@@ -44,7 +45,7 @@ def game_to_string(game):
 
 
 def get_avatar_path(instance, filename):
-    return 'avatars/%s_a%s' % (slugify(instance.user.username), os.path.splitext(filename)[1])
+    return 'avatars/%s%s' % (uuid.uuid4().hex, os.path.splitext(filename)[1])
 
 
 def get_thumb_path(instance, filename):

@@ -457,7 +457,6 @@ class Profile(models.Model):
     email2 = models.EmailField(blank=True, default='')
 
     avatar = models.ImageField(upload_to=utils.get_avatar_path, storage=OverwriteStorage(), blank=True, null=True)
-    avatar_cropped = models.ImageField(upload_to=utils.get_thumb_path, storage=OverwriteStorage(), blank=True, null=True)
 
     about = models.CharField(max_length=500, blank=True, null=True)
     location = models.CharField(max_length=50, blank=True)
@@ -493,6 +492,8 @@ class Profile(models.Model):
         return str(self.user) + '\'s Profile'
 
 
+# TODO P2 add flag for "big headline" posts
+# TODO P3 bring back comments to posts and maybe also likes
 class Post(models.Model):
     title = models.TextField()
     content = models.TextField()

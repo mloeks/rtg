@@ -7,10 +7,12 @@ from django.http import HttpResponse, HttpResponseBadRequest
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets
-from rest_framework.decorators import parser_classes
+from rest_framework.decorators import parser_classes, detail_route
 from rest_framework.filters import OrderingFilter, DjangoFilterBackend
 from rest_framework.parsers import FormParser, JSONParser
 from rest_framework.parsers import MultiPartParser
+from rest_framework.response import Response
+from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
 from main import filters as rtgfilters
 from . import permissions as rtg_permissions
@@ -121,8 +123,6 @@ class GameViewSet(viewsets.ModelViewSet):
     ordering = ('kickoff',)
 
 
-# TODO may be needed for avatar upload
-# @parser_classes((JSONParser, FormParser, MultiPartParser,))
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -143,6 +143,28 @@ class UserViewSet(viewsets.ModelViewSet):
         if not user.is_staff:
             queryset = queryset.filter(pk=user.pk)
         return queryset
+
+    @detail_route(methods=['POST'], permission_classes=[rtg_permissions.IsAdminOrOwner])
+    @parser_classes((FormParser, MultiPartParser,))
+    def avatar(self, request, *args, **kwargs):
+        if 'upload' in request.data:
+            user = request.user
+            user.profile.avatar.delete()
+
+            upload = request.data['upload']
+            user.profile.avatar.save(upload.name, upload)
+
+            return Response(status=HTTP_201_CREATED, headers={'Location': user.profile.avatar.url}, data=user)
+        else:
+            return Response(status=HTTP_400_BAD_REQUEST)
+
+    # TODO P1 try to bring back server-side validation of avatar
+    # def validate(self, attrs):
+    #     if 'avatar' in attrs:
+    #         avatar = attrs['avatar']
+    #         if avatar and len(avatar) > settings.MAX_UPLOAD_SIZE:
+    #             raise ValidationError('Bitte ein Bild mit max. %s hochladen.' % filesizeformat(settings.MAX_UPLOAD_SIZE))
+    #     return attrs
 
 
 # how the public can see users

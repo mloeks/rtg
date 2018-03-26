@@ -13,7 +13,7 @@ from main.models import User
 
 
 def jwt_response_payload_handler(token, user=None, request=None):
-    avatar_prop = user.profile.avatar_cropped
+    avatar_prop = user.profile.avatar
     avatar_url = str(avatar_prop) if avatar_prop else None
     no_open_bets = len(user.profile.get_open_bettables())
 

@@ -207,6 +207,7 @@ class PostSerializer(serializers.ModelSerializer):
 
 class StatisticSerializer(serializers.ModelSerializer):
     username = CharField(source='user.username', read_only=True)
+    user_avatar = CharField(source='user.profile.avatar', read_only=True)
 
     class Meta:
         model = Statistic

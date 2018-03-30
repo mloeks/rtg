@@ -11,7 +11,7 @@ mkdir ${TMP_DIR}
 pg_dump -Fc muden_${APP_NAME} -f ${TMP_DIR}/muden_${APP_NAME}_$(date '+%d%b%y_%H%M').dump
 
 # media folder
-cp -rf /home/muden/${APP_NAME}/rtg/media ${TMP_DIR}/${APP_NAME}_media_$(date '+%d%b%y_%H%M') 2>/dev/null
+cp -rf /home/muden/${APP_NAME}/media ${TMP_DIR}/${APP_NAME}_media_$(date '+%d%b%y_%H%M') 2>/dev/null
 
 cd ${TMP_DIR}
 tar -czf /home/muden/backups/${APP_NAME}_backup_$(date '+%d%b%y_%H%M').tar.gz *

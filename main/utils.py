@@ -52,6 +52,16 @@ def get_thumb_path(instance, filename):
     return 'avatars/%s_t%s' % (slugify(instance.user.username), os.path.splitext(filename)[1])
 
 
+def merge_two_dicts(x, y):
+    """
+        Python < 3.5 compat function for kwargs merging, cf. https://stackoverflow.com/a/26853961
+        Given two dicts, merge them into a new dict as a shallow copy.
+    """
+    z = x.copy()
+    z.update(y)
+    return z
+
+
 def send_mail_to_users(post_instance, force_all=False):
     undisclosed_recipients = settings.EMAIL_UNDISCLOSED_RECIPIENTS
     subject, from_email = settings.EMAIL_PREFIX + post_instance.title, settings.DEFAULT_FROM_EMAIL

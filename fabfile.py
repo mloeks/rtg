@@ -73,7 +73,7 @@ def deploy(app_env):
         print("Replacing " + project_name + " app with freshly checked out project")
         with cd(app_env['dir']):
             run('rm -rf %s/* 2>/dev/null' % app_name)
-            run('rsync -aC /tmp/%s/* .' % project_name)
+            run('rsync -adC /tmp/%s/* .' % project_name)
 
         print("Updating pip requirements...")
         with cd(app_env['dir']):

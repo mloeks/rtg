@@ -1,6 +1,7 @@
 Hallo {{ contact_request.author }},
 
-vielen Dank für Deine Nachricht an die RTG 2016. Das Königshaus wird sie alsbald bearbeiten und sich ggf. bei Dir melden.
+vielen Dank für Deine Nachricht an die Royale Tippgemeinschaft.
+Das Königshaus wird sie alsbald bearbeiten und sich ggf. bei Dir melden.
 
 Hier noch einmal Deine Nachricht:
 --------------------------------------

@@ -1,6 +1,6 @@
 Hallo {{ user.get_short_name }},
 
-vielen Dank für Deine Registrierung bei der Royalen Tippgemeinschaft 2016.
+herzlich willkommen in der Royalen Tippgemeinschaft!
 
 Dein Username lautet: {{ user.username }}
 

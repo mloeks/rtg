@@ -217,7 +217,7 @@ def contact_request(request):
                 'content': form.cleaned_data['content']
             }
 
-            subject = '%sDeine Nachricht an die RTG 2016' % settings.EMAIL_PREFIX
+            subject = '%sDeine Nachricht an das Königshaus' % settings.EMAIL_PREFIX
             message = render_to_string('rtg/contact_copy.txt', {'contact_request': payload})
             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [payload['email']])
 

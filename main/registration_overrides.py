@@ -85,7 +85,7 @@ class RtgRegisterView(ObtainJSONWebToken):
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [settings.DEFAULT_STAFF_EMAIL])
 
         # send confirmation mail to new user
-        subject = '%sDeine Registrierung bei der RTG 2016' % settings.EMAIL_PREFIX
+        subject = '%sWillkommen in der Royalen Tippgemeinschaft' % settings.EMAIL_PREFIX
         message = render_to_string('registration/registration_confirm_email.txt', {'user': new_user})
         admin_recipients = [tpl[1] for tpl in settings.ADMINS]
 

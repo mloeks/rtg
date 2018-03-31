@@ -62,6 +62,14 @@ def merge_two_dicts(x, y):
     return z
 
 
+def sizeof_fmt(num, suffix='B'):
+    for unit in ['','K','M','G','T','P','E','Z']:
+        if abs(num) < 1024.0:
+            return "%3.1f %s%s" % (num, unit, suffix)
+        num /= 1024.0
+    return "%.1f %s%s" % (num, 'Y', suffix)
+
+
 def send_mail_to_users(post_instance, force_all=False):
     undisclosed_recipients = settings.EMAIL_UNDISCLOSED_RECIPIENTS
     subject, from_email = settings.EMAIL_PREFIX + post_instance.title, settings.DEFAULT_FROM_EMAIL

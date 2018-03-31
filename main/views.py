@@ -1,6 +1,7 @@
 import json
 import logging
 
+from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -15,6 +16,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
 from main import filters as rtgfilters
+from main.utils import sizeof_fmt
 from . import permissions as rtg_permissions
 from .forms import RtgContactForm
 from .serializers import *
@@ -150,22 +152,23 @@ class UserViewSet(viewsets.ModelViewSet):
         if 'upload' in request.data:
             user = request.user
             user.profile.avatar.delete()
-
             upload = request.data['upload']
+
+            # manually validate size and format, because the UserSerializers does not seem to take action here?
+            if upload and len(upload) > settings.MAX_UPLOAD_SIZE:
+                return Response(status=HTTP_400_BAD_REQUEST,
+                                data={'error': 'Das Bild überschreitet die maximale erlaubte Dateigröße von %s.' %
+                                               sizeof_fmt(settings.MAX_UPLOAD_SIZE)})
+            if upload and upload.content_type not in ['image/jpeg', 'image/jpg', 'image/png']:
+                return Response(status=HTTP_400_BAD_REQUEST,
+                                data={'error': 'Erlaubte Dateitypen sind PNG/JPG/JPEG.'})
+
             user.profile.avatar.save(upload.name, upload)
 
             return Response(status=HTTP_201_CREATED, headers={'Location': user.profile.avatar.url},
                             data=UserSerializer(user).data)
         else:
             return Response(status=HTTP_400_BAD_REQUEST)
-
-    # TODO P1 try to bring back server-side validation of avatar
-    # def validate(self, attrs):
-    #     if 'avatar' in attrs:
-    #         avatar = attrs['avatar']
-    #         if avatar and len(avatar) > settings.MAX_UPLOAD_SIZE:
-    #             raise ValidationError('Bitte ein Bild mit max. %s hochladen.' % filesizeformat(settings.MAX_UPLOAD_SIZE))
-    #     return attrs
 
 
 # how the public can see users

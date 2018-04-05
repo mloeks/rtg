@@ -520,5 +520,5 @@ class Post(models.Model):
 
 @receiver(post_save, sender=Post)
 def send_post_as_mail(sender, instance, created, **kwargs):
-    if instance.as_mail:
+    if instance.as_mail or instance.force_mail:
         utils.send_mail_to_users(instance, instance.force_mail)

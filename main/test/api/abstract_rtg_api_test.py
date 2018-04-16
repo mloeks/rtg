@@ -18,6 +18,7 @@ class RtgApiTestCase(APITestCase):
     EXTRAS_BASEURL = '/rtg/extras/'
     EXTRACHOICES_BASEURL = '/rtg/extrachoices/'
     USERS_BASEURL = '/rtg/users/'
+    STATISTICS_BASEURL = '/rtg/statistics/'
 
     REGISTER_URL = '/api-token-register/'
 

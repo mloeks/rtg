@@ -82,7 +82,6 @@ def send_mail_to_users(post_instance, force_all=False):
 
     recipients = list(usr.email for usr in target_users)
     recipients.extend(list(usr.profile.email2 for usr in target_users if usr.profile.email2))
-    recipients.extend(['w.huizing@gmx.net'])
 
     admin_recipients = [tpl[1] for tpl in settings.ADMINS]
 

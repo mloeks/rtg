@@ -8,6 +8,4 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for user in User.objects.all():
-            user.statistic.recalculate()
-            user.statistic.update_no_bets()
-            user.statistic.save()
+            user.statistic.update()

@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import time
+from datetime import datetime
 from random import randrange
 
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from main.models import Statistic, ResultBetType
+from main.models import Statistic, ResultBetType, timedelta
 from main.test.utils import TestModelUtils as utils
 
 
@@ -55,6 +56,29 @@ class StatisticTests(TestCase):
         self.assertEqual(0, u1_stats.no_remis_tendenz)
         self.assertEqual(0, u1_stats.no_niete)
         self.assertEqual(3, u1_stats.points)
+
+    def test_no_calc_before_tournament(self):
+        # GIVEN: some user
+        u1 = utils.create_user('Queen')
+
+        # AND: some game in the future
+        g1 = utils.create_game(homegoals=2, awaygoals=4, kickoff=datetime.now() + timedelta(days=5))
+
+        # AND: some bet for this game with result type and points
+        utils.create_bet(u1, g1, "2:3", ResultBetType.tendenz.name, 1)
+
+        # WHEN: stats are updated
+        u1_stats = Statistic.objects.get(user=u1)
+        u1_stats.update()
+
+        # THEN: the stats should be all-0, because the tournament has not yet started
+        self.assertEqual(0, u1_stats.no_bets)
+        self.assertEqual(0, u1_stats.no_volltreffer)
+        self.assertEqual(0, u1_stats.no_differenz)
+        self.assertEqual(0, u1_stats.no_tendenz)
+        self.assertEqual(0, u1_stats.no_remis_tendenz)
+        self.assertEqual(0, u1_stats.no_niete)
+        self.assertEqual(0, u1_stats.points)
 
     def test_recalculate(self):
         # GIVEN: some users

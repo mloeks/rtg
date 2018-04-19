@@ -383,11 +383,8 @@ class Statistic(models.Model):
 
     def recalculate(self):
         """
-            Re-calculate statistics based on all bets for this user - only if the tournament has already started
+            Re-calculate statistics based on all bets for this user
         """
-        if not Game.tournament_has_started():
-            return
-
         self.points, self.no_volltreffer, self.no_differenz, self.no_remis_tendenz, \
             self.no_tendenz, self.no_niete = 0, 0, 0, 0, 0, 0
 
@@ -410,9 +407,7 @@ class Statistic(models.Model):
         """
             Count number of bets this user has placed
         """
-        # TODO before the tournament has started, no-one should be able to see the number of bets of other users
-        # however, this should not be handled here, because the user themselves should see their placed bets counter
-        self.no_bets = 0 if not Game.tournament_has_started() else Bet.get_by_user_and_has_bet(self.user.pk).count()
+        self.no_bets = Bet.get_by_user_and_has_bet(self.user.pk).count()
 
     def pretty_print(self):
         return "%s (%i bets, %i Volltreffer, %i Points)" % (self.user, self.no_bets, self.no_volltreffer, self.points)

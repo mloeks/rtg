@@ -7,10 +7,10 @@ from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.decorators import parser_classes, detail_route
 from rest_framework.filters import OrderingFilter, DjangoFilterBackend
-from rest_framework.parsers import FormParser, JSONParser
+from rest_framework.parsers import FormParser
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
@@ -24,6 +24,7 @@ from .serializers import *
 LOG = logging.getLogger('rtg.' + __name__)
 
 
+# TODO P2 add admin endpoint for recalculating the statistics
 class BetViewSet(viewsets.ModelViewSet):
     queryset = Bet.objects.all()
     serializer_class = BetSerializer
@@ -203,6 +204,16 @@ class StatisticViewSet(viewsets.ReadOnlyModelViewSet):
 
     filter_backends = (rtgfilters.RelatedOrderingFilter,)
     ordering = ('-points', '-no_volltreffer', 'user__username')
+
+    def list(self, request, *args, **kwargs):
+        if not Game.tournament_has_started():
+            return Response(status=status.HTTP_412_PRECONDITION_FAILED)
+        return super(StatisticViewSet, self).list(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        if not Game.tournament_has_started():
+            return Response(status=status.HTTP_412_PRECONDITION_FAILED)
+        return super(StatisticViewSet, self).retrieve(request, *args, **kwargs)
 
 
 ################## CONTACT FORM endpoint

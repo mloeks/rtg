@@ -178,6 +178,9 @@ class PublicUserViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = PublicUserSerializer
     pagination_class = None
 
+    filter_backends = (OrderingFilter,)
+    ordering = ('username')
+
 
 # how admin users can see all users
 class AdminUserViewSet(viewsets.ModelViewSet):

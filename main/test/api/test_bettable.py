@@ -6,7 +6,6 @@ from rest_framework import status
 
 from main.models import Bet, Bettable
 from main.test.api.abstract_rtg_api_test import RtgApiTestCase
-from main.test.api.test_game import GameApiTests
 from main.test.utils import TestModelUtils
 
 

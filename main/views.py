@@ -69,7 +69,7 @@ class BettableViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = BettableSerializer
     pagination_class = None
 
-    filter_backends = (OrderingFilter, rtgfilters.GamesWithBetsOpenIfParamSet)
+    filter_backends = (OrderingFilter, rtgfilters.BettablesWithBetsOpenIfParamSet)
 
     ordering_fields = ('id', 'deadline')
     ordering = ('deadline',)
@@ -80,6 +80,8 @@ class ExtraViewSet(viewsets.ModelViewSet):
     serializer_class = ExtraSerializer
     permission_classes = (rtg_permissions.IsAdminOrAuthenticatedReadOnly,)
     pagination_class = None
+
+    filter_backends = (rtgfilters.BettablesWithBetsOpenIfParamSet,)
 
 
 class TournamentGroupViewSet(viewsets.ModelViewSet):
@@ -120,7 +122,7 @@ class GameViewSet(viewsets.ModelViewSet):
     permission_classes = (rtg_permissions.IsAdminOrAuthenticatedReadOnly,)
     pagination_class = None
 
-    filter_backends = (OrderingFilter, rtgfilters.GamesWithBetsOpenIfParamSet)
+    filter_backends = (OrderingFilter, rtgfilters.BettablesWithBetsOpenIfParamSet)
 
     ordering_fields = ('id', 'kickoff', 'deadline', 'venue', 'round')
     ordering = ('kickoff',)

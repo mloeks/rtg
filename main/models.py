@@ -83,7 +83,7 @@ class Bettable(models.Model):
         ordering = ["deadline", "name"]
 
     def deadline_passed(self):
-        return utils.get_reference_date() > self.deadline
+        return utils.get_reference_date() >= self.deadline
 
     def has_result(self):
         return self.result is not None and self.result != ''

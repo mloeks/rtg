@@ -1,10 +1,8 @@
-import json
 import logging
 
 from django.conf import settings
-from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import viewsets, status
@@ -224,7 +222,7 @@ class StatisticViewSet(viewsets.ReadOnlyModelViewSet):
 ################## CONTACT FORM endpoint
 
 # TODO this should be moved into a separate app, not into the RTG REST API
-# TODO why does CORS_WHITELIST not work and @csrf_exempt is necessary?
+# Remove exempt once the frontend sends CSRF token correctly
 @csrf_exempt
 def contact_request(request):
     if request.method == 'POST' and request.is_ajax():
@@ -236,16 +234,17 @@ def contact_request(request):
                 'content': form.cleaned_data['content']
             }
 
+            # TODO P3 only send copy if user ticks a box
             subject = '%sDeine Nachricht an das Königshaus' % settings.EMAIL_PREFIX
             message = render_to_string('rtg/contact_copy.txt', {'contact_request': payload})
             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [payload['email']])
 
-            subject = '%sKontaktaufnahme von %s' % (settings.EMAIL_PREFIX, payload['author'],)
+            subject = '%sPost von %s' % (settings.EMAIL_PREFIX, payload['author'],)
             message = payload['content']
             send_mail(subject, message, payload['email'], [settings.DEFAULT_STAFF_EMAIL])
 
-            return HttpResponse('OK')
+            return HttpResponse()
         else:
-            return HttpResponseBadRequest(json.dumps(form.errors))
+            return JsonResponse(data=form.errors, status=HTTP_400_BAD_REQUEST)
     else:
-        raise PermissionDenied()
+        return HttpResponseForbidden()

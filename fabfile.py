@@ -14,14 +14,14 @@ DEMO_APP = {
     'dir': '${HOME}/%s_demo' % app_name,
     'requirements': 'production',
     'manage_script': 'manage_test',
-    'backup_script': '${HOME}/scripts/%s_demo/backup.sh %s_demo' % (app_name, app_name),
+    'backup_script': '${HOME}/scripts/%s/backup/backup.sh %s_demo' % (app_name, app_name),
 }
 PROD_APP = {
     'name': app_name,
     'dir': '${HOME}/%s' % app_name,
     'requirements': 'production',
     'manage_script': 'manage_prod',
-    'backup_script': '${HOME}/scripts/%s/backup.sh %s' % (app_name, app_name),
+    'backup_script': '${HOME}/scripts/%s/backup/backup.sh %s' % (app_name, app_name),
 }
 LOCAL_APP = {
     'name': app_name,

@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
-# TODO test invalid requests (at least for bets)
-# TODO create some more advanced tests
+# TODO P2 test invalid requests (at least for bets)
+# TODO P3 create some more advanced tests
 
 
 class RtgApiTestCase(APITestCase):
 
-    # TODO DRF's reverse function not working here
+    # DRF's reverse function does not work here (why?)
     GROUPS_BASEURL = '/rtg/tournamentgroups/'
     ROUNDS_BASEURL = '/rtg/tournamentrounds/'
     TEAMS_BASEURL = '/rtg/teams/'

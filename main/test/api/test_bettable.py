@@ -30,7 +30,7 @@ class BettableApiTests(RtgApiTestCase):
         self.assertEqual(some_extra.name, response.data[1]['name'])
         self.assertEqual('extra', response.data[1]['type'])
 
-    # TODO it would be more RESTful if the modifying requests tested below returned 405 (Method Not Allowed) instead
+    # TODO P3 it would be more RESTful if the modifying requests tested below returned 405 (Method Not Allowed) instead
     # of 401 (Unauthorized) - since this should have nothing to do with authentication. The bettable resource should
     # just not offer write methods.
     # (I thought that would be the case with ReadOnlyModelViewSet, but apparently it's not)

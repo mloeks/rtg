@@ -52,7 +52,7 @@ class GameResultBetUpdateTests(TestCase):
         self.assertEqual(3, updated_bet.points)
         self.assertEqual('differenz', updated_bet.result_bet_type)
 
-    # TODO write API test for this scenario as this test was green when it actually didn't work when tested manually via the API browser
+    # TODO P2 write API test for this scenario as this test was green when it actually didn't work when tested manually via the API browser
     def test_remove_game_result_resets_bettable(self):
         # WHEN: some game with a result is created
         some_game = TestModelUtils.create_game(homegoals=3, awaygoals=2)

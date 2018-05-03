@@ -51,7 +51,7 @@ class ExtraTests(TestCase):
         self.assertTrue(utils.create_extra(deadline=now + timedelta(hours=-2)).deadline_passed())
         self.assertFalse(utils.create_extra(deadline=now + timedelta(hours=2)).deadline_passed())
 
-    # TODO move to Bettable test
+    # TODO P3 move to Bettable test
     # def test_get_finished_extras(self):
     #     e1, e2, e3 = utils.create_extra(result='Die Königin!'), utils.create_extra(), \
     #                  utils.create_extra(result='Der Prinzgemahl!')

@@ -93,7 +93,7 @@ class GameApiTests(RtgApiTestCase):
         team_2 = TestModelUtils.create_team()
         test_venue = TestModelUtils.create_venue(venue_name)
         test_round = TestModelUtils.create_round()
-        # TODO deadline should not be required, but apparently is
+        # TODO P3 deadline should not be required, but apparently is
         test_kickoff = datetime.now(pytz.utc) + timedelta(days=5)
         test_game = Game(kickoff=test_kickoff, deadline=test_kickoff, venue=test_venue, round=test_round ,
                          hometeam=team_1, awayteam=team_2)

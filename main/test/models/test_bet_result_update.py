@@ -171,4 +171,4 @@ class BetResultUpdateTests(TestCase):
             print(u.statistic.pretty_print())
 
         self.assertEqual(int(BET_AMOUNT*len(games)), users[0].statistic.no_bets)
-        # TODO what else could be asserted?
+        # TODO P3 what else could be asserted?

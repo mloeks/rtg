@@ -18,7 +18,7 @@ class ProfileTests(TestCase):
         self.assertEqual("Queen's Profile", str(p))
 
     def test_ordering(self):
-        # TODO case-insensitive ordering does not work with Meta class
+        # TODO P3 case-insensitive ordering does not work with Meta class
         u1, u2, u3 = utils.create_user('Tick'), utils.create_user('zack'), utils.create_user('Track')
 
         profiles = list(Profile.objects.all())

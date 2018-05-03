@@ -14,6 +14,7 @@ from main.storage import OverwriteStorage
 from main.validators import *
 
 
+# TODO P1 transfer old users and deactivate them - re-enable on login
 class TournamentGroup(models.Model):
     name = models.CharField(max_length=20, unique=True)
     abbreviation = models.CharField(max_length=3, unique=True)
@@ -213,7 +214,7 @@ class Extra(Bettable):
     points = models.SmallIntegerField(default=10)
 
 
-# TODO could maybe generalised to a BettableChoice? (although YAGNI?)
+# TODO P3 could maybe generalised to a BettableChoice? (although YAGNI?)
 class ExtraChoice(models.Model):
     name = models.CharField(max_length=50)
     extra = models.ForeignKey(Extra, related_name='choices')
@@ -325,7 +326,7 @@ class Bet(models.Model):
 
         bettable_game = self.bettable.game
 
-        # TODO hardcoded points... move to settings? or think about how to dynamically expose them via the API
+        # TODO P3 hardcoded points... move to settings? or think about how to dynamically expose them via the API
         volltreffer = (ResultBetType.volltreffer.name, 5)
         differenz = (ResultBetType.differenz.name, 3)
         remis_tendenz = (ResultBetType.remis_tendenz.name, 2)

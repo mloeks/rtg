@@ -221,8 +221,7 @@ class StatisticViewSet(viewsets.ReadOnlyModelViewSet):
 
 ################## CONTACT FORM endpoint
 
-# TODO this should be moved into a separate app, not into the RTG REST API
-# Remove exempt once the frontend sends CSRF token correctly
+# TODO P3 Remove exempt once the frontend sends CSRF token correctly
 @csrf_exempt
 def contact_request(request):
     if request.method == 'POST' and request.is_ajax():

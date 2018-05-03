@@ -38,7 +38,7 @@ class BetApiTests(RtgApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_bet_read(self):
-        # TODO apply restrictions when trying to read bets created by other users
+        # TODO P1 apply restrictions when trying to read bets created by other users
         u1 = self.create_test_user()
         response = self.get_test_bet_api()
         self.assertEqual(response.status_code, status.HTTP_200_OK)

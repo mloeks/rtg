@@ -9,6 +9,7 @@ from django.template.loader import render_to_string
 from main.models import User
 
 
+# TODO P1 does it still work?
 class Command(BaseCommand):
     args = ''
     help = 'Daily reminder e-mails for RTG members'

@@ -14,7 +14,7 @@ from main.storage import OverwriteStorage
 from main.validators import *
 
 
-# TODO P1 transfer old users and deactivate them - re-enable on login
+# TODO P1 activate users on login
 class TournamentGroup(models.Model):
     name = models.CharField(max_length=20, unique=True)
     abbreviation = models.CharField(max_length=3, unique=True)

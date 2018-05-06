@@ -22,13 +22,23 @@
 
 * ggf. Performance bei Updates (ist langsam geworden...)
 
-### TODOs
-
-* checken, was davon wirklich wichtig ist und gemacht werden sollte
-
 ### Migration auf generisches RTG-Projekt
 
 * User aus rtg2016-Datenbank in generische DB übertragen (und deaktivieren bis zum ersten Login)
+
+Nur Daten mit INSERTS und Spaltenangaben dumpen:
+
+`pg_dump -a --column-inserts -f rtg2016_auth_user.sql -d muden_rtg2016 -t auth_user`
+
+Primary Keys händisch aus erzeugter SQL-Datei entfernen...
+
+Daten in generische DB einspielen:
+
+`psql -d muden_rtg -f rtg2016_auth_user.sql`
+
+Alle User deaktivieren:
+
+`UPDATE auth_user SET is_active = false;`
 
 # Neue Features 2018
 

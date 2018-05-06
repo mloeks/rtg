@@ -36,6 +36,9 @@ Daten in generische DB einspielen:
 
 `psql -d muden_rtg -f rtg2016_auth_user.sql`
 
+Für all diese User müssen noch entsprechende Profile und Statistic Instanzen erstellt werden.
+Mit custom management command lösen.
+
 # Neue Features 2018
 
 ## HTTPS

@@ -6,6 +6,7 @@ from enum import Enum
 
 import html2text
 from django.conf import settings
+from django.contrib.auth.signals import user_logged_in
 from django.core.mail import EmailMultiAlternatives
 from django.utils import timezone
 from django.utils.text import slugify
@@ -14,6 +15,9 @@ from main.models import User
 
 
 def jwt_response_payload_handler(token, user=None, request=None):
+    if user and request:
+        user_logged_in.send(sender=user.__class__, request=request, user=user)
+
     return {
         'token': token,
         'user_id': user.pk,

@@ -36,10 +36,6 @@ Daten in generische DB einspielen:
 
 `psql -d muden_rtg -f rtg2016_auth_user.sql`
 
-Alle User deaktivieren:
-
-`UPDATE auth_user SET is_active = false;`
-
 # Neue Features 2018
 
 ## HTTPS

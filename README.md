@@ -36,8 +36,13 @@ Daten in generische DB einspielen:
 
 `psql -d muden_rtg -f rtg2016_auth_user.sql`
 
+Abhängige Fremdschlüssel-Tabelle korrekt befüllen:
+
+* account_emailaddress
+`insert into account_emailaddress (email, verified, "primary", user_id) select email, false, true, id from auth_user;`
+
 Für all diese User müssen noch entsprechende Profile und Statistic Instanzen erstellt werden.
-Mit custom management command lösen.
+Dafür habe ich ein eigenes management command 'create_profiles' erstellt.
 
 # Neue Features 2018
 

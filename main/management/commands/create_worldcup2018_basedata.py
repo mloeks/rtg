@@ -2,11 +2,13 @@
 
 from django.core.management.base import BaseCommand
 
-from main.models import TournamentGroup, TournamentRound, Venue, Team, Game
+from main.models import TournamentGroup, TournamentRound, Venue, Team, Game, Extra, ExtraChoice
 
 
 class Command(BaseCommand):
     help = 'Creates the real World Cup 2018 data'
+
+    TOURNAMENT_START = '2018-06-14 17:00:00+02'
 
     def handle(self, *args, **options):
         self.clear_data()
@@ -15,9 +17,12 @@ class Command(BaseCommand):
         self.rounds = self.create_rounds()
         self.teams = self.create_teams()
         self.create_first_round_games()
+        self.create_extra_bets()
 
     def clear_data(self):
         Game.objects.all().delete()
+        Extra.objects.all().delete()
+        ExtraChoice.objects.all().delete()
         TournamentRound.objects.all().delete()
         TournamentGroup.objects.all().delete()
         Team.objects.all().delete()
@@ -121,7 +126,7 @@ class Command(BaseCommand):
         return teams
 
     def create_first_round_games(self):
-        self.a_game('RUS', 'KSA', '2018-06-14 17:00:00+02', 'moskau-luschniki')
+        self.a_game('RUS', 'KSA', self.TOURNAMENT_START, 'moskau-luschniki')
         self.a_game('EGY', 'URU', '2018-06-15 14:00:00+02', 'jekaterinburg')
         self.a_game('MAR', 'IRN', '2018-06-15 17:00:00+02', 'sankt-petersburg')
         self.a_game('POR', 'ESP', '2018-06-15 20:00:00+02', 'sotschi')
@@ -172,7 +177,24 @@ class Command(BaseCommand):
         self.a_game('ENG', 'BEL', '2018-06-28 20:00:00+02', 'kaliningrad')
         self.a_game('PAN', 'TUN', '2018-06-28 20:00:00+02', 'saransk')
 
-    def a_game(self, home, away, kickoff, venue, deadline='2018-06-14 17:00:00+02'):
+    def create_extra_bets(self):
+        wm = Extra(name='Wer wird Weltmeister?', points=10, deadline=self.TOURNAMENT_START)
+        deu = Extra(name='Wie weit kommt Deutschland?', points=5, deadline=self.TOURNAMENT_START)
+        wm.save()
+        deu.save()
+
+        for team in Team.objects.all():
+            ExtraChoice(name=team.name, extra=wm, sort_index=team.name[0:9]).save()
+
+        ExtraChoice(name='Vorrunde', extra=deu, sort_index='010').save()
+        ExtraChoice(name='Achtelfinale', extra=deu, sort_index='020').save()
+        ExtraChoice(name='Viertelfinale', extra=deu, sort_index='030').save()
+        ExtraChoice(name='Vierter', extra=deu, sort_index='040').save()
+        ExtraChoice(name='Dritter', extra=deu, sort_index='050').save()
+        ExtraChoice(name='Zweiter', extra=deu, sort_index='060').save()
+        ExtraChoice(name='Weltmeister', extra=deu, sort_index='070').save()
+
+    def a_game(self, home, away, kickoff, venue, deadline=TOURNAMENT_START):
         hometeam = self.teams[home]
         awayteam = self.teams[away]
         Game(kickoff=kickoff, deadline=deadline, round=self.rounds['vorrunde'],

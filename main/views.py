@@ -174,7 +174,9 @@ class UserViewSet(viewsets.ModelViewSet):
 
 # how the public can see users
 class PublicUserViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = User.objects.all()
+    # exclude users whose last login was not this year
+    queryset = User.objects.all().filter(last_login__year=datetime.now().year)
+
     serializer_class = PublicUserSerializer
     pagination_class = None
 

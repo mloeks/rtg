@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
+from utils import active_users
+
 __author__ = 'mloeks'
 
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
-
-from main.models import User
 
 
 # TODO P1 does it still work?
@@ -18,7 +18,7 @@ class Command(BaseCommand):
         self.send_bet_reminder()
 
     def send_bet_reminder(self):
-        for user in User.objects.filter(is_active=True).filter(profile__reminder_emails=True).order_by('username'):
+        for user in active_users().filter(profile__reminder_emails=True).order_by('username'):
             open_bettables = user.profile.get_open_bettables(user)
             if open_bettables:
                 ctx = {'user': user, 'open_bettables': open_bettables}

@@ -2,6 +2,7 @@ import inspect
 import os
 import re
 import uuid
+from datetime import datetime
 from enum import Enum
 
 import html2text
@@ -70,15 +71,19 @@ def sizeof_fmt(num, suffix='B'):
     return "%.1f %s%s" % (num, 'Y', suffix)
 
 
+def active_users():
+    """ Returns users which are active (not disabled) and have logged in this year """
+    return User.objects.filter(is_active=True).filter(last_login__year=datetime.now().year)
+
+
 def send_mail_to_users(post_instance, force_all=False):
     undisclosed_recipients = settings.EMAIL_UNDISCLOSED_RECIPIENTS
     subject, from_email = settings.EMAIL_PREFIX + post_instance.title, settings.DEFAULT_FROM_EMAIL
 
     if force_all:
-        target_users = User.objects.exclude(email=None).exclude(email='').filter(is_active=True)
+        target_users = active_users().exclude(email=None).exclude(email='')
     else:
-        target_users = User.objects.exclude(email=None).exclude(email='').filter(is_active=True)\
-            .filter(profile__daily_emails=True)
+        target_users = active_users().exclude(email=None).exclude(email='').filter(profile__daily_emails=True)
 
     recipients = list(usr.email for usr in target_users)
     recipients.extend(list(usr.profile.email2 for usr in target_users if usr.profile.email2))

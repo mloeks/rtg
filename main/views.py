@@ -14,7 +14,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
 from main import filters as rtgfilters
-from main.utils import sizeof_fmt
+from main.utils import sizeof_fmt, active_users
 from . import permissions as rtg_permissions
 from .forms import RtgContactForm
 from .serializers import *
@@ -175,7 +175,7 @@ class UserViewSet(viewsets.ModelViewSet):
 # how the public can see users
 class PublicUserViewSet(viewsets.ReadOnlyModelViewSet):
     # exclude users whose last login was not this year
-    queryset = User.objects.all().filter(last_login__year=datetime.now().year)
+    queryset = active_users()
 
     serializer_class = PublicUserSerializer
     pagination_class = None

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from datetime import timedelta
+
 from utils import active_users
 
 __author__ = 'mloeks'
@@ -9,7 +11,7 @@ from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 
 
-# TODO P1 does it still work?
+# TODO P1 add cron to server
 class Command(BaseCommand):
     args = ''
     help = 'Daily reminder e-mails for RTG members'
@@ -19,7 +21,7 @@ class Command(BaseCommand):
 
     def send_bet_reminder(self):
         for user in active_users().filter(profile__reminder_emails=True).order_by('username'):
-            open_bettables = user.profile.get_open_bettables(user)
+            open_bettables = user.profile.get_open_bettables_deadline_within(timedelta(hours=24))
             if open_bettables:
                 ctx = {'user': user, 'open_bettables': open_bettables}
 

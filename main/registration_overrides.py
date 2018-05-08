@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from django.core.mail.message import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from rest_auth.registration.serializers import RegisterSerializer
-from rest_auth.serializers import PasswordResetConfirmSerializer
+from rest_auth.serializers import PasswordResetConfirmSerializer, PasswordResetSerializer
 from rest_framework import serializers
 from rest_framework import status
 from rest_framework.response import Response
@@ -94,6 +94,15 @@ class RtgRegisterView(ObtainJSONWebToken):
         mail.send()
 
 rtg_register = RtgRegisterView.as_view()
+
+
+class RtgPasswordResetSerializer(PasswordResetSerializer):
+    def get_email_options(self):
+        return {
+            'extra_email_context': {
+                'site_base_url': settings.SITE_BASE_URL
+            }
+        }
 
 
 class RtgPasswordResetConfirmSerializer(PasswordResetConfirmSerializer):

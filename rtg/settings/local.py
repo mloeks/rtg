@@ -15,6 +15,7 @@ def tz_date(*args):
 # simulate that "now" is a different date
 # FAKE_DATE = tz_date(2018, 10, 30, 9, 0, 0)
 # FAKE_DATE = tz_date(2018, 6, 14, 17, 0, 0)       # World Cup 2018 begins! :-)
+# FAKE_DATE = tz_date(2018, 6, 14, 9, 0, 0)
 
 ########## END DEBUG CONFIGURATION
 
@@ -23,6 +24,8 @@ ALLOWED_HOSTS = [
 ]
 
 CORS_ORIGIN_REGEX_WHITELIST = ('^(https?://)?localhost:3000$', )
+
+SITE_BASE_URL = 'http://localhost:3000'
 
 ########## EMAIL CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend

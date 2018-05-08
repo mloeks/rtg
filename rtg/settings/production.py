@@ -23,6 +23,7 @@ from .base import *
 ALLOWED_HOSTS = [
     '.royale-tippgemeinschaft.de',   # Allow domain and subdomains
 ]
+SITE_BASE_URL = 'https://www.royale-tippgemeinschaft.de'
 ########## END HOST CONFIGURATION
 
 CORS_ORIGIN_WHITELIST = (

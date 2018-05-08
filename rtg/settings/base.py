@@ -255,7 +255,8 @@ WSGI_APPLICATION = 'wsgi.application'
 OLD_PASSWORD_FIELD_ENABLED = True
 LOGOUT_ON_PASSWORD_CHANGE = False
 REST_AUTH_SERIALIZERS = {
-    'PASSWORD_RESET_CONFIRM_SERIALIZER': 'main.registration_overrides.RtgPasswordResetConfirmSerializer'
+    'PASSWORD_RESET_SERIALIZER': 'main.registration_overrides.RtgPasswordResetSerializer',
+    'PASSWORD_RESET_CONFIRM_SERIALIZER': 'main.registration_overrides.RtgPasswordResetConfirmSerializer',
 }
 
 # all-auth settings

@@ -25,7 +25,10 @@ ALLOWED_HOSTS = [
 ]
 ########## END HOST CONFIGURATION
 
-CORS_ORIGIN_REGEX_WHITELIST = ('^(https?://)?(\w+\.)?royale-tippgemeinschaft\.de$', )
+CORS_ORIGIN_WHITELIST = (
+    'royale-tippgemeinschaft.de',
+    'www.royale-tippgemeinschaft.de',
+)
 
 ########## EMAIL CONFIGURATION
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

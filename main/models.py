@@ -11,7 +11,6 @@ from django.utils.translation import ugettext as _
 from main import utils
 from main.storage import OverwriteStorage
 from main.validators import *
-from utils import get_reference_date
 
 
 class TournamentGroup(models.Model):
@@ -472,7 +471,7 @@ class Profile(models.Model):
         return Bettable.get_open_bettables_for_user(self.user.pk)
 
     def get_open_bettables_deadline_within(self, delta):
-        reference_date_plus_delta = get_reference_date() + delta
+        reference_date_plus_delta = utils.get_reference_date() + delta
         return self.get_open_bettables().filter(deadline__lte=reference_date_plus_delta)
 
     def avatar_tag(self):

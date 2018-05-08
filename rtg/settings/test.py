@@ -26,6 +26,9 @@ ALLOWED_HOSTS = [
 ]
 ########## END HOST CONFIGURATION
 
+CORS_ORIGIN_WHITELIST = ('demo.royale-tippgemeinschaft.de')
+# CORS_ORIGIN_REGEX_WHITELIST = ('^(https?://)?(\w+\.)?demo.royale-tippgemeinschaft\.de$', )
+
 DEBUG = True
 
 def tz_date(*args):
@@ -34,8 +37,6 @@ def tz_date(*args):
 # simulate that "now" is a different date
 # FAKE_DATE = tz_date(2018, 10, 30, 9, 0, 0)
 # FAKE_DATE = tz_date(2018, 6, 14, 17, 0, 0)       # World Cup 2018 begins! :-)
-
-CORS_ORIGIN_REGEX_WHITELIST = ('^(https?://)?(\w+\.)?demo.royale-tippgemeinschaft\.de$', )
 
 ########## EMAIL CONFIGURATION
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

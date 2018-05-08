@@ -26,8 +26,10 @@ ALLOWED_HOSTS = [
 ]
 ########## END HOST CONFIGURATION
 
-CORS_ORIGIN_WHITELIST = ('demo.royale-tippgemeinschaft.de')
-# CORS_ORIGIN_REGEX_WHITELIST = ('^(https?://)?(\w+\.)?demo.royale-tippgemeinschaft\.de$', )
+CORS_ORIGIN_WHITELIST = (
+    'demo.royale-tippgemeinschaft.de',
+    'www.demo.royale-tippgemeinschaft.de',
+)
 
 DEBUG = True
 

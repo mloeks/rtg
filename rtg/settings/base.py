@@ -250,6 +250,9 @@ WSGI_APPLICATION = 'wsgi.application'
 
 # auth settings
 # PASSWORD_RESET_TIMEOUT_DAYS = 1
+AUTH_PASSWORD_VALIDATORS = [{
+    'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+}]
 
 # rest-auth settings
 OLD_PASSWORD_FIELD_ENABLED = True

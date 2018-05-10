@@ -16,7 +16,9 @@ from main.models import User
 
 
 def jwt_response_payload_handler(token, user=None, request=None):
+    last_login = None
     if user and request:
+        last_login = user.last_login
         user_logged_in.send(sender=user.__class__, request=request, user=user)
 
     return {
@@ -26,7 +28,8 @@ def jwt_response_payload_handler(token, user=None, request=None):
         'admin': user.is_staff,
         'has_paid': user.profile.has_paid,
         'avatar': str(user.profile.avatar),
-        'no_open_bets': len(user.profile.get_open_bettables())
+        'no_open_bets': len(user.profile.get_open_bettables()),
+        'last_login': last_login,
     }
 
 

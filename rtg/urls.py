@@ -4,8 +4,9 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from rest_auth.views import PasswordResetConfirmView
 from rest_auth.views import PasswordResetView
-from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
+from rest_framework_jwt.views import refresh_jwt_token, verify_jwt_token
 
+from main.login_overrides import rtg_obtain_jwt_token
 from main.registration_overrides import rtg_register
 from main.views import contact_request
 
@@ -24,7 +25,7 @@ urlpatterns = [
     # url(r'^password/change/$', PasswordChangeView.as_view(), name='rest_password_change'),
 
     # djangorestramework-jwt extension Authentication views
-    url(r'^api-token-auth/', obtain_jwt_token),
+    url(r'^api-token-auth/', rtg_obtain_jwt_token),
     url(r'^api-token-refresh/', refresh_jwt_token),
     url(r'^api-token-verify/', verify_jwt_token),
 

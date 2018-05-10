@@ -293,8 +293,8 @@ JWT_AUTH = {
 ########## END REST FRAMEWORK CONFIGURATION
 
 ########## REGISTRATION
-# TODO P2 add possibility to disable login as well
 REGISTRATION_OPEN = True
+LOGIN_OPEN = True
 ########## END REGISTRATION CONFIGURATION
 
 # 2.5MB - 2621440

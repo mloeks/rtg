@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 from django.core.mail.message import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from rest_auth.registration.serializers import RegisterSerializer
-from rest_auth.serializers import PasswordResetConfirmSerializer, PasswordResetSerializer
+from rest_auth.serializers import PasswordResetConfirmSerializer, PasswordResetSerializer, PasswordChangeSerializer
 from rest_framework import serializers
 from rest_framework import status
 from rest_framework.response import Response
@@ -94,6 +94,14 @@ class RtgRegisterView(ObtainJSONWebToken):
         mail.send()
 
 rtg_register = RtgRegisterView.as_view()
+
+
+class RtgPasswordChangeSerializer(PasswordChangeSerializer):
+    def validate_old_password(self, value):
+        try:
+            return super(RtgPasswordChangeSerializer, self).validate_old_password(value)
+        except serializers.ValidationError:
+            raise serializers.ValidationError('Ungültiges aktuelles Passwort')
 
 
 class RtgPasswordResetSerializer(PasswordResetSerializer):

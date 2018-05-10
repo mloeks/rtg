@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
-from rest_auth.views import PasswordResetConfirmView
+from rest_auth.views import PasswordResetConfirmView, PasswordChangeView
 from rest_auth.views import PasswordResetView
 from rest_framework_jwt.views import refresh_jwt_token, verify_jwt_token
 
@@ -22,7 +22,7 @@ urlpatterns = [
     # use django-rest-auth extension views for password reset endpoints
     url(r'^rest-auth/password/reset/$', PasswordResetView.as_view(), name='rest_password_reset'),
     url(r'^rest-auth/password/reset/confirm/$', PasswordResetConfirmView.as_view(), name='rest_password_reset_confirm'),
-    # url(r'^password/change/$', PasswordChangeView.as_view(), name='rest_password_change'),
+    url(r'^rest-auth/password/change/$', PasswordChangeView.as_view(), name='rest_password_change'),
 
     # djangorestramework-jwt extension Authentication views
     url(r'^api-token-auth/', rtg_obtain_jwt_token),

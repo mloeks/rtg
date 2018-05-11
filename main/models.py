@@ -513,6 +513,7 @@ class Post(models.Model):
 class Comment(models.Model):
     content = models.TextField()
     author = models.ForeignKey(User, related_name='comments')
+    post = models.ForeignKey(Post, related_name='comments')
     reply_to = models.ForeignKey("self", related_name='replies')
 
     date_created = models.DateTimeField(auto_now_add=True)

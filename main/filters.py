@@ -27,6 +27,17 @@ class BettablesWithBetsOpenIfParamSet(filters.BaseFilterBackend):
         return queryset
 
 
+class TopLevelComments(filters.BaseFilterBackend):
+    """
+        Return only comments which directly reply to the post (reply_to = null)
+    """
+    def filter_queryset(self, request, queryset, view):
+        toplevel = request.query_params.get('toplevel', None)
+        if toplevel is not None and toplevel == 'true':
+            return queryset.filter(reply_to=None)
+        return queryset
+
+
 class RelatedOrderingFilter(OrderingFilter):
     """
         Extends OrderingFilter to support ordering by fields in related models

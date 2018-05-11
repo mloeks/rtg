@@ -208,8 +208,8 @@ class CommentViewSet(viewsets.ModelViewSet):
     permission_classes = (rtg_permissions.CommentPermissions,)
 
     filter_backends = (DjangoFilterBackend, OrderingFilter,)
-    filter_fields = ('post',)
-    ordering = ('post', '-date_created',)
+    filter_fields = ('post', 'reply_to')
+    ordering = ('post', 'date_created',)
 
 
 class StatisticViewSet(viewsets.ReadOnlyModelViewSet):

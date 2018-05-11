@@ -8,6 +8,7 @@ from main.test.api.abstract_rtg_api_test import RtgApiTestCase
 from test.utils import TestModelUtils
 
 
+# TODO P1 users may only create comments with themselves as author
 class CommentApiTests(RtgApiTestCase):
 
     def setUp(self):

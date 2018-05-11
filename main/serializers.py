@@ -210,11 +210,15 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    author_details = PublicUserSerializer(source='author', read_only=True)
     no_replies = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Comment
-        fields = ('id', 'author', 'content', 'post', 'reply_to', 'date_created', 'removed', 'no_replies')
+        fields = '__all__'
+        extra_kwargs = {
+            'author': {'write_only': True},
+        }
 
     def get_no_replies(self, obj):
         return obj.replies.count()

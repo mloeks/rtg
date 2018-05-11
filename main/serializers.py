@@ -208,7 +208,7 @@ class PostSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = '__all__'
+        fields = ('id', 'author', 'content', 'post', 'reply_to', 'date_created')
 
 
 class StatisticSerializer(serializers.ModelSerializer):

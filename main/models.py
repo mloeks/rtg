@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import *
+
 from django.contrib.auth.models import User
 from django.db import models, utils
 from django.db.models import Q
@@ -9,6 +10,7 @@ from django.utils.translation import ugettext as _
 
 from main import utils
 from main.storage import OverwriteStorage
+from main.validators import *
 
 
 class TournamentGroup(models.Model):
@@ -483,8 +485,6 @@ class Profile(models.Model):
         return str(self.user) + '\'s Profile'
 
 
-# TODO P2 add flag for "big headline" posts
-# TODO P1 bring back comments to posts and maybe also likes
 class Post(models.Model):
     title = models.TextField()
     content = models.TextField()
@@ -507,6 +507,25 @@ class Post(models.Model):
 
     def __str__(self):
         return u"Post by " + str(self.author)
+
+
+# TODO P3 introduce likes on comments
+class Comment(models.Model):
+    content = models.TextField()
+    author = models.ForeignKey(User, related_name='comments')
+    reply_to = models.ForeignKey("self", related_name='replies')
+
+    date_created = models.DateTimeField(auto_now_add=True)
+    removed = models.BooleanField(default=False)
+
+    def clean(self):
+        # blank comments are not allowed. This has to be validated here, cannot be validate by the TextField itself
+        # (blank=False only applies to Django forms)
+        if not self.content:
+            raise ValidationError(_('Content must not be empty.'))
+
+    def __str__(self):
+        return u"Comment by " + str(self.author)
 
 
 @receiver(post_save, sender=Post)

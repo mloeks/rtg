@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from datetime import *
-
 from django.contrib.auth.models import User
 from django.db import models, utils
 from django.db.models import Q
@@ -10,7 +9,6 @@ from django.utils.translation import ugettext as _
 
 from main import utils
 from main.storage import OverwriteStorage
-from main.validators import *
 
 
 class TournamentGroup(models.Model):
@@ -116,6 +114,7 @@ class Bettable(models.Model):
         return str(self.name)
 
 
+# TODO P2 connect with OpenLigaDb Web Service, update results automatically
 class Game(Bettable):
     kickoff = models.DateTimeField()
     homegoals = models.SmallIntegerField(default=-1)
@@ -485,7 +484,7 @@ class Profile(models.Model):
 
 
 # TODO P2 add flag for "big headline" posts
-# TODO P3 bring back comments to posts and maybe also likes
+# TODO P1 bring back comments to posts and maybe also likes
 class Post(models.Model):
     title = models.TextField()
     content = models.TextField()

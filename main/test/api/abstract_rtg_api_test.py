@@ -21,6 +21,7 @@ class RtgApiTestCase(APITestCase):
     PUBLIC_USERS_BASEURL = '/rtg/users_public/'
     STATISTICS_BASEURL = '/rtg/statistics/'
     POSTS_BASEURL = '/rtg/posts/'
+    COMMENTS_BASEURL = '/rtg/comments/'
 
     REGISTER_URL = '/api-token-register/'
 

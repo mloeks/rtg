@@ -207,7 +207,8 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = (rtg_permissions.CommentPermissions,)
 
-    filter_backends = (OrderingFilter,)
+    filter_backends = (DjangoFilterBackend, OrderingFilter,)
+    filter_fields = ('post',)
     ordering = ('post', '-date_created',)
 
 

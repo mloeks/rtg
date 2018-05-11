@@ -18,6 +18,7 @@ router.register(r'users', views.UserViewSet)
 router.register(r'users_public', views.PublicUserViewSet, 'users_public')
 router.register(r'users_admin', views.AdminUserViewSet, 'users_admin')
 router.register(r'posts', views.PostViewSet)
+router.register(r'comments', views.CommentViewSet)
 router.register(r'statistics', views.StatisticViewSet)
 
 app_name = 'rtg'

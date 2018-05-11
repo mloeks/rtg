@@ -202,6 +202,15 @@ class PostViewSet(viewsets.ModelViewSet):
     ordering = ('-date_created',)
 
 
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = (rtg_permissions.CommentPermissions,)
+
+    filter_backends = (OrderingFilter,)
+    ordering = ('post, -date_created',)
+
+
 class StatisticViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Statistic.objects.all()
     serializer_class = StatisticSerializer

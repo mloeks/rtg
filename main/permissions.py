@@ -52,6 +52,24 @@ class IsAdminOrSelf(permissions.BasePermission):
                 return request.user.is_staff or obj == request.user
 
 
+class CommentPermissions(permissions.BasePermission):
+    """
+        Every authenticated user may create or read comments.
+        Admins may use all HTTP methods.
+    """
+    def has_permission(self, request, view):
+        if request.user.is_authenticated:
+            return request.user.is_staff or request.method in permissions.SAFE_METHODS or request.method == 'POST'
+        else:
+            return False
+
+    def has_object_permission(self, request, view, obj):
+        if request.user.is_authenticated:
+            return request.user.is_staff or request.method in permissions.SAFE_METHODS or request.method == 'POST'
+        else:
+            return False
+
+
 class UserPermissions(permissions.BasePermission):
     """
         Permissions for (complete) UserViewSet.

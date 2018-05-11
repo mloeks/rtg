@@ -205,6 +205,12 @@ class PostSerializer(serializers.ModelSerializer):
         }
 
 
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'
+
+
 class StatisticSerializer(serializers.ModelSerializer):
     username = CharField(source='user.username', read_only=True)
     user_avatar = CharField(source='user.profile.avatar', read_only=True)

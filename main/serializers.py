@@ -194,6 +194,7 @@ class AdminUserSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     author_details = PublicUserSerializer(source='author', read_only=True)
+    no_comments = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Post
@@ -203,6 +204,9 @@ class PostSerializer(serializers.ModelSerializer):
             'as_mail': {'write_only': True},
             'force_mail': {'write_only': True}
         }
+
+    def get_no_comments(self, obj):
+        return obj.comments.count()
 
 
 class CommentSerializer(serializers.ModelSerializer):

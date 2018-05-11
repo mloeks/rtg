@@ -208,7 +208,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     permission_classes = (rtg_permissions.CommentPermissions,)
 
     filter_backends = (OrderingFilter,)
-    ordering = ('post, -date_created',)
+    ordering = ('post', '-date_created',)
 
 
 class StatisticViewSet(viewsets.ReadOnlyModelViewSet):

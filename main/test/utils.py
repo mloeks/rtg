@@ -6,7 +6,8 @@ from string import ascii_uppercase
 from django.contrib.auth.models import User
 from django.utils import timezone
 
-from main.models import TournamentGroup, TournamentRound, Game, Venue, Team, Extra, ExtraChoice, Post, Bet, Profile
+from main.models import TournamentGroup, TournamentRound, Game, Venue, Team, Extra, ExtraChoice, Post, Bet, Profile, \
+    Comment
 
 
 class TestModelUtils:
@@ -117,6 +118,14 @@ class TestModelUtils:
         author = author or TestModelUtils.create_user()
 
         return Post.objects.create(content=content, author=author)
+
+    @staticmethod
+    def create_comment(author=None, content=None, post=None, reply_to=None):
+        author = author or TestModelUtils.create_user()
+        content = content or TestModelUtils.create_random_string(100)
+        post = post or TestModelUtils.create_post(content, TestModelUtils.create_user())
+
+        return Comment.objects.create(author=author, content=content, post=post, reply_to=reply_to)
 
     @staticmethod
     def create_random_string(length=12):

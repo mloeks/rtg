@@ -221,7 +221,14 @@ class CommentSerializer(serializers.ModelSerializer):
         }
 
     def get_no_replies(self, obj):
-        return obj.replies.count()
+        replies = obj.replies
+
+        count = 0
+        if replies.count() > 0:
+            count += replies.count()
+            for reply in replies.iterator():
+                count += self.get_no_replies(reply)
+        return count
 
 
 class StatisticSerializer(serializers.ModelSerializer):

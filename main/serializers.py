@@ -202,7 +202,7 @@ class PostSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'author': {'write_only': True},
             'as_mail': {'write_only': True},
-            'force_active_users': {'write_only': True}
+            'force_active_users': {'write_only': True},
             'force_all_users': {'write_only': True}
         }
 

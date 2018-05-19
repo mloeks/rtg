@@ -495,7 +495,7 @@ class Post(models.Model):
 
     news_appear = models.BooleanField(default=True)
     as_mail = models.BooleanField(default=False)
-    force_mail = models.BooleanField(default=False)
+    force_all_users = models.BooleanField(default=False)
 
     def clean(self):
         # blank posts are not allowed. This has to be validated here, cannot be validate by the TextField itself
@@ -531,5 +531,5 @@ class Comment(models.Model):
 
 @receiver(post_save, sender=Post)
 def send_post_as_mail(sender, instance, created, **kwargs):
-    if instance.as_mail or instance.force_mail:
-        utils.send_mail_to_users(instance, instance.force_mail)
+    if instance.as_mail or instance.force_all_users:
+        utils.send_mail_to_users(instance, instance.force_all_users)

@@ -202,7 +202,7 @@ class PostSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'author': {'write_only': True},
             'as_mail': {'write_only': True},
-            'force_mail': {'write_only': True}
+            'force_all_users': {'write_only': True}
         }
 
     def get_no_comments(self, obj):

@@ -11,7 +11,7 @@ from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
 
 
-# TODO P1 add cron to server
+# TODO P2 test & uncomment crons on server
 class Command(BaseCommand):
     args = ''
     help = 'Daily reminder e-mails for RTG members'

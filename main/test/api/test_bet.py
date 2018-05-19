@@ -38,12 +38,32 @@ class BetApiTests(RtgApiTestCase):
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_bet_read(self):
-        # TODO P1 apply restrictions when trying to read bets created by other users
         u1 = self.create_test_user()
         response = self.get_test_bet_api()
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Bet.objects.count(), 1)
         self.assertIsNotNone(Bet.objects.get(user=u1))
+
+    def test_bet_read_others_bet_before_deadline(self):
+        """
+            A user may only read their own bet before a game's deadline, but also foreign bets when the deadline
+            has passed
+        """
+        auth_user = self.create_test_user()
+        another_user = TestModelUtils.create_user()
+
+        running_game = TestModelUtils.create_game(kickoff=TestModelUtils.create_datetime_from_now(timedelta(minutes=-20)))
+        future_game = TestModelUtils.create_game(kickoff=TestModelUtils.create_datetime_from_now(timedelta(hours=2)))
+
+        own_bet_running = TestModelUtils.create_bet(auth_user, running_game, 2, 1)
+        others_bet_running = TestModelUtils.create_bet(another_user, running_game, 2, 1)
+        own_bet_future = TestModelUtils.create_bet(auth_user, future_game, 3, 2)
+        others_bet_future = TestModelUtils.create_bet(another_user, future_game, 0, 0)
+
+        self.assertEqual(status.HTTP_200_OK, self.client.get("%s%i/" % (self.BETS_BASEURL, own_bet_running.pk)).status_code)
+        self.assertEqual(status.HTTP_200_OK, self.client.get("%s%i/" % (self.BETS_BASEURL, others_bet_running.pk)).status_code)
+        self.assertEqual(status.HTTP_200_OK, self.client.get("%s%i/" % (self.BETS_BASEURL, own_bet_future.pk)).status_code)
+        self.assertEqual(status.HTTP_404_NOT_FOUND, self.client.get("%s%i/" % (self.BETS_BASEURL, others_bet_future.pk)).status_code)
 
     def test_bet_read_allowed_filtered(self):
         u1, u2 = TestModelUtils.create_user(), TestModelUtils.create_user()

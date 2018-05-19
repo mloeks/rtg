@@ -215,10 +215,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
-        fields = '__all__'
-        extra_kwargs = {
-            'author': {'write_only': True},
-        }
+        exclude = ('author',)  # always set to the request's user
 
     def get_no_replies(self, obj):
         replies = obj.replies

@@ -211,6 +211,14 @@ class CommentViewSet(viewsets.ModelViewSet):
     filter_fields = ('post', 'reply_to')
     ordering = ('post', 'date_created',)
 
+    def perform_create(self, serializer):
+        """ Always set the Comment author to the current user. """
+        serializer.save(author=self.request.user)
+
+    def perform_update(self, serializer):
+        """ Always set the Comment author to the current user. """
+        serializer.save(author=self.request.user)
+
 
 class StatisticViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Statistic.objects.all()

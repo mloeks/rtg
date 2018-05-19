@@ -8,7 +8,6 @@ from main.test.api.abstract_rtg_api_test import RtgApiTestCase
 from test.utils import TestModelUtils
 
 
-# TODO P1 users may only create comments with themselves as author
 class CommentApiTests(RtgApiTestCase):
 
     def setUp(self):
@@ -19,18 +18,18 @@ class CommentApiTests(RtgApiTestCase):
     def test_create(self):
         user = self.create_test_user()
         test_post = TestModelUtils.create_post('content', TestModelUtils.create_user())
-        response = self.create_test_comment_api(user, test_post)
+        response = self.create_test_comment_api(test_post)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Comment.objects.count(), 1)
         self.assertIsNotNone(Comment.objects.get(author=user))
 
-    def test_delete_admin(self):
+    def test_delete_admin_other_comments(self):
         self.create_test_user(admin=True)
 
         test_post = TestModelUtils.create_post('content', TestModelUtils.create_user())
-        test_comment = TestModelUtils.create_comment(author=TestModelUtils.create_user(), post=test_post)
-        response = self.delete_comment_api(test_comment)
+        test_comment_different_author = TestModelUtils.create_comment(author=TestModelUtils.create_user(), post=test_post)
+        response = self.delete_comment_api(test_comment_different_author)
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Comment.objects.count(), 0)
@@ -39,9 +38,9 @@ class CommentApiTests(RtgApiTestCase):
         user = self.create_test_user(admin=False)
 
         test_post = TestModelUtils.create_post('content', user)
-        test_comment = TestModelUtils.create_comment(author=user, post=test_post,
-                                                     reply_to=TestModelUtils.create_comment())
-        response = self.delete_comment_api(test_comment)
+        own_test_comment = TestModelUtils.create_comment(author=user, post=test_post,
+                                                         reply_to=TestModelUtils.create_comment())
+        response = self.delete_comment_api(own_test_comment)
 
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(Comment.objects.count(), 2)
@@ -58,8 +57,8 @@ class CommentApiTests(RtgApiTestCase):
         self.assertEqual(Comment.objects.count(), 1)
         self.assertTrue(Comment.objects.get(pk=test_comment.pk).removed)
 
-    def create_test_comment_api(self, author, post, reply_to_comment=None):
-        return self.client.post(self.COMMENTS_BASEURL, {'content': 'content', 'author': author.pk, 'post': post.pk,
+    def create_test_comment_api(self, post, reply_to_comment=None):
+        return self.client.post(self.COMMENTS_BASEURL, {'content': 'content', 'post': post.pk,
                                                         'reply_to': reply_to_comment}, format='json')
 
     def delete_comment_api(self, comment):

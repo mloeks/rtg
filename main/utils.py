@@ -79,12 +79,14 @@ def active_users():
     return User.objects.filter(is_active=True).filter(last_login__year=datetime.now().year)
 
 
-def send_mail_to_users(post_instance, force_all_users=False):
+def send_mail_to_users(post_instance):
     undisclosed_recipients = settings.EMAIL_UNDISCLOSED_RECIPIENTS
     subject, from_email = settings.EMAIL_PREFIX + post_instance.title, settings.DEFAULT_FROM_EMAIL
 
-    if force_all_users:
-        target_users =  active_users().exclude(email=None).exclude(email='')
+    if post_instance.force_all_users:
+        target_users = User.objects.exclude(email=None).exclude(email='')
+    elif post_instance.force_active_users:
+        target_users = active_users().exclude(email=None).exclude(email='')
     else:
         target_users = active_users().exclude(email=None).exclude(email='').filter(profile__daily_emails=True)
 

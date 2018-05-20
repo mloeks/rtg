@@ -5,7 +5,6 @@ import uuid
 from datetime import datetime
 from enum import Enum
 
-import html2text
 from django.conf import settings
 from django.contrib.auth.signals import user_logged_in
 from django.core.mail import EmailMultiAlternatives
@@ -95,9 +94,8 @@ def send_mail_to_users(post_instance):
 
     admin_recipients = [tpl[1] for tpl in settings.ADMINS]
 
-    # text_content = html2text.html2text(post_instance.content)
     text_content = post_instance.content
-    html_content = post_instance.content
+    html_content = post_instance.content.replace('\n', '<br />')
 
     if undisclosed_recipients:
         recipients.extend(admin_recipients)

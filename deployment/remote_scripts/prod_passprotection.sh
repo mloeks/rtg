@@ -6,7 +6,7 @@ if [[ "$1" == "SET" ]];then
 
 else
     echo "REMOVING PROD password protection..."
-    CONF_FILE=${HOME}/scripts/rtg/rtg_original.conf
+    CONF_FILE=${HOME}/scripts/rtg/rtg.original.conf
 fi
 
 ${HOME}/init/nginx stop

@@ -72,7 +72,7 @@ class StatisticAdmin(admin.ModelAdmin):
 
 
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'date_created')
+    list_display = ('__str__', 'date_created', 'title', 'news_appear', 'as_mail')
 
 ###########################
 

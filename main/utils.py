@@ -95,7 +95,8 @@ def send_mail_to_users(post_instance):
 
     admin_recipients = [tpl[1] for tpl in settings.ADMINS]
 
-    text_content = html2text.html2text(post_instance.content)
+    # text_content = html2text.html2text(post_instance.content)
+    text_content = post_instance.content
     html_content = post_instance.content
 
     if undisclosed_recipients:

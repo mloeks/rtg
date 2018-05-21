@@ -190,7 +190,7 @@ class AdminUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('pk', 'username', 'first_name', 'last_name', 'avatar', 'has_paid')
+        fields = ('pk', 'username', 'first_name', 'last_name', 'avatar', 'has_paid', 'last_login')
 
 
 class PostSerializer(serializers.ModelSerializer):

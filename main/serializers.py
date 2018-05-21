@@ -186,10 +186,11 @@ class PublicUserSerializer(serializers.ModelSerializer):
 
 class AdminUserSerializer(serializers.ModelSerializer):
     has_paid = serializers.BooleanField(source='profile.has_paid', default=True)
+    avatar = ImageField(source='profile.avatar', required=False, allow_null=True, read_only=True)
 
     class Meta:
         model = User
-        fields = ('pk', 'username', 'first_name', 'last_name', 'has_paid')
+        fields = ('pk', 'username', 'first_name', 'last_name', 'avatar', 'has_paid')
 
 
 class PostSerializer(serializers.ModelSerializer):

@@ -185,12 +185,13 @@ class PublicUserSerializer(serializers.ModelSerializer):
 
 
 class AdminUserSerializer(serializers.ModelSerializer):
+    email2 = serializers.EmailField(source='profile.email2')
     has_paid = serializers.BooleanField(source='profile.has_paid', default=True)
-    avatar = ImageField(source='profile.avatar', required=False, allow_null=True, read_only=True)
+    avatar = ImageField(source='profile.avatar')
 
     class Meta:
         model = User
-        fields = ('pk', 'username', 'first_name', 'last_name', 'avatar', 'has_paid', 'last_login')
+        fields = ('pk', 'username', 'email', 'email2', 'first_name', 'last_name', 'avatar', 'has_paid', 'last_login')
 
 
 class PostSerializer(serializers.ModelSerializer):

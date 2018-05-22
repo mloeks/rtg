@@ -185,7 +185,7 @@ class PublicUserViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 # how admin users can see all users
-class AdminUserViewSet(viewsets.ModelViewSet):
+class AdminUserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = AdminUserSerializer
     permission_classes = (rtg_permissions.IsAdmin,)

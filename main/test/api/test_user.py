@@ -169,6 +169,34 @@ class UserApiTests(RtgApiTestCase):
                                      {'username': 'newuser', 'location': 'Buxtehude'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_admin_update_user_has_paid_valid(self):
+        """
+            Admins may patch any user
+        """
+        self.create_test_user(admin=True)
+        some_user = TestModelUtils.create_user()
+
+        response = self.client.patch("%s%i/" % (self.ADMIN_USERS_BASEURL, some_user.pk),
+                                     {'has_paid': 'true'}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        updated_user = User.objects.get(pk=some_user.pk)
+        self.assertEqual(True, updated_user.profile.has_paid)
+
+    def test_user_update_user_has_paid_failure(self):
+        """
+            Normal users may not patch a different user
+        """
+        self.create_test_user()
+        some_user = TestModelUtils.create_user()
+
+        response = self.client.patch("%s%i/" % (self.ADMIN_USERS_BASEURL, some_user.pk),
+                                     {'has_paid': 'true'}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        updated_user = User.objects.get(pk=some_user.pk)
+        self.assertEqual(False, updated_user.profile.has_paid)
+
     def test_user_delete_admin(self):
         """
             Even admins must not delete user via the REST API

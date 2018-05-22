@@ -193,6 +193,11 @@ class AdminUserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('pk', 'username', 'email', 'email2', 'first_name', 'last_name', 'avatar', 'has_paid', 'last_login')
 
+    def update(self, instance, validated_data):
+        profile_data = validated_data.pop('profile', None)
+        Profile.objects.filter(user=instance).update(has_paid=profile_data['has_paid'])
+        return super(AdminUserSerializer, self).update(instance, validated_data)
+
 
 class PostSerializer(serializers.ModelSerializer):
     author_details = PublicUserSerializer(source='author', read_only=True)

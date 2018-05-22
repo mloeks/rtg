@@ -19,6 +19,7 @@ class RtgApiTestCase(APITestCase):
     EXTRACHOICES_BASEURL = '/rtg/extrachoices/'
     USERS_BASEURL = '/rtg/users/'
     PUBLIC_USERS_BASEURL = '/rtg/users_public/'
+    ADMIN_USERS_BASEURL = '/rtg/users_admin/'
     STATISTICS_BASEURL = '/rtg/statistics/'
     POSTS_BASEURL = '/rtg/posts/'
     COMMENTS_BASEURL = '/rtg/comments/'

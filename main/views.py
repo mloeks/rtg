@@ -1,7 +1,7 @@
 import logging
 
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
@@ -146,6 +146,14 @@ class UserViewSet(viewsets.ModelViewSet):
         if not user.is_staff:
             queryset = queryset.filter(pk=user.pk)
         return queryset
+
+    def destroy(self, request, *args, **kwargs):
+        msg = EmailMessage('%s User %s gelöscht' % (settings.EMAIL_PREFIX, request.user.username),
+                           'Zur Info: "%s" (%s) hat ihren/seinen Account soeben gelöscht.' %
+                           (request.user.username, request.user.email), settings.DEFAULT_FROM_EMAIL,
+                           [tpl[1] for tpl in settings.ADMINS])
+        msg.send()
+        return super(UserViewSet, self).destroy(request, *args, **kwargs)
 
     @detail_route(methods=['POST'], permission_classes=[rtg_permissions.IsAdminOrOwner])
     @parser_classes((FormParser, MultiPartParser,))

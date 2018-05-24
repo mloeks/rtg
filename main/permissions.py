@@ -76,6 +76,7 @@ class UserPermissions(permissions.BasePermission):
         List access is read-only (safe methods) for authenticated users.
         Object access is only permitted for the owner or an Administrator.
         POSTing a new User should only be allowed for admin users.
+        DELETing a User should only be allowed for admins or the owner.
     """
 
     def has_permission(self, request, view):
@@ -85,7 +86,7 @@ class UserPermissions(permissions.BasePermission):
                 return True
             else:
                 return request.method in permissions.SAFE_METHODS or \
-                       (request.method in ['PUT', 'PATCH'] and self.is_own_user_resource(user, view))
+                       (request.method in ['PUT', 'PATCH', 'DELETE'] and self.is_own_user_resource(user, view))
         else:
             return False
 

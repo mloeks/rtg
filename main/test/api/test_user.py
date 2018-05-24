@@ -197,24 +197,28 @@ class UserApiTests(RtgApiTestCase):
         updated_user = User.objects.get(pk=some_user.pk)
         self.assertEqual(False, updated_user.profile.has_paid)
 
-    def test_user_delete_admin(self):
+    def test_user_delete_other_user_not_found(self):
         """
-            Even admins must not delete user via the REST API
+            A user attempting to delete another user will get a 404 because the User view set
+            will not even allow the user to see the other user, let alone deleting them.
         """
-        self.create_test_user(admin=True)
-        response = self.delete_test_user_api()
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-
-    def test_user_delete_authuser(self):
         self.create_test_user()
-        response = self.delete_test_user_api()
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        some_other_user = TestModelUtils.create_user()
+        response = self.client.delete("%s%i/" % (self.USERS_BASEURL, some_other_user.pk))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_user_delete_self_ok(self):
+        user = self.create_test_user()
+        response = self.client.delete("%s%i/" % (self.USERS_BASEURL, user.pk))
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_admin_delete_user_ok(self):
+        self.create_test_user(admin=True)
+        some_other_user = TestModelUtils.create_user()
+        response = self.client.delete("%s%i/" % (self.USERS_BASEURL, some_other_user.pk))
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def create_test_user_api(self):
         return self.client.post(self.USERS_BASEURL, {'username': 'test_user_api', 'first_name': 'Testy',
                                                      'last_name': 'McTestface', 'email': 'test_user@test.de'},
                                 format='json')
-
-    def delete_test_user_api(self):
-        test_user = self.create_test_user()
-        return self.client.delete("%s%i/" % (self.USERS_BASEURL, test_user.pk))

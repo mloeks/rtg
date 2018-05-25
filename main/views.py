@@ -22,6 +22,10 @@ from .serializers import *
 LOG = logging.getLogger('rtg.' + __name__)
 
 
+def health(request):
+    return HttpResponse(content='OK')
+
+
 # TODO P2 add admin endpoint for recalculating the statistics
 class BetViewSet(viewsets.ModelViewSet):
     queryset = Bet.objects.all()

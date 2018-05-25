@@ -8,7 +8,7 @@ from rest_framework_jwt.views import refresh_jwt_token, verify_jwt_token
 
 from main.login_overrides import rtg_obtain_jwt_token
 from main.registration_overrides import rtg_register
-from main.views import contact_request
+from main.views import contact_request, health
 
 admin.autodiscover()
 
@@ -34,6 +34,8 @@ urlpatterns = [
 
     # contact form endpoint
     url(r'^contact/$', contact_request, name='rtg_contact_request'),
+
+    url(r'^healthcheck/', health)
 ]
 
 # Uncomment the next line to serve media files in dev.

@@ -86,6 +86,8 @@ def send_mail_to_users(post_instance):
         target_users = User.objects.exclude(email=None).exclude(email='')
     elif post_instance.force_active_users:
         target_users = active_users().exclude(email=None).exclude(email='')
+    elif post_instance.force_inactive_users:
+        target_users = User.objects.filter(is_active=True).filter(last_login__isnull=True)
     else:
         target_users = active_users().exclude(email=None).exclude(email='').filter(profile__daily_emails=True)
 

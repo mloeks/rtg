@@ -496,6 +496,7 @@ class Post(models.Model):
     news_appear = models.BooleanField(default=True)
     as_mail = models.BooleanField(default=False)
     force_active_users = models.BooleanField(default=False)
+    force_inactive_users = models.BooleanField(default=False)
     force_all_users = models.BooleanField(default=False)
 
     def clean(self):

@@ -153,7 +153,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         msg = EmailMessage('%s User %s gelöscht' % (settings.EMAIL_PREFIX, request.user.username),
-                           'Zur Info: "%s" (%s) hat ihren/seinen Account soeben gelöscht.' %
+                           'Zur Info: "%s" (%s) wurde soeben gelöscht.' %
                            (request.user.username, request.user.email), settings.DEFAULT_FROM_EMAIL,
                            [tpl[1] for tpl in settings.ADMINS])
         msg.send()

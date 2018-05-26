@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from random import choice, randrange
-from string import ascii_uppercase
+from string import printable
 
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -129,7 +129,7 @@ class TestModelUtils:
 
     @staticmethod
     def create_random_string(length=12):
-        return ''.join(choice(ascii_uppercase) for i in range(length))
+        return ''.join(choice(printable) for i in range(length))
 
     @staticmethod
     def create_random_number(maxnr=1000):

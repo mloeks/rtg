@@ -178,7 +178,7 @@ class Command(BaseCommand):
         self.a_game('PAN', 'TUN', '2018-06-28 20:00:00+02', 'saransk')
 
     def create_extra_bets(self):
-        wm = Extra(name='Wer wird Weltmeister?', points=10, deadline=self.TOURNAMENT_START)
+        wm = Extra(name='Wer wird Weltmeister?', points=5, deadline=self.TOURNAMENT_START)
         deu = Extra(name='Wie weit kommt Deutschland?', points=5, deadline=self.TOURNAMENT_START)
         wm.save()
         deu.save()

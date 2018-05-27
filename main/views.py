@@ -126,7 +126,19 @@ class GameViewSet(viewsets.ModelViewSet):
     filter_backends = (OrderingFilter, rtgfilters.BettablesWithBetsOpenIfParamSet, rtgfilters.GamesFromDate)
 
     ordering_fields = ('id', 'kickoff', 'deadline', 'venue', 'round')
-    ordering = ('kickoff',)
+    ordering = ('kickoff', 'id',)
+
+
+class GameKickoffsViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Game.objects.all()
+    serializer_class = GameKickoffsSerializer
+    permission_classes = (rtg_permissions.IsAdminOrAuthenticatedReadOnly,)
+    pagination_class = None
+
+    filter_backends = (OrderingFilter,)
+
+    ordering_fields = ('id', 'kickoff',)
+    ordering = ('kickoff', 'id',)
 
 
 class UserViewSet(viewsets.ModelViewSet):

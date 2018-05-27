@@ -139,6 +139,14 @@ class GameSerializer(serializers.ModelSerializer):
         return TournamentGroupSerializer.as_dict(obj.hometeam.group) if not obj.round.is_knock_out else None
 
 
+class GameKickoffsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Game
+        fields = ('kickoff',)
+
+    def to_representation(self, instance):
+        return str(instance.kickoff)
+
 # Combining custom Profile with User, cf. https://stackoverflow.com/a/28733782
 class UserSerializer(serializers.ModelSerializer):
     # TODO P3 where does the min_length 3 requirement actually come from?

@@ -12,6 +12,7 @@ router.register(r'tournamentrounds', views.TournamentRoundViewSet)
 router.register(r'teams', views.TeamViewSet)
 router.register(r'venues', views.VenueViewSet)
 router.register(r'games', views.GameViewSet)
+router.register(r'game-kickoffs', views.GameKickoffsViewSet)
 router.register(r'extras', views.ExtraViewSet)
 
 router.register(r'users', views.UserViewSet)

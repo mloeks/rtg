@@ -87,6 +87,20 @@ class GameApiTests(RtgApiTestCase):
         response = self.delete_test_game_api()
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_game_filter_from_date(self):
+        self.create_test_user()
+        now = datetime.now()
+
+        g1 = TestModelUtils.create_game(kickoff=now - timedelta(days=5))
+        g2 = TestModelUtils.create_game(kickoff=now - timedelta(hours=3))
+        g3 = TestModelUtils.create_game(kickoff=now)
+        g4 = TestModelUtils.create_game(kickoff=now + timedelta(hours=2))
+
+        response = self.client.get('%s?from=%s' % (self.GAMES_BASEURL, now))
+        self.assertEqual(2, response.data['count'])
+        self.assertEqual(g3.id, response.data['results'][0]['id'])
+        self.assertEqual(g4.id, response.data['results'][1]['id'])
+
     @staticmethod
     def create_test_game(venue_name=None):
         team_1 = TestModelUtils.create_team()

@@ -1,7 +1,9 @@
+import dateutil.parser
 from django.core.exceptions import FieldDoesNotExist
 from django.db.models import Q
 from django.db.models.fields.related import ForeignObjectRel
 from rest_framework import filters
+from rest_framework.exceptions import ParseError
 from rest_framework.filters import OrderingFilter
 
 from main.utils import get_reference_date
@@ -25,6 +27,25 @@ class BettablesWithBetsOpenIfParamSet(filters.BaseFilterBackend):
         if bets_open is not None and bets_open == 'true':
             return queryset.filter(deadline__gt=get_reference_date())
         return queryset
+
+
+class GamesFromDate(filters.BaseFilterBackend):
+    """
+        Return only games starting on or later than a given date
+    """
+    def filter_queryset(self, request, queryset, view):
+        from_date = self.parse_date(request.query_params.get('from', None))
+        if from_date is not None:
+            return queryset.filter(kickoff__gte=from_date)
+        return queryset
+
+    def parse_date(self, date_string):
+        if date_string:
+            try:
+                return dateutil.parser.parse(date_string)
+            except ValueError:
+                raise ParseError('Invalid date provided in from query parameter')
+        return None
 
 
 class TopLevelComments(filters.BaseFilterBackend):

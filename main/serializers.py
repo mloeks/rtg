@@ -23,7 +23,7 @@ class BetSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs['bettable'].deadline_passed():
-            raise ValidationError('Die Deadline ist bereits abgelaufen.')
+            raise serializers.ValidationError({ 'detail': 'Die Deadline ist abgelaufen.', 'code': 'DEADLINE_PASSED'})
         return attrs
 
 

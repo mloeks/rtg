@@ -74,6 +74,10 @@ class StatisticAdmin(admin.ModelAdmin):
 class PostAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'date_created', 'title', 'news_appear', 'as_mail')
 
+
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'date_created', 'content')
+
 ###########################
 
 admin.site.register(TournamentGroup, TournamentGroupAdmin)
@@ -91,3 +95,4 @@ admin.site.register(Bettable, BettableAdmin)
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Statistic, StatisticAdmin)
 admin.site.register(Post, PostAdmin)
+admin.site.register(Comment, CommentAdmin)

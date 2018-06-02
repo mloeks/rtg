@@ -35,7 +35,7 @@ class BetViewSet(viewsets.ModelViewSet):
 
     # return all bets of the user and all other bets if deadline has passed
     filter_backends = (rtgfilters.IsOwnerOrDeadlinePassed, OrderingFilter, DjangoFilterBackend)
-    filter_fields = ('bettable',)
+    filter_fields = ('user', 'bettable',)
 
     # never use pagination for bets, since they should never be displayed paginated to the user in the UI
     pagination_class = None

@@ -23,7 +23,6 @@ def jwt_response_payload_handler(token, user=None, request=None):
     return {
         'token': token,
         'user_id': user.pk,
-        'email': user.email,
         'admin': user.is_staff,
         'has_paid': user.profile.has_paid,
         'avatar': str(user.profile.avatar),

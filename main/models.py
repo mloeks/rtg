@@ -117,6 +117,10 @@ class Bettable(models.Model):
 
 
 # TODO P2 connect with OpenLigaDb Web Service, update results automatically
+# Recherchen siehe Postman
+# Ergebnis nach 90 Minuten scheint ResultTypeID 2 zu sein, Endergebnis ID 4
+# Spiel-Ressourcen werden direkt per unique ID im Root Pfad referenziert
+# Vorgehen: Spiel-IDs als zusätzliches Feld speichern (für Vorrunde einpflegen, für Finalrunde Importer?)
 class Game(Bettable):
     kickoff = models.DateTimeField()
     homegoals = models.SmallIntegerField(default=-1)
@@ -486,8 +490,8 @@ class Profile(models.Model):
 
 
 class Post(models.Model):
-    title = models.TextField()
-    content = models.TextField()
+    title = models.TextField(null=True, blank=True, default='')
+    content = models.TextField(null=True, blank=True, default='')
     author = models.ForeignKey(User, related_name='authored_posts')
 
     date_created = models.DateTimeField(auto_now_add=True)
@@ -495,6 +499,7 @@ class Post(models.Model):
 
     news_appear = models.BooleanField(default=True)
     as_mail = models.BooleanField(default=False)
+    # TODO P3 do I really have to persist these flags? there should be no need to...
     force_active_users = models.BooleanField(default=False)
     force_inactive_users = models.BooleanField(default=False)
     force_all_users = models.BooleanField(default=False)
@@ -502,9 +507,9 @@ class Post(models.Model):
     def clean(self):
         # blank posts are not allowed. This has to be validated here, cannot be validate by the TextField itself
         # (blank=False only applies to Django forms)
-        if not self.title:
+        if self.finished and not self.title:
             raise ValidationError(_('Title must not be empty.'))
-        if not self.content:
+        if self.finished and not self.content:
             raise ValidationError(_('Content must not be empty.'))
 
     def __str__(self):

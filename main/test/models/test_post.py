@@ -27,12 +27,25 @@ class PostTests(TestCase):
 
     def test_invalid_missing_fields(self):
         u = utils.create_user()
-        with self.assertRaises(IntegrityError):
-            with transaction.atomic():
-                Post.objects.create(content=None, author=u)
         with self.assertRaises(ValidationError):
             with transaction.atomic():
-                Post.objects.create(content='', author=u).clean()
+                Post.objects.create(title='foo', content=None, author=u).clean()
+        with self.assertRaises(ValidationError):
+            with transaction.atomic():
+                Post.objects.create(title='foo', content='', author=u).clean()
+        with self.assertRaises(ValidationError):
+            with transaction.atomic():
+                Post.objects.create(title=None, content='foo', author=u).clean()
+        with self.assertRaises(ValidationError):
+            with transaction.atomic():
+                Post.objects.create(title='', content='foo', author=u).clean()
+
+    def test_valid_missing_fields_but_not_finished(self):
+        u = utils.create_user()
+        Post.objects.create(title='', content='foo', author=u, finished=False).clean()
+        Post.objects.create(title=None, content='foo', author=u, finished=False).clean()
+        Post.objects.create(title='foo', content='', author=u, finished=False).clean()
+        Post.objects.create(title='foo', content=None, author=u, finished=False).clean()
 
     def test_date_created(self):
         p = utils.create_post()

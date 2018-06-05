@@ -218,6 +218,7 @@ class PostSerializer(serializers.ModelSerializer):
             'author': {'write_only': True},
             'as_mail': {'write_only': True},
             'force_active_users': {'write_only': True},
+            'force_inactive_users': {'write_only': True},
             'force_all_users': {'write_only': True}
         }
 

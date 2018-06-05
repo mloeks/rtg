@@ -494,7 +494,7 @@ class Post(models.Model):
     content = models.TextField(null=True, blank=True, default='')
     author = models.ForeignKey(User, related_name='authored_posts')
 
-    date_created = models.DateTimeField(auto_now_add=True)
+    date_created = models.DateTimeField(auto_now=True)
     finished = models.BooleanField(default=True)
 
     news_appear = models.BooleanField(default=True)

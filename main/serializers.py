@@ -225,6 +225,13 @@ class PostSerializer(serializers.ModelSerializer):
     def get_no_comments(self, obj):
         return obj.comments.count()
 
+    def validate(self, attrs):
+        if attrs['finished'] and not attrs['title']:
+            raise serializers.ValidationError({'title': 'Dieses Feld darf nicht leer sein.'})
+        if attrs['finished'] and not attrs['content']:
+            raise serializers.ValidationError({'content': 'Dieses Feld darf nicht leer sein.'})
+        return attrs
+
 
 class CommentSerializer(serializers.ModelSerializer):
     author_details = PublicUserSerializer(source='author', read_only=True)

@@ -504,14 +504,6 @@ class Post(models.Model):
     force_inactive_users = models.BooleanField(default=False)
     force_all_users = models.BooleanField(default=False)
 
-    def clean(self):
-        # blank posts are not allowed. This has to be validated here, cannot be validate by the TextField itself
-        # (blank=False only applies to Django forms)
-        if self.finished and not self.title:
-            raise ValidationError(_('Title must not be empty.'))
-        if self.finished and not self.content:
-            raise ValidationError(_('Content must not be empty.'))
-
     def __str__(self):
         return u"Post by " + str(self.author)
 

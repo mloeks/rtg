@@ -25,34 +25,12 @@ class PostTests(TestCase):
         p = Post.objects.create(content='Tolle Neuigkeiten!', author=u)
         self.assertEqual('Post by the queen', str(p))
 
-    def test_invalid_missing_fields(self):
-        u = utils.create_user()
-        with self.assertRaises(ValidationError):
-            with transaction.atomic():
-                Post.objects.create(title='foo', content=None, author=u).clean()
-        with self.assertRaises(ValidationError):
-            with transaction.atomic():
-                Post.objects.create(title='foo', content='', author=u).clean()
-        with self.assertRaises(ValidationError):
-            with transaction.atomic():
-                Post.objects.create(title=None, content='foo', author=u).clean()
-        with self.assertRaises(ValidationError):
-            with transaction.atomic():
-                Post.objects.create(title='', content='foo', author=u).clean()
-
-    def test_valid_missing_fields_but_not_finished(self):
-        u = utils.create_user()
-        Post.objects.create(title='', content='foo', author=u, finished=False).clean()
-        Post.objects.create(title=None, content='foo', author=u, finished=False).clean()
-        Post.objects.create(title='foo', content='', author=u, finished=False).clean()
-        Post.objects.create(title='foo', content=None, author=u, finished=False).clean()
-
     def test_date_created(self):
         p = utils.create_post()
         date_format = '%d-%m-%y %H:%M:%S'
         self.assertTrue(p.date_created.strftime(date_format) == timezone.now().strftime(date_format))
 
-        # auto_now_add can *not* be overriden!
+        # auto_now can *not* be overriden!
         other_time = utils.create_datetime_from_now(timedelta(days=2, hours=1))
         p = Post.objects.create(content='foo', author=utils.create_user(), date_created=other_time)
         self.assertTrue(p.date_created.strftime(date_format) == timezone.now().strftime(date_format))

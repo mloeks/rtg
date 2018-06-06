@@ -530,5 +530,5 @@ class Comment(models.Model):
 
 @receiver(post_save, sender=Post)
 def send_post_as_mail(sender, instance, created, **kwargs):
-    if instance.as_mail:
+    if instance.finished and instance.as_mail:
         utils.send_mail_to_users(instance)

@@ -31,15 +31,16 @@ def jwt_response_payload_handler(token, user=None, request=None):
     }
 
 
-def extract_homegoals_from_result(result):
-    return re.match("^([0-9]{1,2}):[0-9]{1,2}", result).group(1)
+def extract_goals_from_result(result):
+    match = re.match("^([0-9]{1,2}):([0-9]{1,2})$", result)
+    if match:
+        return tuple(int(goal) for goal in match.group(1, 2))
+    else:
+        return (-1, -1)
 
 
 def get_reference_date():
     return settings.FAKE_DATE if hasattr(settings, 'FAKE_DATE') else timezone.now()
-
-def extract_awaygoals_from_result(result):
-    return re.match("^[0-9]{1,2}:([0-9]{1,2})", result).group(1)
 
 
 def game_to_string(game):
@@ -77,6 +78,7 @@ def active_users():
     return User.objects.filter(is_active=True).filter(last_login__year=datetime.now().year)
 
 
+# TODO HTML e-mail?
 def send_mail_to_users(post_instance):
     undisclosed_recipients = settings.EMAIL_UNDISCLOSED_RECIPIENTS
     subject, from_email = settings.EMAIL_PREFIX + post_instance.title, settings.DEFAULT_FROM_EMAIL

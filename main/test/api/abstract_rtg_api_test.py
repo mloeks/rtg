@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
-# TODO P2 test invalid requests (at least for bets)
 # TODO P3 create some more advanced tests
 
 

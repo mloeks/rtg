@@ -131,7 +131,7 @@ class Game(Bettable):
     venue = models.ForeignKey(Venue)
     round = models.ForeignKey(TournamentRound)
 
-    openligadb_match_id = models.TextField(null=True, blank=True)
+    openligadb_match_id = models.CharField(null=True, blank=True, max_length=10)
 
     class Meta:
         ordering = ["kickoff"]

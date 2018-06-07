@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import timedelta
 
-from utils import active_users
+from main.utils import active_users
 
 __author__ = 'mloeks'
 

@@ -24,9 +24,11 @@ class VenueAdmin(admin.ModelAdmin):
 
 class GameAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('Game details', {'fields': ['round', 'kickoff', 'deadline', 'venue', 'hometeam', 'awayteam', 'homegoals', 'awaygoals']}),
+        ('Game details',
+         {'fields': ['round', 'kickoff', 'deadline', 'venue', 'hometeam', 'awayteam',
+                     'homegoals', 'awaygoals', 'openligadb_match_id']}),
     ]
-    list_display = ('__str__', 'round', 'kickoff', 'deadline', 'result_str', 'venue')
+    list_display = ('pk', '__str__', 'round', 'kickoff', 'deadline', 'result_str', 'venue')
     list_filter = ['round', 'kickoff', 'deadline', 'venue']
 
 

@@ -116,7 +116,6 @@ class Bettable(models.Model):
         return str(self.name)
 
 
-# TODO P2 set OpenLigaDB IDs for all games (in fixture command, and in data migration? or manually...)
 # TODO P3 also add import functionality from OpenLigaDB (scan for unknown games and add them)
 class Game(Bettable):
     kickoff = models.DateTimeField()

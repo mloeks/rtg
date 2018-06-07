@@ -116,11 +116,8 @@ class Bettable(models.Model):
         return str(self.name)
 
 
-# TODO P2 connect with OpenLigaDb Web Service, update results automatically
-# Recherchen siehe Postman
-# Ergebnis nach 90 Minuten scheint ResultTypeID 2 zu sein, Endergebnis ID 4
-# Spiel-Ressourcen werden direkt per unique ID im Root Pfad referenziert
-# Vorgehen: Spiel-IDs als zusätzliches Feld speichern (für Vorrunde einpflegen, für Finalrunde Importer?)
+# TODO P2 set OpenLigaDB IDs for all games (in fixture command, and in data migration? or manually...)
+# TODO P3 also add import functionality from OpenLigaDB (scan for unknown games and add them)
 class Game(Bettable):
     kickoff = models.DateTimeField()
     homegoals = models.SmallIntegerField(default=-1)

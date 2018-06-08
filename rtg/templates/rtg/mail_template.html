@@ -1,39 +1,49 @@
-<link href='https://fonts.googleapis.com/css?family=Roboto%7CLobster+Two:400' rel='stylesheet' type='text/css'>
-
-<table style="width: 100%; font-family: 'Roboto', sans-serif;">
-    <tr>
-        <td>
-            <table align="center" style="width: 100%; max-width:600px;">
-                <tr>
-                    <th width="80" style="text-align: left;">
-                        <img style="height: 90px;" src="https://www.royale-tippgemeinschaft.de/static/media/logo_100px.0f80814f.png" alt="RTG Logo" />
-                    </th>
-                    <th style="text-align: left; vertical-align: middle;">
-                        <h1 style="color: #974578; font-family: 'Lobster Two', sans-serif; font-size: 26px; font-weight: 400; margin: 0;">
-                            Royale Tippgemeinschaft
-                        </h1>
-                        {% if subtitle %}
-                            <h2 style="color: #B4B4B4; font-size:14px; font-weight: normal; margin: 0;">{{ subtitle }}</h2>
-                        {% endif %}
-                    </th>
-                </tr>
-                <tr style="height:25px;"></tr>
-                <tr>
-                    <td colspan="2" style="padding: 0; height: 1px; background-color: #EDD69C;"></td>
-                </tr>
-                <tr style="height:25px;"></tr>
-                <tr>
-                    <td colspan="2" style="color:#333;">
-                        {{ content|linebreaksbr }}
-                    </td>
-                </tr>
-                <tr style="height:25px;"></tr>
-                <tr>
-                    <td colspan="2">
-                        <a style="color: #B4B4B4;" href="https://www.royale-tippgemeinschaft.de">www.royale-tippgemeinschaft.de</a>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-</table>
+<head>
+    <link href='https://fonts.googleapis.com/css?family=Roboto%7CLobster+Two:400' rel='stylesheet' type='text/css'>
+</head>
+<body>
+    <table style="width: 100%; font-family: 'Roboto', sans-serif;">
+        <tr>
+            <td>
+                <table align="center" style="width: 100%; max-width:600px;">
+                    <tr>
+                        <th width="80" style="text-align: left;">
+                            <img style="height: 90px;"
+                                 src="https://www.royale-tippgemeinschaft.de/static/media/logo_100px.0f80814f.png"
+                                 alt="RTG Logo"/>
+                        </th>
+                        <th style="text-align: left; vertical-align: middle;">
+                            <h1 style="color: #974578; font-family: 'Lobster Two', sans-serif; font-size: 26px; font-weight: 400; margin: 0;">
+                                Royale Tippgemeinschaft
+                            </h1>
+                            {% if subtitle %}
+                                <h2 style="color: #808080; font-size:16px; font-weight: normal; margin: 0;">{{ subtitle }}</h2>
+                            {% endif %}
+                        </th>
+                    </tr>
+                    <tr style="height:25px;"></tr>
+                    <tr>
+                        <td colspan="2" style="padding: 0; height: 1px; background-color: #EDD69C;"></td>
+                    </tr>
+                    <tr style="height:25px;"></tr>
+                    <tr>
+                        <td colspan="2" style="color:#333;">
+                            {{ content|linebreaksbr }}
+                        </td>
+                    </tr>
+                    <tr style="height:25px;"></tr>
+                    <tr>
+                        <td colspan="2">
+                            <a style="color: #B4B4B4;" href="https://www.royale-tippgemeinschaft.de">www.royale-tippgemeinschaft.de</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a style="color: #B4B4B4;" href="https://www.royale-tippgemeinschaft.de/profile">Mail-Einstellungen</a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>

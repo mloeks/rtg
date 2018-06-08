@@ -21,8 +21,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for game in self.get_started_games_without_result():
-            LOG.info('Looking for result of game %s (ID %s, OpenLigaDB ID %s)' %
-                     (game, game.pk, game.openligadb_match_id))
             result = self.fetch_result_from_openligadb(game)
             if result:
                 LOG.info('Setting result of game %s to %s' % (game, result))

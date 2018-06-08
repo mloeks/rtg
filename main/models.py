@@ -8,6 +8,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext as _
 
+from main import mail_utils
 from main import utils
 from main.storage import OverwriteStorage
 from main.validators import *
@@ -529,4 +530,4 @@ class Comment(models.Model):
 @receiver(post_save, sender=Post)
 def send_post_as_mail(sender, instance, created, **kwargs):
     if instance.finished and instance.as_mail:
-        utils.send_mail_to_users(instance)
+        mail_utils.send_mail_to_users(instance)

@@ -28,7 +28,7 @@ class GameAdmin(admin.ModelAdmin):
          {'fields': ['round', 'kickoff', 'deadline', 'venue', 'hometeam', 'awayteam',
                      'homegoals', 'awaygoals', 'openligadb_match_id']}),
     ]
-    list_display = ('pk', '__str__', 'round', 'kickoff', 'deadline', 'result_str', 'venue')
+    list_display = ('pk', 'openligadb_match_id', '__str__', 'round', 'kickoff', 'deadline', 'result_str', 'venue')
     list_filter = ['round', 'kickoff', 'deadline', 'venue']
 
 

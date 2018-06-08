@@ -6,7 +6,6 @@ from main.models import User
 from main.utils import active_users
 
 
-# TODO P2 put image onto static path which will remain the same (without hash)
 def send_post_as_mail(post_instance, post_count):
     undisclosed_recipients = settings.EMAIL_UNDISCLOSED_RECIPIENTS
     subject, from_email = settings.EMAIL_PREFIX + post_instance.title, settings.DEFAULT_FROM_EMAIL

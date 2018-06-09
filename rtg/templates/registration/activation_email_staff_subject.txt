@@ -1,1 +1,0 @@
-Neue Registrierung von {{ user.get_full_name }} ({{ user.username }})

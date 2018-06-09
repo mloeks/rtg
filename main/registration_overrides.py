@@ -14,6 +14,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework_jwt.views import ObtainJSONWebToken
 
+from main.mail_utils import with_rtg_template
 from main.utils import merge_two_dicts
 
 
@@ -69,29 +70,33 @@ class RtgRegisterView(ObtainJSONWebToken):
         user = serializer.save(self.request)
 
         site = RequestSite(request)
-        self.send_confirmation_mails(site, user)
+        RtgRegisterView.send_mail_to_staff(site, user)
+        RtgRegisterView.send_mail_to_user(user)
 
         return super(RtgRegisterView, self).post(request)
 
-    def send_confirmation_mails(self, site, new_user):
-        # send notification mail to staff members
-        ctx = {'user': new_user, 'site': site}
-        subject = render_to_string('registration/activation_email_staff_subject.txt', ctx)
-        # Email subject *must not* contain newlines
-        subject = ''.join(subject.splitlines())
-        subject = settings.EMAIL_PREFIX + subject
-        message = render_to_string('registration/activation_email_staff.html', ctx)
+    @staticmethod
+    def send_mail_to_staff(site, new_user):
+        subject = '%sNeue Registrierung von %s (%s)' % (settings.EMAIL_PREFIX, new_user.get_full_name, new_user.username)
+        text_content = render_to_string('registration/activation_email_staff.html', {'user': new_user, 'site': site})
+        html_content = with_rtg_template({'subtitle': 'Neues Mitglied', 'content': text_content})
 
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [settings.DEFAULT_STAFF_EMAIL])
+        mail = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, to=[settings.DEFAULT_STAFF_EMAIL])
+        mail.attach_alternative(html_content, "text/html")
+        mail.send()
 
-        # send confirmation mail to new user
+    @staticmethod
+    def send_mail_to_user(new_user):
         subject = '%sWillkommen in der Royalen Tippgemeinschaft' % settings.EMAIL_PREFIX
-        message = render_to_string('registration/registration_confirm_email.txt', {'user': new_user})
+        text_content = render_to_string('registration/registration_confirm_email.txt', {'user': new_user})
+        html_content = with_rtg_template({'subtitle': 'Herzlich Willkommen', 'content': text_content})
         admin_recipients = [tpl[1] for tpl in settings.ADMINS]
 
-        mail = EmailMultiAlternatives(subject, message, settings.DEFAULT_FROM_EMAIL, [new_user.email],
+        mail = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [new_user.email],
                                       bcc=admin_recipients)
+        mail.attach_alternative(html_content, "text/html")
         mail.send()
+
 
 rtg_register = RtgRegisterView.as_view()
 

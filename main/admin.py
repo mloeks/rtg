@@ -2,6 +2,9 @@ from django.contrib import admin
 
 from main.models import *
 
+# TODO P3 how to override default username validator?
+# When changing usernames via the admin interface, our RtgValidator is not used
+# (e.g. whitespaces are not allowed)
 
 class TournamentGroupAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'abbreviation')

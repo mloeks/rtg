@@ -1,6 +1,6 @@
 Hallo {{ user.get_short_name }},
 
-herzlich willkommen in der Royalen Tippgemeinschaft!
+Herzlich Willkommen in der Royalen Tippgemeinschaft!
 
 Dein Username lautet: {{ user.username }}
 

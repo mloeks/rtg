@@ -529,4 +529,4 @@ class Comment(models.Model):
 @receiver(post_save, sender=Post)
 def send_post_as_mail(sender, instance, created, **kwargs):
     if instance.finished and instance.as_mail:
-        mail_utils.send_post_as_mail(instance, Post.objects.filter(as_mail=True).count())
+        mail_utils.send_post_as_mail(instance)

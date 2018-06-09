@@ -6,7 +6,8 @@ from main.models import User
 from main.utils import active_users
 
 
-def send_post_as_mail(post_instance, post_count):
+# TODO P3 use mail template also for some of the other mails?
+def send_post_as_mail(post_instance):
     undisclosed_recipients = settings.EMAIL_UNDISCLOSED_RECIPIENTS
     subject, from_email = settings.EMAIL_PREFIX + post_instance.title, settings.DEFAULT_FROM_EMAIL
 
@@ -24,7 +25,7 @@ def send_post_as_mail(post_instance, post_count):
     admin_recipients = [tpl[1] for tpl in settings.ADMINS]
 
     text_content = post_instance.content
-    html_content = with_rtg_template({'subtitle': 'Depesche #%s - Jg. 2018' % post_count, 'content': post_instance.content})
+    html_content = with_rtg_template({'subtitle': 'Königliche Mitteilung', 'content': post_instance.content})
 
     if undisclosed_recipients:
         recipients.extend(admin_recipients)

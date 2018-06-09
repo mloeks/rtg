@@ -1,22 +1,25 @@
 <head>
-    <link href='https://fonts.googleapis.com/css?family=Roboto%7CLobster+Two:400' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 </head>
 <body>
-    <table style="width: 100%; font-family: 'Roboto', sans-serif;">
+    <table style="width: 100%; font-family: 'Roboto', Arial, sans-serif;">
         <tr>
             <td>
                 <table align="center" style="width: 100%; max-width:600px;">
                     <tr>
-                        <th width="80" style="text-align: left;">
-                            <img style="height: 90px;"
-                                 src="https://api.demo.royale-tippgemeinschaft.de/static/logo.png" alt="RTG Logo"/>
+                        <th width="70" style="text-align: left; font-size: 12px;">
+                            <img style="height: 85px;"
+                                 src="https://api.royale-tippgemeinschaft.de/static/logo.png" alt="Logo"/>
                         </th>
                         <th style="text-align: left; vertical-align: middle;">
-                            <h1 style="color: #974578; font-family: 'Lobster Two', sans-serif; font-size: 26px; font-weight: 400; margin: 0;">
-                                Royale Tippgemeinschaft
+                            <h1 style="color: #974578; font-family: Times New Roman, serif; font-size: 22px; margin: 0;">
+                                <img style="width: 100%; max-width: 270px"
+                                     src="https://api.royale-tippgemeinschaft.de/static/heading.png" alt="Royale Tippgemeinschaft"/>
                             </h1>
                             {% if subtitle %}
-                                <h2 style="color: #808080; font-size:16px; font-weight: normal; margin: 0;">{{ subtitle }}</h2>
+                                <h2 style="color: #808080; font-size:14px; font-weight: normal; margin: 0; padding-top: 3px;">
+                                    {{ subtitle }}
+                                </h2>
                             {% endif %}
                         </th>
                     </tr>

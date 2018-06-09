@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 
+import dateutil
 import requests
 from django.db.models import Q
 
@@ -33,11 +34,17 @@ class Command(BaseCommand):
 
     def fetch_games(self):
         resp = requests.get('https://www.openligadb.de/api/getmatchdata/fifa18/2018').json()
-        return [(g['MatchID'], g['Team1']['TeamName'], g['Team2']['TeamName']) for g in resp]
+        return [(
+            g['MatchID'],
+            dateutil.parser.parse(g['MatchDateTimeUTC']),
+            g['Team1']['TeamName'],
+            g['Team2']['TeamName']
+        ) for g in resp]
 
     def get_games_without_match_id(self):
         return Game.objects\
             .filter(Q(openligadb_match_id__isnull=True) | Q(openligadb_match_id__exact=''))
 
     def game_matches(self, game, ol_game):
-        return game.hometeam.name.lower() == ol_game[1].lower() and game.awayteam.name.lower() == ol_game[2].lower()
+        return game.kickoff == ol_game[1] and game.hometeam.name.lower() == ol_game[2].lower() \
+                    and game.awayteam.name.lower() == ol_game[3].lower()

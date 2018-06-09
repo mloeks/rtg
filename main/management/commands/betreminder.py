@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import timedelta
 
+from main.mail_utils import with_rtg_template
 from main.utils import active_users
 
 __author__ = 'mloeks'
@@ -27,8 +28,12 @@ class Command(BaseCommand):
                 subject = 'Tipp-Erinnerung'
                 subject = settings.EMAIL_PREFIX + subject
 
-                message = render_to_string('rtg/bet_reminder_email.html', ctx)
                 print("Sending reminder E-Mail to " + str(user.username) + " [" + str(user.email) + "]...")
-                mail = EmailMultiAlternatives(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email],
+
+                text_content = render_to_string('rtg/bet_reminder_email.html', ctx)
+                html_content = with_rtg_template({'subtitle': 'Tipp-Erinnerung', 'content': text_content})
+
+                mail = EmailMultiAlternatives(subject, text_content, settings.DEFAULT_FROM_EMAIL, [user.email],
                                               bcc=['admin@royale-tippgemeinschaft.de'])
+                mail.attach_alternative(html_content, "text/html")
                 mail.send()

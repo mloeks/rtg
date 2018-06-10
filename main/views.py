@@ -163,11 +163,13 @@ class UserViewSet(viewsets.ModelViewSet):
         return queryset
 
     def destroy(self, request, *args, **kwargs):
-        msg = EmailMessage('%s User %s gelöscht' % (settings.EMAIL_PREFIX, request.user.username),
-                           'Zur Info: "%s" (%s) wurde soeben gelöscht.' %
-                           (request.user.username, request.user.email), settings.DEFAULT_FROM_EMAIL,
-                           [tpl[1] for tpl in settings.ADMINS])
-        msg.send()
+        user_to_delete = User.objects.get(pk=kwargs['pk'])
+        if user_to_delete:
+            msg = EmailMessage('%s User %s gelöscht' % (settings.EMAIL_PREFIX, user_to_delete.username),
+                               'Zur Info: "%s" (%s) wurde soeben gelöscht.' %
+                               (user_to_delete.username, user_to_delete.email), settings.DEFAULT_FROM_EMAIL,
+                               [tpl[1] for tpl in settings.ADMINS])
+            msg.send()
         return super(UserViewSet, self).destroy(request, *args, **kwargs)
 
     @detail_route(methods=['POST'], permission_classes=[rtg_permissions.IsAdminOrOwner])

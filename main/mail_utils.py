@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
+from html2text import html2text
 
 from main.models import User
 from main.utils import active_users
@@ -23,8 +24,8 @@ def send_post_as_mail(post_instance):
     recipients.extend(list(usr.profile.email2 for usr in target_users if usr.profile.email2))
     admin_recipients = [tpl[1] for tpl in settings.ADMINS]
 
-    text_content = post_instance.content
-    html_content = with_rtg_template({'subtitle': 'Königliche Mitteilung', 'content': post_instance.content})
+    text_content = html2text(post_instance.content)
+    html_content = with_rtg_template({'subtitle': 'Königliche Mitteilung', 'html_content': post_instance.content})
 
     if undisclosed_recipients:
         recipients.extend(admin_recipients)

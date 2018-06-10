@@ -30,7 +30,12 @@
 
                     <tr>
                         <td colspan="2" style="color:#333;">
-                            {{ content|linebreaksbr }}
+                            {% if content %}
+                                {{ content|linebreaksbr }}
+                            {%  endif %}
+                            {% if html_content %}
+                                {{ html_content|safe }}
+                            {%  endif %}
                         </td>
                     </tr>
 

@@ -76,7 +76,7 @@ class RtgRegisterView(ObtainJSONWebToken):
 
     @staticmethod
     def send_mail_to_staff(site, new_user):
-        subject = '%sNeue Registrierung von %s (%s)' % (settings.EMAIL_PREFIX, new_user.get_full_name(), new_user.username())
+        subject = '%sNeue Registrierung von %s (%s)' % (settings.EMAIL_PREFIX, new_user.get_full_name(), new_user.username)
         text_content = render_to_string('registration/activation_email_staff.html', {'user': new_user, 'site': site})
         html_content = with_rtg_template({'subtitle': 'Neues Mitglied', 'content': text_content})
 

@@ -14,4 +14,4 @@ django-filter==1.0.4
 django-pgcrypto==1.4.0
 Pillow==4.2.1
 python-dateutil==2.7.3
-html2text==2016.9.19
+html2text==2018.1.9

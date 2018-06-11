@@ -34,7 +34,7 @@
                                 {{ content|linebreaksbr }}
                             {%  endif %}
                             {% if html_content %}
-                                {{ html_content }}
+                                {% autoescape off %}{{ html_content }}{% endautoescape %}
                             {%  endif %}
                         </td>
                     </tr>

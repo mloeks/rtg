@@ -100,6 +100,8 @@ class RtgRegisterView(ObtainJSONWebToken):
 rtg_register = RtgRegisterView.as_view()
 
 
+# TODO P3 it seems the password validation here is different than on register
+# on register it needs to be 8 characters long, but here it may be shorter?
 class RtgPasswordChangeSerializer(PasswordChangeSerializer):
     def validate_old_password(self, value):
         try:

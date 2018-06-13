@@ -58,11 +58,12 @@ class ExtraSerializer(serializers.ModelSerializer):
 class TournamentGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = TournamentGroup
-        fields = ('name', 'abbreviation')
+        fields = ('id', 'name', 'abbreviation')
 
     @staticmethod
     def as_dict(obj):
         return {
+            'id': obj.pk,
             'name': obj.name,
             'abbreviation': obj.abbreviation
         }
@@ -102,6 +103,7 @@ class VenueSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+# TODO P3 validate various possible inconsistencies (cf. model, is not applied here at all!)
 class GameSerializer(serializers.ModelSerializer):
     city = serializers.SerializerMethodField()
     bets_open = serializers.SerializerMethodField()

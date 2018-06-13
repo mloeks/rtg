@@ -187,6 +187,8 @@ class Game(Bettable):
         first_game = list(Game.objects.filter().order_by('kickoff'))[:1]
         return first_game[0] if first_game else None
 
+    # TODO P3 this has no effect when using the API. How to share validation between models and serializers?
+    # or, move them to the controller layer (views) somehow?
     def clean(self):
         if self.deadline is None:
             self.deadline = self.kickoff

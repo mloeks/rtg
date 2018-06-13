@@ -117,6 +117,11 @@ class VenueViewSet(viewsets.ModelViewSet):
     permission_classes = (rtg_permissions.IsAdminOrAuthenticatedReadOnly,)
     pagination_class = None
 
+    filter_backends = (OrderingFilter,)
+
+    ordering_fields = ('city', 'capacity')
+    ordering = ('city',)
+
 
 class GameViewSet(viewsets.ModelViewSet):
     queryset = Game.objects.all()

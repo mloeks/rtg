@@ -254,7 +254,8 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 
 class StatisticViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Statistic.objects.all()
+    # TODO reuse util method
+    queryset = Statistic.objects.filter(user__is_active=True).filter(user__last_login__year=datetime.now().year)
     serializer_class = StatisticSerializer
     pagination_class = None
 

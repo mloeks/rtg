@@ -1,8 +1,8 @@
 """Test/Demo settings and globals."""
 
 from __future__ import absolute_import
-from django.utils import timezone
 
+from django.utils import timezone
 from os import environ
 
 from .base import *
@@ -87,4 +87,8 @@ REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] += (
     'rest_framework.renderers.BrowsableAPIRenderer',
 )
 ########## END REST FRAMEWORK CONFIGURATION
+
+########## REGISTRATION
+REGISTRATION_OPEN = False
+########## END REGISTRATION CONFIGURATION
 

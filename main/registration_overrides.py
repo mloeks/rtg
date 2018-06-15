@@ -50,7 +50,7 @@ class RtgRegisterView(ObtainJSONWebToken):
     def post(self, request, *args, **kwargs):
         if not settings.REGISTRATION_OPEN:
             return Response(
-                {"error": "Es tut uns Leid, aber die Registrierung für die RTG ist geschlossen."},
+                {"error": "Die Registrierung für die RTG ist geschlossen."},
                 status=status.HTTP_403_FORBIDDEN
             )
 

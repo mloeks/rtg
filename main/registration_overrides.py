@@ -1,6 +1,5 @@
 # # -*- coding: utf-8 -*-
 import re
-
 from django.conf import settings
 from django.contrib.sites.requests import RequestSite
 from django.core import validators
@@ -51,7 +50,7 @@ class RtgRegisterView(ObtainJSONWebToken):
     def post(self, request, *args, **kwargs):
         if not settings.REGISTRATION_OPEN:
             return Response(
-                {"error": "Es tut uns Leid, aber die Registrierung für die RTG ist aktuell nicht möglich."},
+                {"error": "Es tut uns Leid, aber die Registrierung für die RTG ist geschlossen."},
                 status=status.HTTP_403_FORBIDDEN
             )
 

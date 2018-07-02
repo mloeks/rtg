@@ -1,11 +1,8 @@
 Hallo {{ user.get_short_name }},
 
-die Deadline für folgende Tipps läuft innerhalb der nächsten 24 Stunden ab:
+Bitte denke daran, deine Tipps rechtzeitig abzugeben:
 {% for bettable in open_bettables %}
 - Bis {{ bettable.deadline|date:'j.n, H:i' }} Uhr (MESZ): {{ bettable }}{% endfor %}
-
-Du hast hierfür bislang noch keine Tipps abgegeben!
-Bitte denke daran, dies rechtzeitig auf der Webseite des Königshauses zu tun.
 
 Weiterhin viel Spaß und Glück bei der RTG!
 

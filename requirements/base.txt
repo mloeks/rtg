@@ -6,7 +6,7 @@ psycopg2==2.7.5
 path.py==11.0.1
 unipath==1.1
 pytest==3.7.3
-django-rest-auth[extras]==0.9.3
+django-rest-auth==0.9.3
 django-allauth==0.37.1
 djangorestframework-jwt==1.11.0
 django-cors-headers==2.2.0

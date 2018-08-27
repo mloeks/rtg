@@ -62,6 +62,13 @@ Die "Let's Encrypt" Option muss angehakt sein. Auch Subdomains können eingetrag
 Die Let's Encrypt Zertifikate sind nur 90 Tage gültig und müssen entsprechend häufig
 erneuert werden. Scheinbar macht dies DjangoEurope automatisch? Am 09.12.17 checken...
 
+# Wunschliste - Fachliche Features
+
+* Zusammenfassung User oben auf Startseite (Avatar, Platz, Punkte etc.)
+* Siehe TODOs in diesem und dem Frontend Repo
+
+# Wunschliste - Technische Features
+
 ## Logging
 
 Ich möchte Logfiles schreiben, inkl. Log Rotation (z.B. 10 Tage aufbewahren)
@@ -82,3 +89,8 @@ Gibt `logrotate` auf dem System, aber nicht user-spezifisch editierbar, auch nic
 
 **TODO**: jeder Eintrag wird noch 2x geloggt, trotz `propagate: False`.
 Debugger: Landet auch 2x im Request Breakpoint ...?
+
+## Browser Tests
+
+Um automatisiert zu testen, ob die RTG "zwischen den Turnieren" lauffähig bleibt, wäre es super, den Happy Path per 
+UI Test abdecken zu können.

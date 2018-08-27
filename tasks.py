@@ -83,6 +83,7 @@ def deploy(ctx, app_env):
         with ctx.cd(app_env['dir']):
             ctx.run('${HOME}/v/%s/bin/pip install -r requirements/%s.txt' % (app_name, app_env['requirements'],))
 
+        # Make sure the app's secret key environment variable is available for the following commands
         with ctx.prefix('source ${HOME}/.bash_profile'):
             print("Collecting static files...")
             with ctx.cd(app_env['dir']):
@@ -92,8 +93,8 @@ def deploy(ctx, app_env):
             with ctx.cd(app_env['dir']):
                 ctx.run('${HOME}/v/%s/bin/python %s.py migrate' % (app_name, app_env['manage_script'],))
 
-        print("Starting " + project_name + " app server...")
-        ctx.run('${HOME}/init/%s start' % project_name)
+            print("Starting " + project_name + " app server...")
+            ctx.run('${HOME}/init/%s start' % project_name)
 
         print("Restarting " + project_name + " web server...")
         ctx.run('${HOME}/init/nginx stop')

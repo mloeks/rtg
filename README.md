@@ -94,3 +94,9 @@ Debugger: Landet auch 2x im Request Breakpoint ...?
 
 Um automatisiert zu testen, ob die RTG "zwischen den Turnieren" lauffähig bleibt, wäre es super, den Happy Path per 
 UI Test abdecken zu können.
+
+## Django 2.x Upgrade
+
+* Funktioniert Deployment & läuft App auf dem Djangoserver?
+* psycopg2 wheel package durch psycopg2-binary ersetzen (Warnung bei Startup)
+* Weiter upgraden auf 2.1

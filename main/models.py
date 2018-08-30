@@ -44,7 +44,7 @@ class TournamentRound(models.Model):
 class Team(models.Model):
     name = models.CharField(max_length=50, unique=True)
     abbreviation = models.CharField(max_length=3, unique=True)
-    group = models.ForeignKey(TournamentGroup)
+    group = models.ForeignKey(TournamentGroup, models.CASCADE)
 
     class Meta:
         ordering = ["name"]
@@ -122,10 +122,10 @@ class Game(Bettable):
     homegoals = models.SmallIntegerField(default=-1)
     awaygoals = models.SmallIntegerField(default=-1)
 
-    hometeam = models.ForeignKey(Team, related_name='games_home')
-    awayteam = models.ForeignKey(Team, related_name='games_away')
-    venue = models.ForeignKey(Venue)
-    round = models.ForeignKey(TournamentRound)
+    hometeam = models.ForeignKey(Team, models.CASCADE, related_name='games_home')
+    awayteam = models.ForeignKey(Team, models.CASCADE, related_name='games_away')
+    venue = models.ForeignKey(Venue, models.CASCADE)
+    round = models.ForeignKey(TournamentRound, models.CASCADE)
 
     openligadb_match_id = models.CharField(null=True, blank=True, max_length=10)
 
@@ -220,7 +220,7 @@ class Extra(Bettable):
 # TODO P3 could maybe generalised to a BettableChoice? (although YAGNI?)
 class ExtraChoice(models.Model):
     name = models.CharField(max_length=50)
-    extra = models.ForeignKey(Extra, related_name='choices')
+    extra = models.ForeignKey(Extra, models.CASCADE, related_name='choices')
     sort_index = models.CharField(blank=True, max_length=10)
 
     class Meta:
@@ -237,8 +237,8 @@ class Bet(models.Model):
                                        choices=ResultBetType.choices(), max_length=50)
     points = models.PositiveSmallIntegerField(blank=True, null=True)
 
-    bettable = models.ForeignKey(Bettable)
-    user = models.ForeignKey(User)
+    bettable = models.ForeignKey(Bettable, models.CASCADE)
+    user = models.ForeignKey(User, models.CASCADE)
 
     class Meta:
         unique_together = ('bettable', 'user',)
@@ -368,7 +368,7 @@ class Bet(models.Model):
 
 
 class Statistic(models.Model):
-    user = models.OneToOneField(User, primary_key=True)
+    user = models.OneToOneField(User, models.CASCADE, primary_key=True)
 
     no_bets = models.PositiveSmallIntegerField(default=0)
 
@@ -452,7 +452,7 @@ def update_statistic_no_bets(sender, instance, created, **kwargs):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, primary_key=True)
+    user = models.OneToOneField(User, models.CASCADE, primary_key=True)
     email2 = models.EmailField(blank=True, default='')
 
     avatar = models.ImageField(upload_to=utils.get_avatar_path, storage=OverwriteStorage(), blank=True, null=True)
@@ -492,7 +492,7 @@ class Profile(models.Model):
 class Post(models.Model):
     title = models.TextField(null=True, blank=True, default='')
     content = models.TextField(null=True, blank=True, default='')
-    author = models.ForeignKey(User, related_name='authored_posts')
+    author = models.ForeignKey(User, models.SET(-1), related_name='authored_posts')
 
     date_created = models.DateTimeField(auto_now=True)
     finished = models.BooleanField(default=True)
@@ -511,9 +511,9 @@ class Post(models.Model):
 # TODO P3 introduce likes on comments
 class Comment(models.Model):
     content = models.TextField()
-    author = models.ForeignKey(User, related_name='comments')
-    post = models.ForeignKey(Post, related_name='comments')
-    reply_to = models.ForeignKey("self", blank=True, null=True, related_name='replies')
+    author = models.ForeignKey(User, models.SET(-1), related_name='comments')
+    post = models.ForeignKey(Post, models.CASCADE, related_name='comments')
+    reply_to = models.ForeignKey("self", models.SET_NULL, blank=True, null=True, related_name='replies')
 
     date_created = models.DateTimeField(auto_now_add=True)
     removed = models.BooleanField(default=False)

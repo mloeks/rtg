@@ -66,8 +66,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 class StatisticAdmin(admin.ModelAdmin):
-
-    user = models.OneToOneField(User, primary_key=True)
+    user = models.OneToOneField(User, models.CASCADE, primary_key=True)
 
     no_bets = models.PositiveSmallIntegerField(default=0)
     no_volltreffer = models.PositiveSmallIntegerField(default=0)

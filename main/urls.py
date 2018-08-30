@@ -1,4 +1,4 @@
-from django.conf.urls import include, url
+from django.urls import include, re_path
 from rest_framework.routers import DefaultRouter
 
 from main import views
@@ -24,5 +24,5 @@ router.register(r'statistics', views.StatisticViewSet)
 
 app_name = 'rtg'
 urlpatterns = [
-    url(r'^', include(router.urls, namespace='rtg')),
+    re_path(r'^', include((router.urls, 'rtg'), 'rtg')),
 ]

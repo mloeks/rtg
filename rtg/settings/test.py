@@ -58,7 +58,7 @@ EMAIL_UNDISCLOSED_RECIPIENTS = True
 ########## DATABASE CONFIGURATION
 DATABASES = {
     'default': {
-        'ENGINE':'django.db.backends.postgresql_psycopg2',
+        'ENGINE':'django.db.backends.postgresql',
         'NAME': 'muden_rtg_demo',
         'USER': 'muden',
         'PASSWORD': 'BX0gLv4N',

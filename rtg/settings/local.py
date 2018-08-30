@@ -20,10 +20,10 @@ def tz_date(*args):
 ########## END DEBUG CONFIGURATION
 
 ALLOWED_HOSTS = [
-    'localhost'
+    'localhost', '192.168.2.121'
 ]
 
-CORS_ORIGIN_REGEX_WHITELIST = ('^(https?://)?localhost:3000$', )
+CORS_ORIGIN_REGEX_WHITELIST = ('^(https?://)?(localhost|192.168.2.121):3000$', )
 
 SITE_BASE_URL = 'http://localhost:3000'
 
@@ -44,7 +44,7 @@ EMAIL_UNDISCLOSED_RECIPIENTS = False
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'rtg',
         'USER': 'mloeks',
         'PASSWORD': '!Warwickshire',
@@ -78,19 +78,3 @@ REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] += (
     'rest_framework.renderers.BrowsableAPIRenderer',
 )
 ########## END REST FRAMEWORK CONFIGURATION
-
-########## TOOLBAR CONFIGURATION
-# See: http://django-debug-toolbar.readthedocs.org/en/latest/installation.html#explicit-setup
-# INSTALLED_APPS += (
-#     'debug_toolbar',
-# )
-#
-# MIDDLEWARE_CLASSES += (
-#     'debug_toolbar.middleware.DebugToolbarMiddleware',
-# )
-#
-# DEBUG_TOOLBAR_PATCH_SETTINGS = False
-#
-# # http://django-debug-toolbar.readthedocs.org/en/latest/installation.html
-# INTERNAL_IPS = ('127.0.0.1',)
-########## END TOOLBAR CONFIGURATION

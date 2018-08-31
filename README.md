@@ -7,22 +7,13 @@
 
 `pip install -r requirements/base.txt`
 
-## Erkenntnisse aus der Migration von Django 1.8 auf 1.11
+## Hilfreiches für Django Upgrades
 
-* v.a. package foo und Verzeichnisstruktur haben Probleme gemacht
-* DB ging einfacher als gedacht
 * DB Superuser im Nachhinein erstellen: `python manage.py createsuperuser`
                                         https://docs.djangoproject.com/en/1.11/intro/tutorial02/#creating-an-admin-user
-* einige breaking changes in Django, REST Framework & Co., ggf. Changelogs genauer anschauen (wobei der Konsolen-Output auch meistens hilfreich ist)
-* Python sys.path und Auflösung von Packages verstehen!! 
+* Django Installation auf dem Server upgraden: https://panel.djangoeurope.com/faq/update                                        
 
-## Aktuelle TODOs
-
-### Konzept generischer Bets
-
-* ggf. Performance bei Updates (ist langsam geworden...)
-
-### Migration auf generisches RTG-Projekt
+## Dokumentation: Migration auf generisches RTG-Projekt
 
 * User aus rtg2016-Datenbank in generische DB übertragen (und deaktivieren bis zum ersten Login)
 
@@ -69,6 +60,10 @@ erneuert werden. Scheinbar macht dies DjangoEurope automatisch? Am 09.12.17 chec
 
 # Wunschliste - Technische Features
 
+## Performance
+
+* ggf. Performance bei Updates (ist seit "generischen" Bets langsam geworden...)
+
 ## Logging
 
 Ich möchte Logfiles schreiben, inkl. Log Rotation (z.B. 10 Tage aufbewahren)
@@ -94,9 +89,3 @@ Debugger: Landet auch 2x im Request Breakpoint ...?
 
 Um automatisiert zu testen, ob die RTG "zwischen den Turnieren" lauffähig bleibt, wäre es super, den Happy Path per 
 UI Test abdecken zu können.
-
-## Django 2.x Upgrade
-
-* Funktioniert Deployment & läuft App auf dem Djangoserver?
-* psycopg2 wheel package durch psycopg2-binary ersetzen (Warnung bei Startup)
-* Weiter upgraden auf 2.1

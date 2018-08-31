@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+
 from django.contrib.auth.models import User
 from rest_framework.test import APITestCase
 # TODO P3 create some more advanced tests
@@ -30,7 +32,7 @@ class RtgApiTestCase(APITestCase):
             user = User.objects.get(username=name)
             user.is_staff = admin
         except User.DoesNotExist:
-            user = User(username=name, is_staff=admin)
+            user = User(username=name, is_staff=admin, last_login=datetime.now())
 
         user.save()
 

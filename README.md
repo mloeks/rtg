@@ -2,7 +2,13 @@
 
 ## Aktuelle Upgrades
 
+* registration_overrides anpassen (Python 3.5.x nun auch auf dem Server)
+    * Erster Versuch hat aber nicht geklappt! 500 response...
 * Django 2.1
+* djangorestframework-jwt wird offenbar nicht mehr maintained
+    * Bricht ab Django 2.1, da dort breaking change in der authenticate() Methode (request als erster Parameter)
+    * Bis Django 2.0.x scheint es aber noch zu funktionieren
+    * Mögliche Alternative: https://github.com/davesque/django-rest-framework-simplejwt
 
 ## Setup
 

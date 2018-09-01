@@ -20,7 +20,7 @@ DAEMON=$HOME/v/$NAME/bin/gunicorn
 PATH=/sbin:/bin:/usr/sbin:/usr/bin
 ERROR_LOG="$PROJECT_DIR/error.log"
 WORKERS=1
-OPTS="-D -b unix:///$SOCKET --worker-class gevent --workers $WORKERS --settings $SETTINGS --pid $PIDFILE $NAME.wsgi --error-logfile $ERROR_LOG"
+OPTS="-D -b unix:///$SOCKET --worker-class gevent --workers $WORKERS --pid $PIDFILE $NAME.wsgi --error-logfile $ERROR_LOG"
 
 echo "---------------------------"
 echo "PROJECT_DIR=$PROJECT_DIR"

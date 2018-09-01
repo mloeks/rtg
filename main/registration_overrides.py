@@ -58,7 +58,10 @@ class RtgRegisterView(ObtainJSONWebToken):
         # However, the JWT serializer later on expects a password field to be present
         # We'd like to send the schema password/password2 in the payload, so we need to enhance the
         # serialized and validated data with password1 here in order to satisfy the RegisterSerializer
-        request_data_with_password1_field = {**request.data, **{'password1': request.data['password']}}
+        request_data_with_password1_field = merge_two_dicts(request.data, {'password1': request.data['password']})
+
+        # This does only work from Python 3.5 upwards
+        # request_data_with_password1_field = {**request.data, **{'password1': request.data['password']}}
 
         serializer = RtgRegisterSerializer(data=request_data_with_password1_field)
         serializer.is_valid(raise_exception=True)

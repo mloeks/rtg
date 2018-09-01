@@ -1,5 +1,9 @@
 # Royale Tippgemeinschaft --- Backend
 
+## Aktuelle Upgrades
+
+* Django 2.1
+
 ## Setup
 
 ### Python 3 Virtualenv

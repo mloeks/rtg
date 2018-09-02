@@ -1,25 +1,6 @@
 """Production settings and globals."""
 
-from __future__ import absolute_import
-
-from os import environ
-
-from .base import *
-
-# Normally you should not import ANYTHING from Django directly
-# into your settings, but ImproperlyConfigured is an exception.
-# from django.core.exceptions import ImproperlyConfigured
-
-# def get_env_setting(setting):
-#     """ Get the environment setting or return exception """
-#     try:
-#         return environ[setting]
-#     except KeyError:
-#         error_msg = "Set the %s env variable" % setting
-#         raise ImproperlyConfigured(error_msg)
-
 ########## HOST CONFIGURATION
-# See: https://docs.djangoproject.com/en/1.5/releases/1.5/#allowed-hosts-required-in-production
 ALLOWED_HOSTS = [
     '.royale-tippgemeinschaft.de',   # Allow domain and subdomains
 ]
@@ -32,16 +13,10 @@ CORS_ORIGIN_WHITELIST = (
 )
 
 ########## EMAIL CONFIGURATION
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = environ.get('EMAIL_HOST', 'localhost')
-EMAIL_HOST_PASSWORD = environ.get('EMAIL_HOST_PASSWORD', '')
-EMAIL_HOST_USER = environ.get('EMAIL_HOST_USER', 'matthias@loeks.net')
-EMAIL_PORT = environ.get('EMAIL_PORT', 25)
-EMAIL_SUBJECT_PREFIX = '[%s] ' % SITE_NAME
-EMAIL_USE_TLS = True
-SERVER_EMAIL = EMAIL_HOST_USER
-DEFAULT_FROM_EMAIL = 'koenigshaus@royale-tippgemeinschaft.de'
+SERVER_EMAIL = 'koenigshaus@royale-tippgemeinschaft.de'
+DEFAULT_FROM_EMAIL = SERVER_EMAIL
 EMAIL_PREFIX = '[RTG] '
+EMAIL_SUBJECT_PREFIX = EMAIL_PREFIX
 EMAIL_UNDISCLOSED_RECIPIENTS = True
 ########## END EMAIL CONFIGURATION
 

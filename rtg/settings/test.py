@@ -3,7 +3,6 @@
 from __future__ import absolute_import
 
 from django.utils import timezone
-from os import environ
 
 from .base import *
 
@@ -42,12 +41,6 @@ def tz_date(*args):
 # FAKE_DATE = tz_date(2018, 6, 14, 17, 0, 0)       # World Cup 2018 begins! :-)
 
 ########## EMAIL CONFIGURATION
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = environ.get('EMAIL_HOST', 'localhost')
-# EMAIL_HOST_PASSWORD = environ.get('EMAIL_HOST_PASSWORD', '')
-# EMAIL_HOST_USER = 'koenigshaus@royale-tippgemeinschaft.de'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
 SERVER_EMAIL = 'koenigshaus@royale-tippgemeinschaft.de'
 DEFAULT_FROM_EMAIL = SERVER_EMAIL
 EMAIL_PREFIX = '[RTG Demo] '

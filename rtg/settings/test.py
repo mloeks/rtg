@@ -6,20 +6,7 @@ from django.utils import timezone
 
 from .base import *
 
-# Normally you should not import ANYTHING from Django directly
-# into your settings, but ImproperlyConfigured is an exception.
-# from django.core.exceptions import ImproperlyConfigured
-
-# def get_env_setting(setting):
-#     """ Get the environment setting or return exception """
-#     try:
-#         return environ[setting]
-#     except KeyError:
-#         error_msg = "Set the %s env variable" % setting
-#         raise ImproperlyConfigured(error_msg)
-
 ########## HOST CONFIGURATION
-# See: https://docs.djangoproject.com/en/1.5/releases/1.5/#allowed-hosts-required-in-production
 ALLOWED_HOSTS = [
     '.demo.royale-tippgemeinschaft.de',   # Allow domain and subdomains
 ]
@@ -33,12 +20,14 @@ CORS_ORIGIN_WHITELIST = (
 
 DEBUG = True
 
+
 def tz_date(*args):
     return timezone.make_aware(datetime.datetime(*args), timezone.get_default_timezone())
 
 # simulate that "now" is a different date
 # FAKE_DATE = tz_date(2018, 10, 30, 9, 0, 0)
 # FAKE_DATE = tz_date(2018, 6, 14, 17, 0, 0)       # World Cup 2018 begins! :-)
+
 
 ########## EMAIL CONFIGURATION
 SERVER_EMAIL = 'koenigshaus@royale-tippgemeinschaft.de'

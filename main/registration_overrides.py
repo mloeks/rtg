@@ -1,8 +1,8 @@
 # # -*- coding: utf-8 -*-
 import logging
 import re
-
 import sys
+
 from django.conf import settings
 from django.contrib.sites.requests import RequestSite
 from django.core import validators
@@ -16,7 +16,6 @@ from rest_framework.response import Response
 from rest_framework_jwt.views import ObtainJSONWebToken
 
 from main.mail_utils import with_rtg_template
-from main.utils import merge_two_dicts
 
 LOG = logging.getLogger('rtg.' + __name__)
 

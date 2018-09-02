@@ -1,13 +1,10 @@
 """Common settings and globals."""
 import datetime
-
 import os
-
 from os.path import abspath, basename, dirname, join, normpath
 from sys import path
 
 from django.core.exceptions import ImproperlyConfigured
-
 
 ########## PATH CONFIGURATION
 # Absolute filesystem path to the Django project directory:
@@ -279,7 +276,7 @@ AUTHENTICATION_BACKENDS = (
 
 ########## REST FRAMEWORK CONFIGURATION
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_jwt.authentication.JSONWebTokenAuthentication',),
+    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_RENDERER_CLASSES': ('rest_framework.renderers.JSONRenderer',),
@@ -287,12 +284,10 @@ REST_FRAMEWORK = {
     'UPLOADED_FILES_USE_URL': False
 }
 REST_SESSION_LOGIN = False
-JWT_AUTH = {
-    'JWT_AUTH_HEADER_PREFIX': 'Token',
-    'JWT_RESPONSE_PAYLOAD_HANDLER': 'main.utils.jwt_response_payload_handler',
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(hours=4),
-    'JWT_ALLOW_REFRESH': True,
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(hours=12),
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(hours=4),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
+    'AUTH_HEADER_TYPES': ('Token',),
 }
 ########## END REST FRAMEWORK CONFIGURATION
 

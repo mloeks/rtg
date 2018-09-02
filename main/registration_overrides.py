@@ -11,8 +11,8 @@ from rest_auth.serializers import PasswordResetConfirmSerializer, PasswordResetS
 from rest_framework import serializers
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework_jwt.views import ObtainJSONWebToken
 
+from login_overrides import RtgObtainJSONWebToken
 from main.mail_utils import with_rtg_template
 
 
@@ -45,7 +45,7 @@ class RtgUsernameValidator(validators.RegexValidator):
 rtg_username_validators = [RtgUsernameValidator()]
 
 
-class RtgRegisterView(ObtainJSONWebToken):
+class RtgRegisterView(RtgObtainJSONWebToken):
 
     def post(self, request, *args, **kwargs):
         if not settings.REGISTRATION_OPEN:

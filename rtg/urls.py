@@ -1,12 +1,12 @@
 from django.conf import settings
-from django.urls import include, path
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.urls import include, path
 from rest_auth.views import PasswordResetConfirmView, PasswordChangeView
 from rest_auth.views import PasswordResetView
-from rest_framework_jwt.views import refresh_jwt_token, verify_jwt_token
+from rest_framework_simplejwt.views import TokenRefreshView
 
-from main.login_overrides import rtg_obtain_jwt_token
+from main.login_overrides import RtgObtainJSONWebToken
 from main.registration_overrides import rtg_register
 from main.views import contact_request, health
 
@@ -24,10 +24,10 @@ urlpatterns = [
     path('rest-auth/password/reset/confirm/', PasswordResetConfirmView.as_view(), name='rest_password_reset_confirm'),
     path('rest-auth/password/change/', PasswordChangeView.as_view(), name='rest_password_change'),
 
-    # djangorestramework-jwt extension Authentication views
-    path('api-token-auth/', rtg_obtain_jwt_token),
-    path('api-token-refresh/', refresh_jwt_token),
-    path('api-token-verify/', verify_jwt_token),
+    # djangorestramework_simplejwt extension Authentication views
+    path('api-token-auth/', RtgObtainJSONWebToken.as_view()),
+    # TODO probably needs our own view as well
+    path('api-token-refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     # custom extensions for registering new users in the JWT context
     path('api-token-register/', rtg_register),

@@ -1,5 +1,8 @@
 # # -*- coding: utf-8 -*-
+import logging
 import re
+
+import sys
 from django.conf import settings
 from django.contrib.sites.requests import RequestSite
 from django.core import validators
@@ -14,6 +17,8 @@ from rest_framework_jwt.views import ObtainJSONWebToken
 
 from main.mail_utils import with_rtg_template
 from main.utils import merge_two_dicts
+
+LOG = logging.getLogger('rtg.' + __name__)
 
 
 class RtgRegisterSerializer(RegisterSerializer):
@@ -48,30 +53,38 @@ rtg_username_validators = [RtgUsernameValidator()]
 class RtgRegisterView(ObtainJSONWebToken):
 
     def post(self, request, *args, **kwargs):
+        LOG.info('Registration open: %s' % settings.REGISTRATION_OPEN)
         if not settings.REGISTRATION_OPEN:
             return Response(
                 {"error": "Die Registrierung für die RTG ist geschlossen."},
                 status=status.HTTP_403_FORBIDDEN
             )
 
+        LOG.info('request data: %s' % request.data)
         # the RegisterSerializer expects the two passwords to be in fields named password1 and password2
         # However, the JWT serializer later on expects a password field to be present
         # We'd like to send the schema password/password2 in the payload, so we need to enhance the
         # serialized and validated data with password1 here in order to satisfy the RegisterSerializer
-        request_data_with_password1_field = merge_two_dicts(request.data, {'password1': request.data['password']})
-
-        # This does only work from Python 3.5 upwards
-        # request_data_with_password1_field = {**request.data, **{'password1': request.data['password']}}
+        request_data_with_password1_field = {**request.data, **{'password1': request.data['password']}}
+        LOG.info('request data with enhanced password field: %s' % request_data_with_password1_field)
 
         serializer = RtgRegisterSerializer(data=request_data_with_password1_field)
         serializer.is_valid(raise_exception=True)
         user = serializer.save(self.request)
 
-        site = RequestSite(request)
-        RtgRegisterView.send_mail_to_staff(site, user)
-        RtgRegisterView.send_mail_to_user(user)
+        LOG.info('a valid user was created')
 
-        return super(RtgRegisterView, self).post(request)
+        try:
+            site = RequestSite(request)
+            RtgRegisterView.send_mail_to_staff(site, user)
+            LOG.info('mail to staff sent')
+            RtgRegisterView.send_mail_to_user(user)
+            LOG.info('mail to user sent')
+
+            return super(RtgRegisterView, self).post(request)
+        except:
+            LOG.error("Error while sending registration confirmation mails:", sys.exc_info()[0])
+            raise
 
     @staticmethod
     def send_mail_to_staff(site, new_user):

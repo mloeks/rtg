@@ -12,7 +12,7 @@ from rest_framework import serializers
 from rest_framework import status
 from rest_framework.response import Response
 
-from login_overrides import RtgObtainJSONWebToken
+from main.login_overrides import RtgObtainJSONWebToken
 from main.mail_utils import with_rtg_template
 
 

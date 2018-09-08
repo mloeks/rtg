@@ -18,9 +18,9 @@ class RegistrationApiTests(RtgApiTestCase):
             'password': 'shirley1', 'password2': 'shirley1', 'email': 'hrh@windsor.co.uk'
         }
         response = self.client.post(self.REGISTER_URL, register_payload, format='json')
-        print(response.data)
         self.assertEqual(HTTP_200_OK, response.status_code)
-        self.assertTrue('token' in response.data)
+        self.assertTrue('access' in response.data)
+        self.assertTrue('refresh' in response.data)
 
     def test_register_invalid_user_with_invalid_email(self):
         register_payload = {

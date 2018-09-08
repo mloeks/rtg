@@ -1,4 +1,10 @@
-"""Production settings and globals."""
+"""Test/Demo settings and globals."""
+
+from __future__ import absolute_import
+
+from django.utils import timezone
+
+from .base import *
 
 ########## HOST CONFIGURATION
 ALLOWED_HOSTS = [

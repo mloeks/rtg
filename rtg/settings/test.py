@@ -32,6 +32,9 @@ def tz_date(*args):
 ########## EMAIL CONFIGURATION
 SERVER_EMAIL = 'koenigshaus@royale-tippgemeinschaft.de'
 DEFAULT_FROM_EMAIL = SERVER_EMAIL
+EMAIL_HOST = 'localhost'
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = False
 EMAIL_PREFIX = '[RTG Demo] '
 EMAIL_SUBJECT_PREFIX = EMAIL_PREFIX
 EMAIL_UNDISCLOSED_RECIPIENTS = True

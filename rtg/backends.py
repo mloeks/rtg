@@ -11,8 +11,8 @@ class BasicBackend:
             return None
 
 
-class EmailBackend(BasicBackend):
-    def authenticate(self, username=None, password=None):
+class UsernameOrEmailBackend(BasicBackend):
+    def authenticate(self, request, username=None, password=None):
         try:
             validate_email(username)
             is_email = True

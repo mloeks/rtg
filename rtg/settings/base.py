@@ -269,7 +269,7 @@ ACCOUNT_USERNAME_VALIDATORS = 'main.registration_overrides.rtg_username_validato
 
 # allow for e-mail as user name (EmailBackend)
 AUTHENTICATION_BACKENDS = (
-    'rtg.backends.EmailBackend',
+    'rtg.backends.UsernameOrEmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 

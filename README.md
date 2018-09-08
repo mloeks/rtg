@@ -4,7 +4,6 @@
 
 * E-Mails schicken funktioniert immer noch nicht
     * Obwohl nun kein 500er mehr kommt, werden E-Mails einfach nicht rausgechickt
-* Django 2.1
 
 ## Setup
 

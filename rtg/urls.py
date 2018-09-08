@@ -26,7 +26,6 @@ urlpatterns = [
 
     # djangorestramework_simplejwt extension Authentication views
     path('api-token-auth/', RtgObtainJSONWebToken.as_view()),
-    # TODO probably needs our own view as well
     path('api-token-refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
     # custom extensions for registering new users in the JWT context

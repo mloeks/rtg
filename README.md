@@ -2,11 +2,9 @@
 
 ## Aktuelle Upgrades
 
+* E-Mails schicken funktioniert immer noch nicht
+    * Obwohl nun kein 500er mehr kommt, werden E-Mails einfach nicht rausgechickt
 * Django 2.1
-* djangorestframework-jwt wird offenbar nicht mehr maintained
-    * Bricht ab Django 2.1, da dort breaking change in der authenticate() Methode (request als erster Parameter)
-    * Bis Django 2.0.x scheint es aber noch zu funktionieren
-    * Mögliche Alternative: https://github.com/davesque/django-rest-framework-simplejwt
 
 ## Setup
 

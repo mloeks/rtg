@@ -65,8 +65,9 @@ class RtgRegisterView(RtgObtainJSONWebToken):
         user = serializer.save(self.request)
 
         site = RequestSite(request)
-        RtgRegisterView.send_mail_to_staff(site, user)
         RtgRegisterView.send_mail_to_user(user)
+        if not settings.DEBUG:
+            RtgRegisterView.send_mail_to_staff(site, user)
 
         return super(RtgRegisterView, self).post(request)
 

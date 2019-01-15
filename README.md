@@ -7,10 +7,22 @@
 
 ## Setup
 
+### Benötigte Packages
+
+(kein Anspruch auf Vollständigkeit)
+
+`sudo apt install gcc make cmake python-dev python3-dev`
+
 ### Python 3 Virtualenv
 `virtualenv -p python3 rtg`
 
 `pip install -r requirements/base.txt`
+
+### Datenbank
+
+`sudo -u postgres createuser -P -d mloeks`
+
+`sudo -u postgres createdb -O mloeks rtg`
 
 ## Hilfreiches für Django Upgrades
 

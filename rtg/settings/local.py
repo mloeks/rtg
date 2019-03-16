@@ -10,6 +10,11 @@ from .base import *
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = True
 
+# Turn tz unaware datetime warning locally into an error with helpful stack trace
+warnings.filterwarnings(
+    'error', r"DateTimeField .* received a naive datetime",
+    RuntimeWarning, r'django\.db\.models\.fields',
+)
 
 
 def zoned_date(*args):

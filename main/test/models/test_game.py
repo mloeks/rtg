@@ -103,7 +103,7 @@ class GameTests(TestCase):
         self.assertIsNone(g2_noresult.result_str())
 
     def test_has_started(self):
-        now = utils.create_datetime_from_now()
+        now = timezone.now()
         g1 = utils.create_game(kickoff=now)
         g2 = utils.create_game(kickoff=now + timedelta(seconds=-1))
         g3 = utils.create_game(kickoff=now + timedelta(seconds=1))
@@ -115,7 +115,7 @@ class GameTests(TestCase):
         self.assertFalse(g4.has_started())
 
     def test_is_over(self):
-        now = utils.create_datetime_from_now()
+        now = timezone.now()
         g1 = utils.create_game(kickoff=now)
         g2 = utils.create_game(kickoff=now + timedelta(hours=-1, minutes=-46))
         g3 = utils.create_game(kickoff=now + timedelta(days=-1))
@@ -133,7 +133,7 @@ class GameTests(TestCase):
         self.assertTrue(utils.create_game(homegoals=4, awaygoals=1).has_result())
 
     def test_get_latest_finished_game(self):
-        now = utils.create_datetime_from_now()
+        now = timezone.now()
         g1 = utils.create_game(kickoff=now + timedelta(days=-3), homegoals=3, awaygoals=1)
         g2 = utils.create_game(kickoff=now + timedelta(days=-2), homegoals=4, awaygoals=0)
         g3 = utils.create_game(kickoff=now + timedelta(days=-1))
@@ -143,7 +143,7 @@ class GameTests(TestCase):
         self.assertEqual(g2, Game.get_latest_finished_game())
 
     def test_get_first_game(self):
-        now = utils.create_datetime_from_now()
+        now = timezone.now()
         g1 = utils.create_game(kickoff=now)
         g2 = utils.create_game(kickoff=now + timedelta(seconds=-1))
         g3 = utils.create_game(kickoff=now + timedelta(seconds=1))

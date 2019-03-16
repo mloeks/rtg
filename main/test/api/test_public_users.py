@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-import json
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from django.contrib.auth.models import User
 from rest_framework import status
 
+from main.models import Profile
 from main.test.api.abstract_rtg_api_test import RtgApiTestCase
 from main.test.utils import TestModelUtils
-from main.models import Profile
 
 
 class PublicUserApiTests(RtgApiTestCase):
@@ -23,8 +22,8 @@ class PublicUserApiTests(RtgApiTestCase):
         """ Only users which have logged in this year should be returned """
         u1, u2, u3 = TestModelUtils.create_user(), TestModelUtils.create_user(), TestModelUtils.create_user()
 
-        u1.last_login = datetime.now()
-        u2.last_login = datetime.now() - timedelta(days=365)
+        u1.last_login = TestModelUtils.create_datetime_from_now()
+        u2.last_login = TestModelUtils.create_datetime_from_now(timedelta(days=365))
         u1.save()
         u2.save()
 

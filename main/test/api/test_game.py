@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from datetime import timedelta, datetime
+from datetime import timedelta
 
-import pytz
+from django.utils import timezone
 from rest_framework import status
 
 from main.models import Game
@@ -89,14 +89,14 @@ class GameApiTests(RtgApiTestCase):
 
     def test_game_filter_from_date(self):
         self.create_test_user()
-        now = datetime.now()
+        now = timezone.now()
 
         g1 = TestModelUtils.create_game(kickoff=now - timedelta(days=5))
         g2 = TestModelUtils.create_game(kickoff=now - timedelta(hours=3))
         g3 = TestModelUtils.create_game(kickoff=now)
         g4 = TestModelUtils.create_game(kickoff=now + timedelta(hours=2))
 
-        response = self.client.get('%s?from=%s' % (self.GAMES_BASEURL, now))
+        response = self.client.get(self.GAMES_BASEURL, {'from': now})
         self.assertEqual(2, response.data['count'])
         self.assertEqual(g3.id, response.data['results'][0]['id'])
         self.assertEqual(g4.id, response.data['results'][1]['id'])
@@ -108,7 +108,7 @@ class GameApiTests(RtgApiTestCase):
         test_venue = TestModelUtils.create_venue(venue_name)
         test_round = TestModelUtils.create_round()
         # TODO P3 deadline should not be required, but apparently is
-        test_kickoff = datetime.now(pytz.utc) + timedelta(days=5)
+        test_kickoff = TestModelUtils.create_datetime_from_now(timedelta(days=5))
         test_game = Game(kickoff=test_kickoff, deadline=test_kickoff, venue=test_venue, round=test_round ,
                          hometeam=team_1, awayteam=team_2)
         test_game.save()

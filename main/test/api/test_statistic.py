@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import timedelta, datetime
+from datetime import timedelta
 
 from django.contrib.auth.models import User
 from rest_framework import status
@@ -40,13 +40,13 @@ class StatisticApiTests(RtgApiTestCase):
         self.assertEqual(1, user_stats['no_bets'])
 
     def test_list_should_fail_before_tournament(self):
-        TestModelUtils.create_game(kickoff=datetime.now() + timedelta(days=5))
+        TestModelUtils.create_game(kickoff=TestModelUtils.create_datetime_from_now(timedelta(days=5)))
 
         response = self.client.get(self.STATISTICS_BASEURL)
         self.assertEqual(status.HTTP_412_PRECONDITION_FAILED, response.status_code)
 
     def test_retrieve_should_fail_before_tournament(self):
-        TestModelUtils.create_game(kickoff=datetime.now() + timedelta(days=5))
+        TestModelUtils.create_game(kickoff=TestModelUtils.create_datetime_from_now(timedelta(days=5)))
 
         response = self.client.get("%s%i/" % (self.STATISTICS_BASEURL, self.user.pk))
         self.assertEqual(status.HTTP_412_PRECONDITION_FAILED, response.status_code)

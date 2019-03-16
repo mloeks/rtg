@@ -2,7 +2,6 @@ import inspect
 import os
 import re
 import uuid
-from datetime import datetime
 from enum import Enum
 
 from django.conf import settings
@@ -46,7 +45,7 @@ def sizeof_fmt(num, suffix='B'):
 
 def active_users():
     """ Returns users which are active (not disabled) and have logged in this year """
-    return User.objects.filter(is_active=True).filter(last_login__year=datetime.now().year)
+    return User.objects.filter(is_active=True).filter(last_login__year=timezone.now().year)
 
 
 class ChoicesEnum(Enum):

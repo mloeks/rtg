@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import random
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 from django.core.management.base import BaseCommand
 
 from main.models import TournamentRound, Venue, Team, Game
+from test.utils import TestModelUtils
 
 
 class Command(BaseCommand):
@@ -23,7 +24,7 @@ class Command(BaseCommand):
             random_hometeam = random.choice(all_teams)
             random_awayteam = random.choice(all_teams)
 
-            kickoff = datetime.now() + timedelta(days=i, hours=-1)
+            kickoff = TestModelUtils.create_datetime_from_now(timedelta(days=i, hours=-1))
             Game(kickoff=kickoff, deadline=kickoff, round=TournamentRound.objects.get(abbreviation='VF'),
                  hometeam=random_hometeam, awayteam=random_awayteam, venue=random.choice(Venue.objects.all()),
                  homegoals=3 if i < 0 else -1, awaygoals=2 if i < 0 else -1).save()

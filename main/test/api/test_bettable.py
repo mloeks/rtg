@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from datetime import timedelta, datetime
+from datetime import timedelta
 
 from django.contrib.auth.models import User
+from django.utils import timezone
 from rest_framework import status
 
 from main.models import Bet, Bettable
@@ -19,8 +20,8 @@ class BettableApiTests(RtgApiTestCase):
     def test_read_mixed_bettables(self):
         self.create_test_user()
 
-        some_game = TestModelUtils.create_game(deadline=datetime.now())
-        some_extra = TestModelUtils.create_extra(deadline=datetime.now() + timedelta(days=1))
+        some_game = TestModelUtils.create_game(deadline=timezone.now())
+        some_extra = TestModelUtils.create_extra(deadline=timezone.now() + timedelta(days=1))
 
         response = self.client.get(self.BETTABLES_BASEURL)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -36,13 +37,13 @@ class BettableApiTests(RtgApiTestCase):
     # (I thought that would be the case with ReadOnlyModelViewSet, but apparently it's not)
 
     def test_bettables_must_not_be_createable(self):
-        response = self.client.post(self.BETTABLES_BASEURL, {'name': 'a bettable', 'deadline': datetime.now()}, format='json')
+        response = self.client.post(self.BETTABLES_BASEURL, {'name': 'a bettable', 'deadline': timezone.now()}, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_bettables_must_not_be_updateable(self):
         some_bettable = TestModelUtils.create_game()
         response = self.client.put('%s%i/' % (self.BETTABLES_BASEURL, some_bettable.pk),
-                                   {'name': 'a new bettable', 'deadline': datetime.now() + timedelta(days=1)},
+                                   {'name': 'a new bettable', 'deadline': timezone.now() + timedelta(days=1)},
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 

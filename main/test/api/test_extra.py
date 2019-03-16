@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime, timedelta
+from datetime import timedelta
 
-import pytz
+from django.utils import timezone
 from rest_framework import status
 
 from main.models import Extra
@@ -76,7 +76,7 @@ class ExtraApiTests(RtgApiTestCase):
             test_extra = Extra.objects.get(name='Extrawurst')
         except Extra.DoesNotExist:
             test_extra = Extra(name='Extrawurst', points=100,
-                               deadline=datetime.now(pytz.utc) + timedelta(days=5), result='Salami')
+                               deadline=timezone.now() + timedelta(days=5), result='Salami')
             test_extra.save()
         return test_extra
 

@@ -24,6 +24,43 @@
 
 `sudo -u postgres createdb -O mloeks rtg`
 
+## How To's
+
+### Run the app
+
+#### From the command line
+
+Activate the `rtg` virtualenv, then:
+
+`python manage.py runserver 8000`
+
+#### From the IDE
+
+Create a new Run configuration of type `Django Server`, enter `localhost` and port `8000`.
+Use the `rtg` virtualenv as specified interpreter.
+
+Add the `SECRET_KEY_RTG` and `DJANGO_SETTINGS_MODULE=rtg.settings.local` env variables.
+
+### Running tests
+
+#### From the command line
+
+Activate the `rtg` virtualenv, then run:
+
+* All tests: `python manage.py test main`
+* Unit / Model tests: `python manage.py test main/test/models`
+* Integration / API tests: `python manage.py test main/test/api`
+
+#### From the IDE
+
+Make sure the entire `main` directory is marked as `Sources` in the Project Settings.
+
+Edit the Django Tests Run Configuration Template such that the `SECRET_KEY_RTG` and `DJANGO_SETTINGS_MODULE`
+env variables are properly set.
+
+Then just right-click on the `test` folder or the individual `api` or `models` folder and choose "Run Test: ...".
+
+
 ## Hilfreiches für Django Upgrades
 
 * DB Superuser im Nachhinein erstellen: `python manage.py createsuperuser`

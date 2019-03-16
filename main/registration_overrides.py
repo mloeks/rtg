@@ -1,5 +1,6 @@
 # # -*- coding: utf-8 -*-
 import re
+from string import whitespace, ascii_letters
 
 from django.conf import settings
 from django.contrib.sites.requests import RequestSite
@@ -14,6 +15,10 @@ from rest_framework.response import Response
 
 from main.login_overrides import RtgObtainJSONWebToken
 from main.mail_utils import with_rtg_template
+
+ADDITIONAL_USERNAME_CHARACTERS = 'äöüÄÖÜéèáàß.@+-'
+USERNAME_CHARACTERS = ascii_letters + whitespace + ADDITIONAL_USERNAME_CHARACTERS
+USERNAME_REGEX = r'^[\w\s' + ADDITIONAL_USERNAME_CHARACTERS + ']+$'
 
 
 class RtgRegisterSerializer(RegisterSerializer):
@@ -37,7 +42,7 @@ class RtgRegisterSerializer(RegisterSerializer):
 
 
 class RtgUsernameValidator(validators.RegexValidator):
-    regex = r'^[\w\säöüÄÖÜéèáàß.@+-]+$'
+    regex = USERNAME_REGEX
     message = 'Dein Username darf nur aus Buchstaben, Zahlen, Leerzeichen und @/./+/-/_. bestehen.'
     flags = re.ASCII
 

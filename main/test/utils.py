@@ -8,6 +8,7 @@ from django.utils import timezone
 
 from main.models import TournamentGroup, TournamentRound, Game, Venue, Team, Extra, ExtraChoice, Post, Bet, Profile, \
     Comment
+from registration_overrides import USERNAME_CHARACTERS
 
 
 class TestModelUtils:
@@ -28,7 +29,7 @@ class TestModelUtils:
 
     @staticmethod
     def create_user(username=None, first_name=None, last_name=None):
-        username = username or TestModelUtils.create_random_string(8)
+        username = username or TestModelUtils.create_random_string(8, USERNAME_CHARACTERS)
         first_name = first_name or TestModelUtils.create_random_string(8)
         last_name = last_name or TestModelUtils.create_random_string(8)
 
@@ -128,8 +129,8 @@ class TestModelUtils:
         return Comment.objects.create(author=author, content=content, post=post, reply_to=reply_to)
 
     @staticmethod
-    def create_random_string(length=12):
-        return ''.join(choice(printable) for i in range(length))
+    def create_random_string(length=12, chars=printable):
+        return ''.join(choice(chars) for i in range(length))
 
     @staticmethod
     def create_random_number(maxnr=1000):

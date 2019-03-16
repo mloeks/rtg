@@ -2,10 +2,6 @@
 
 ## Aktuelle TODOs
 
-* pip updates auch auf DjangoServer ausführen, deployen, testen
-* E-Mails schicken funktioniert immer noch nicht
-    * Obwohl nun kein 500er mehr kommt, werden E-Mails einfach nicht rausgechickt
-
 ## Setup
 
 ### Benötigte Packages

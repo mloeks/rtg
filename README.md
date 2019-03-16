@@ -1,7 +1,8 @@
 # Royale Tippgemeinschaft --- Backend
 
-## Aktuelle Upgrades
+## Aktuelle TODOs
 
+* pip updates auch auf DjangoServer ausführen, deployen, testen
 * E-Mails schicken funktioniert immer noch nicht
     * Obwohl nun kein 500er mehr kommt, werden E-Mails einfach nicht rausgechickt
 
@@ -89,24 +90,6 @@ Abhängige Fremdschlüssel-Tabelle korrekt befüllen:
 Für all diese User müssen noch entsprechende Profile und Statistic Instanzen erstellt werden.
 Dafür habe ich ein eigenes management command 'create_profiles' erstellt.
 
-# Neue Features 2018
-
-## HTTPS
-
-Damit der Browser die Seite als "Sicher" anzeigt und nicht nach der Ausnahme fragt, muss dass Zertifikat
-ein kommerzielles sein - Self-Signed reicht nicht.
-
-### Let's Encrypt
-
-DjangoEurope hat eine neue Option, das einfach per Mausklick zu tun im "SSL"-Bereich.
-Die "Let's Encrypt" Option muss angehakt sein. Auch Subdomains können eingetragen werden
-(SSL-Zertifikate müssen für jede Subdomain ausgestellt werden, oder als Wildcard-Zertifikat).
-
-### Erneuerung
-
-Die Let's Encrypt Zertifikate sind nur 90 Tage gültig und müssen entsprechend häufig
-erneuert werden. Scheinbar macht dies DjangoEurope automatisch? Am 09.12.17 checken...
-
 # Wunschliste - Fachliche Features
 
 * Zusammenfassung User oben auf Startseite (Avatar, Platz, Punkte etc.)
@@ -138,8 +121,3 @@ Gibt `logrotate` auf dem System, aber nicht user-spezifisch editierbar, auch nic
 
 **TODO**: jeder Eintrag wird noch 2x geloggt, trotz `propagate: False`.
 Debugger: Landet auch 2x im Request Breakpoint ...?
-
-## Browser Tests
-
-Um automatisiert zu testen, ob die RTG "zwischen den Turnieren" lauffähig bleibt, wäre es super, den Happy Path per 
-UI Test abdecken zu können.

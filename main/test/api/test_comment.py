@@ -5,7 +5,7 @@ from rest_framework import status
 
 from main.models import Post, Comment
 from main.test.api.abstract_rtg_api_test import RtgApiTestCase
-from test.utils import TestModelUtils
+from main.test.utils import TestModelUtils
 
 
 class CommentApiTests(RtgApiTestCase):

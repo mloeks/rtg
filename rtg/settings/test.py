@@ -14,8 +14,8 @@ SITE_BASE_URL = 'https://demo.royale-tippgemeinschaft.de'
 ########## END HOST CONFIGURATION
 
 CORS_ORIGIN_WHITELIST = (
-    'demo.royale-tippgemeinschaft.de',
-    'www.demo.royale-tippgemeinschaft.de',
+    'https://demo.royale-tippgemeinschaft.de',
+    'https://www.demo.royale-tippgemeinschaft.de',
 )
 
 DEBUG = True

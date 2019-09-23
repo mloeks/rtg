@@ -14,8 +14,8 @@ SITE_BASE_URL = 'https://www.royale-tippgemeinschaft.de'
 ########## END HOST CONFIGURATION
 
 CORS_ORIGIN_WHITELIST = (
-    'royale-tippgemeinschaft.de',
-    'www.royale-tippgemeinschaft.de',
+    'https://royale-tippgemeinschaft.de',
+    'https://www.royale-tippgemeinschaft.de',
 )
 
 ########## EMAIL CONFIGURATION

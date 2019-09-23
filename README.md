@@ -31,7 +31,7 @@ Activate the `rtg` virtualenv, then:
 
 `python manage.py runserver 8000`
 
-#### From the IDE
+#### From within IntelliJ IDE
 
 Create a new Run configuration of type `Django Server`, enter `localhost` and port `8000`.
 Use the `rtg` virtualenv as specified interpreter.
@@ -48,7 +48,7 @@ Activate the `rtg` virtualenv, then run:
 * Unit / Model tests: `python manage.py test main/test/models`
 * Integration / API tests: `python manage.py test main/test/api`
 
-#### From the IDE
+#### From within IntelliJ IDE
 
 Make sure the entire `main` directory is marked as `Sources` in the Project Settings.
 
@@ -58,11 +58,19 @@ env variables are properly set.
 Then just right-click on the `test` folder or the individual `api` or `models` folder and choose "Run Test: ...".
 
 
-## Hilfreiches für Django Upgrades
+### Upgrading
 
-* DB Superuser im Nachhinein erstellen: `python manage.py createsuperuser`
-                                        https://docs.djangoproject.com/en/1.11/intro/tutorial02/#creating-an-admin-user
-* Django Installation auf dem Server upgraden: https://panel.djangoeurope.com/faq/update                                        
+#### Dependencies
+
+* Adjust pip requirements files, re-run `pip install -r local.txt` with virtualenv activated, and test.
+* Remember to execute `pip install -r production.txt` on the server after deploying the updated code.
+
+#### Django
+
+* After upgrading to a newer Django version via the requirements file, some adjustments on the server might be necessary
+    * See [the documentation on updating Django](https://panel.djangoeurope.com/faq/update)
+* During major upgrades, it might make sense to have [the wizard in the web admin panel](https://panel.djangoeurope.com/installer/django) install a new project using the corresponding Django version and then compare crucial configuration files and scripts (particularly for the gunicorn app server and nginx).
+* While updating, it might be necessary to re-create the DB superuser at some point. This can be achieved - [as documented here](https://docs.djangoproject.com/en/2.2/intro/tutorial02/#creating-an-admin-user) - with the command `python manage.py createsuperuser`
 
 ## Dokumentation: Migration auf generisches RTG-Projekt
 

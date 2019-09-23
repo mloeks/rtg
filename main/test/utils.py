@@ -8,7 +8,7 @@ from django.utils import timezone
 
 from main.models import TournamentGroup, TournamentRound, Game, Venue, Team, Extra, ExtraChoice, Post, Bet, Profile, \
     Comment
-from registration_overrides import USERNAME_CHARACTERS
+from main.registration_overrides import USERNAME_CHARACTERS
 
 
 class TestModelUtils:

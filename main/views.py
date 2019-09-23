@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, status
-from rest_framework.decorators import parser_classes, detail_route
+from rest_framework.decorators import action, parser_classes
 from rest_framework.filters import OrderingFilter
 from rest_framework.parsers import FormParser
 from rest_framework.parsers import MultiPartParser
@@ -180,7 +180,7 @@ class UserViewSet(viewsets.ModelViewSet):
             msg.send()
         return super(UserViewSet, self).destroy(request, *args, **kwargs)
 
-    @detail_route(methods=['POST'], permission_classes=[rtg_permissions.IsAdminOrOwner])
+    @action(detail=True, methods=['POST'], permission_classes=[rtg_permissions.IsAdminOrOwner])
     @parser_classes((FormParser, MultiPartParser,))
     def avatar(self, request, *args, **kwargs):
         if 'upload' in request.data:

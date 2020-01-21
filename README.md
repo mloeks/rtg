@@ -2,11 +2,6 @@
 
 ## Aktuelle TODOs
 
-* Update to Django 3
-    * [Breaking changes](https://docs.djangoproject.com/en/dev/releases/3.0/#backwards-incompatible-changes-in-3-0)
-* Update to Pillow 7
-    * [Breaking changes](https://pillow.readthedocs.io/en/stable/releasenotes/7.0.0.html#backwards-incompatible-changes)
-
 ## Setup
 
 ### Benötigte Packages
@@ -62,13 +57,11 @@ env variables are properly set.
 
 Then just right-click on the `test` folder or the individual `api` or `models` folder and choose "Run Test: ...".
 
-
 ### Upgrading
 
 #### Dependencies
 
 * Adjust pip requirements files, re-run `pip install -r local.txt` with virtualenv activated, and test.
-* Remember to execute `pip install -r production.txt` on the server after deploying the updated code.
 
 #### Django
 

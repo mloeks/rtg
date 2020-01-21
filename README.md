@@ -2,6 +2,11 @@
 
 ## Aktuelle TODOs
 
+* Update to Django 3
+    * [Breaking changes](https://docs.djangoproject.com/en/dev/releases/3.0/#backwards-incompatible-changes-in-3-0)
+* Update to Pillow 7
+    * [Breaking changes](https://pillow.readthedocs.io/en/stable/releasenotes/7.0.0.html#backwards-incompatible-changes)
+
 ## Setup
 
 ### Benötigte Packages
@@ -69,6 +74,7 @@ Then just right-click on the `test` folder or the individual `api` or `models` f
 
 * After upgrading to a newer Django version via the requirements file, some adjustments on the server might be necessary
     * See [the documentation on updating Django](https://panel.djangoeurope.com/faq/update)
+    * See [Django release notes](https://docs.djangoproject.com/en/dev/releases/)
 * During major upgrades, it might make sense to have [the wizard in the web admin panel](https://panel.djangoeurope.com/installer/django) install a new project using the corresponding Django version and then compare crucial configuration files and scripts (particularly for the gunicorn app server and nginx).
 * While updating, it might be necessary to re-create the DB superuser at some point. This can be achieved - [as documented here](https://docs.djangoproject.com/en/2.2/intro/tutorial02/#creating-an-admin-user) - with the command `python manage.py createsuperuser`
 

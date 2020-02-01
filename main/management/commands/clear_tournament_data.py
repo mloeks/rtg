@@ -2,11 +2,11 @@
 
 from django.core.management.base import BaseCommand
 
-from main.models import TournamentGroup, TournamentRound, Venue, Team, Game, Extra, Bet, Bettable, Post
+from main.models import TournamentGroup, TournamentRound, Venue, Team, Game, Extra, Bet, Bettable
 
 
 class Command(BaseCommand):
-    help = 'Clears all test and base data, except for users'
+    help = 'Clears tournament data (teams, games etc.) but KEEPS users and posts'
 
     def handle(self, *args, **options):
         TournamentRound.objects.all().delete()
@@ -17,4 +17,3 @@ class Command(BaseCommand):
         Game.objects.all().delete()
         Extra.objects.all().delete()
         Bettable.objects.all().delete()
-        Post.objects.all().delete()

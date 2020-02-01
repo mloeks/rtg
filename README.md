@@ -2,10 +2,24 @@
 
 ## Aktuelle TODOs
 
-* Echte Turnierdaten auf PROD aktivieren, sobald Playoffs durch sind
-    * DB backup!!
-    * clear_test_data command
-    * euro2020_create_tournament_data command
+### Testing 2020
+
+* Turnierdaten aktualisieren, sobald Playoffs durch sind
+    * Manuell teams updaten
+    * Checken, ob irgendwo weitere Updates notwendig sind, wo DB nicht normalisiert ist, z.B.
+        * extras
+        * bettable names
+
+#### Bugs
+
+* 
+
+#### To Test
+
+* IE11!
+* Mail-Versand
+* Registration, Passwort vergessen
+* Tippabgabe, Deadlines
 
 ## Setup
 
@@ -86,6 +100,7 @@ Then just right-click on the `test` folder or the individual `api` or `models` f
         * Run Django command "clear_tournament_data"
         * Run Django command "<tournament_abbrev>_create_tournament_data"
         * Test
+    * Reset "has_paid" flag for all users
 
 ## Dokumentation: Migration auf generisches RTG-Projekt
 

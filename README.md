@@ -2,6 +2,11 @@
 
 ## Aktuelle TODOs
 
+* Echte Turnierdaten auf PROD aktivieren, sobald Playoffs durch sind
+    * DB backup!!
+    * clear_test_data command
+    * euro2020_create_tournament_data command
+
 ## Setup
 
 ### Benötigte Packages
@@ -71,6 +76,17 @@ Then just right-click on the `test` folder or the individual `api` or `models` f
 * During major upgrades, it might make sense to have [the wizard in the web admin panel](https://panel.djangoeurope.com/installer/django) install a new project using the corresponding Django version and then compare crucial configuration files and scripts (particularly for the gunicorn app server and nginx).
 * While updating, it might be necessary to re-create the DB superuser at some point. This can be achieved - [as documented here](https://docs.djangoproject.com/en/2.2/intro/tutorial02/#creating-an-admin-user) - with the command `python manage.py createsuperuser`
 
+## Starting a new tournament
+
+* Manual steps to be carried out:
+    * Backup PROD database
+    * Prepare new tournament data (teams, games etc.) in a new command named "<tournament_abbrev>_create_tournament_data"
+    * Commit an push that new command
+    * First locally, then on DEMO, then on PROD:
+        * Run Django command "clear_tournament_data"
+        * Run Django command "<tournament_abbrev>_create_tournament_data"
+        * Test
+
 ## Dokumentation: Migration auf generisches RTG-Projekt
 
 * User aus rtg2016-Datenbank in generische DB übertragen (und deaktivieren bis zum ersten Login)
@@ -96,6 +112,8 @@ Dafür habe ich ein eigenes management command 'create_profiles' erstellt.
 # Wunschliste - Fachliche Features
 
 * Zusammenfassung User oben auf Startseite (Avatar, Platz, Punkte etc.)
+* Facebook/Instagram/Twitter Integration
+    * Newsfeed soll alle Neuigkeiten aus allen Kanälen anzeigen
 * Siehe TODOs in diesem und dem Frontend Repo
 
 # Wunschliste - Technische Features
@@ -103,6 +121,7 @@ Dafür habe ich ein eigenes management command 'create_profiles' erstellt.
 ## Performance
 
 * ggf. Performance bei Updates (ist seit "generischen" Bets langsam geworden...)
+* Performance von React Rendering profilen und optimieren
 
 ## Logging
 

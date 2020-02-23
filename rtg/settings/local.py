@@ -22,7 +22,6 @@ def zoned_date(*args):
 
 # simulate that "now" is a different date
 # FAKE_DATE = zoned_date(2018, 10, 30, 9, 0, 0)
-# FAKE_DATE = zoned_date(2018, 6, 14, 17, 0, 0)       # World Cup 2018 begins! :-)
 # FAKE_DATE = zoned_date(2018, 6, 14, 9, 0, 0)
 
 ########## END DEBUG CONFIGURATION

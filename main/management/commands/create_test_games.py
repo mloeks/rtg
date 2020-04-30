@@ -5,7 +5,7 @@ from datetime import timedelta
 from django.core.management.base import BaseCommand
 
 from main.models import TournamentRound, Venue, Team, Game
-from test.utils import TestModelUtils
+from main.test.utils import TestModelUtils
 
 
 class Command(BaseCommand):

@@ -18,16 +18,16 @@ It is based on Python and the [Django Web Framework](https://www.djangoproject.c
     * registration, "forgot password" functionality
     * adding/editing bets, particularly close to betting deadlines
 
-# Wunschliste - Fachliche Features
-
-* Zusammenfassung User oben auf Startseite (Avatar, Platz, Punkte etc.)
-* Facebook/Instagram/Twitter Integration
-    * Newsfeed soll alle Neuigkeiten aus allen Kanälen anzeigen
-* Siehe TODOs in diesem und dem Frontend Repo
-
 ## Feature wishlist
 
 Some features that would be nice to have if I find the time someday...
+
+### New features visible to the user
+
+* Summary for the user at the top of the home page (Avatar, current rank and points)
+* Facebook/Instagram/Twitter Integration
+    * Newsfeed could display updates from all social channels?
+* See also numerous TODOs in the code of this and the [frontend repository](https://bitbucket.org/matze09/rtg-ui/src/master/)
 
 ### Performance
 

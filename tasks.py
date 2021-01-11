@@ -5,7 +5,7 @@ from invoke import task
 CONN = Connection(user='muden', host='s17.wservices.ch')
 
 local_user = 'mloeks'
-git_user = 'matze09'
+git_user = 'mloeks'
 app_name = 'rtg'
 
 ## constant fields
@@ -25,14 +25,14 @@ PROD_APP = {
 }
 LOCAL_APP = {
     'name': app_name,
-    'dir': '${HOME}/dev/bitbucket/%s' % app_name,
+    'dir': '${HOME}/dev/%s' % app_name,
     'requirements': 'local',
     'manage_script': 'manage',
     'backup_script': '',
 }
 
 REMOTE_BACKUP_DIR = "${HOME}/backups"
-GIT_URL = 'git@bitbucket.org:%s/%s.git' % (git_user, app_name)
+GIT_URL = 'git@github.com:%s/%s.git' % (git_user, app_name)
 
 
 @task

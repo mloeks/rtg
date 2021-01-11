@@ -27,7 +27,7 @@ Some features that would be nice to have if I find the time someday...
 * Summary for the user at the top of the home page (Avatar, current rank and points)
 * Facebook/Instagram/Twitter Integration
     * Newsfeed could display updates from all social channels?
-* See also numerous TODOs in the code of this and the [frontend repository](https://bitbucket.org/matze09/rtg-ui/src/master/)
+* See also numerous TODOs in the code of this and the [frontend repository](https://github.com/mloeks/rtg-ui)
 
 ### Performance
 

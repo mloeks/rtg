@@ -59,10 +59,12 @@ Tried to debug this, the debugger also steps twice into the breakpoint. Currentl
 
 (might be incomplete)
 
-`sudo apt install gcc make cmake python-dev python3-dev`
+`sudo apt install gcc make cmake python-dev python3-dev python3-virtualenv postgresql`
 
 ### Python 3 Virtualenv
 `virtualenv -p python3 rtg`
+
+Install required packages within `rtg` virtualenv:
 
 `pip install -r requirements/base.txt`
 
@@ -71,6 +73,14 @@ Tried to debug this, the debugger also steps twice into the breakpoint. Currentl
 `sudo -u postgres createuser -P -d mloeks`
 
 `sudo -u postgres createdb -O mloeks rtg`
+
+Run migrations by activating the `rtg` virtualenv and running:
+
+`python manage.py migrate`
+
+Create superuser if it doesn't yet exist:
+
+`python manage.py createsuperuser`
 
 ## How To's
 
@@ -88,6 +98,13 @@ Create a new Run configuration of type `Django Server`, enter `localhost` and po
 Use the `rtg` virtualenv as specified interpreter.
 
 Add the `SECRET_KEY_RTG` and `DJANGO_SETTINGS_MODULE=rtg.settings.local` env variables.
+
+### Explore the API
+
+Start the app, then navigate to:
+
+* `localhost:8000/admin` in order to view the DjangoAdmin panel and login with the superuser
+* `localhost:8000/rtg` to explore the API using DjangoRestFramework's standard API browser
 
 ### Running tests
 

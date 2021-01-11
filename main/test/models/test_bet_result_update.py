@@ -119,7 +119,7 @@ class BetResultUpdateTests(TestCase):
         GAMES=10
         BET_AMOUNT=0.6
 
-        start_time = time.clock()
+        start_time = time.process_time()
         print("~"*50)
         print("SCALING test START = %s" % start_time)
 
@@ -148,14 +148,14 @@ class BetResultUpdateTests(TestCase):
         game_save_times = []
         for g in games:
             g.homegoals, g.awaygoals = randrange(6), randrange(6)
-            game_save_start = time.clock()
+            game_save_start = time.process_time()
             g.save()
-            game_save_end = time.clock()
+            game_save_end = time.process_time()
             game_save_times.append(game_save_end - game_save_start)
 
         avg_game_save = sum(game_save_times) / len(game_save_times)
 
-        end_time = time.clock()
+        end_time = time.process_time()
         duration = (end_time - start_time)
         print("SCALING test FINISHED = %s" % end_time)
         print("TOOK %f s altogether" % duration)

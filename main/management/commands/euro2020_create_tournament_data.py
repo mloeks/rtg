@@ -8,7 +8,7 @@ from main.models import TournamentGroup, TournamentRound, Venue, Team, Game, Ext
 class Command(BaseCommand):
     help = 'Creates the real EURO 2020 data'
 
-    TOURNAMENT_START = '2020-06-12 21:00:00+02'
+    TOURNAMENT_START = '2021-06-11 21:00:00+02'
 
     def handle(self, *args, **options):
         self.clear_data()
@@ -30,18 +30,17 @@ class Command(BaseCommand):
 
     def create_venues(self):
         venues = {
-            'london': Venue(city='London', name='Wembley Stadium', capacity=90652),
-            'baku': Venue(city='Baku', name='Nationalstadion', capacity=69870),
+            'london': Venue(city='London', name='Wembley Stadium', capacity=90000),
+            'baku': Venue(city='Baku', name='Nationalstadion', capacity=68700),
             'muenchen': Venue(city='München', name='Allianz Arena', capacity=70000),
-            'glasgow': Venue(city='Glasgow', name='Hampden Park', capacity=52500),
-            'dublin': Venue(city='Dublin', name='Aviva Stadium', capacity=51700),
-            'bilbao': Venue(city='Bilbao', name='San Mamés', capacity=50000),
+            'glasgow': Venue(city='Glasgow', name='Hampden Park', capacity=51866),
+            'sevilla': Venue(city='Sevilla', name='La Cartuja', capacity=60000),
             'amsterdam': Venue(city='Amsterdam', name='Johan-Cruyff-Arena', capacity=54990),
-            'budapest': Venue(city='Budapest', name='Puskás Aréna', capacity=67155),
+            'budapest': Venue(city='Budapest', name='Puskás Aréna', capacity=67215),
             'bukarest': Venue(city='Bukarest', name='Arena Nationala', capacity=55600),
-            'kopenhagen': Venue(city='Kopenhagen', name='Parken', capacity=38190),
-            'sankt-petersburg': Venue(city='Sankt Petersburg', name='Krestowski-Stadion', capacity=69501),
-            'rom': Venue(city='Rom', name='Olimpico', capacity=72689),
+            'kopenhagen': Venue(city='Kopenhagen', name='Parken', capacity=38065),
+            'sankt-petersburg': Venue(city='Sankt Petersburg', name='Krestowski-Stadion', capacity=68134),
+            'rom': Venue(city='Rom', name='Olimpico', capacity=70634),
         }
 
         for key, venue in venues.items():
@@ -75,7 +74,6 @@ class Command(BaseCommand):
             round.save()
         return rounds
 
-    # TODO finalise once play-offs are thru
     # Country codes according to official FIFA code list
     # See https://de.wikipedia.org/wiki/FIFA-L%C3%A4ndercode
     def create_teams(self):
@@ -91,24 +89,24 @@ class Command(BaseCommand):
             'RUS': Team(name='Russland', abbreviation='RUS', group=self.groups['b']),
 
             'NED': Team(name='Niederlande', abbreviation='NED', group=self.groups['c']),
+            'MKD': Team(name='Nordmazedonien', abbreviation='MKD', group=self.groups['c']),
             'AUT': Team(name='Österreich', abbreviation='AUT', group=self.groups['c']),
             'UKR': Team(name='Ukraine', abbreviation='UKR', group=self.groups['c']),
-            'XDA': Team(name='Playoff D/A', abbreviation='XDA', group=self.groups['c']),
 
             'ENG': Team(name='England', abbreviation='ENG', group=self.groups['d']),
             'CRO': Team(name='Kroatien', abbreviation='CRO', group=self.groups['d']),
+            'SCO': Team(name='Schottland', abbreviation='SCO', group=self.groups['d']),
             'CZE': Team(name='Tschechien', abbreviation='CZE', group=self.groups['d']),
-            'XXC': Team(name='Playoff C', abbreviation='XXC', group=self.groups['d']),
 
             'POL': Team(name='Polen', abbreviation='POL', group=self.groups['e']),
             'SWE': Team(name='Schweden', abbreviation='SWE', group=self.groups['e']),
+            'SVK': Team(name='Slowakei', abbreviation='SVK', group=self.groups['e']),
             'ESP': Team(name='Spanien', abbreviation='ESP', group=self.groups['e']),
-            'XXB': Team(name='Playoff B', abbreviation='XXB', group=self.groups['e']),
 
             'GER': Team(name='Deutschland', abbreviation='GER', group=self.groups['f']),
             'FRA': Team(name='Frankreich', abbreviation='FRA', group=self.groups['f']),
             'POR': Team(name='Portugal', abbreviation='POR', group=self.groups['f']),
-            'XAD': Team(name='Playoff A/D', abbreviation='XAD', group=self.groups['f']),
+            'HUN': Team(name='Ungarn', abbreviation='HUN', group=self.groups['f']),
         }
 
         for key, team in teams.items():
@@ -117,44 +115,43 @@ class Command(BaseCommand):
 
     def create_first_round_games(self):
         self.a_game('TUR', 'ITA', self.TOURNAMENT_START, 'rom')
-        self.a_game('WAL', 'SUI', '2020-06-13 15:00:00+02', 'baku')
-        self.a_game('DEN', 'FIN', '2020-06-13 18:00:00+02', 'kopenhagen')
-        self.a_game('BEL', 'RUS', '2020-06-13 21:00:00+02', 'sankt-petersburg')
-        self.a_game('ENG', 'CRO', '2020-06-14 15:00:00+02', 'london')
-        self.a_game('AUT', 'XDA', '2020-06-14 18:00:00+02', 'bukarest')
-        self.a_game('NED', 'UKR', '2020-06-14 21:00:00+02', 'amsterdam')
-        self.a_game('XXC', 'CZE', '2020-06-15 15:00:00+02', 'glasgow')
-        self.a_game('POL', 'XXB', '2020-06-15 18:00:00+02', 'dublin')
-        self.a_game('ESP', 'SWE', '2020-06-15 21:00:00+02', 'bilbao')
-        self.a_game('XAD', 'POR', '2020-06-16 18:00:00+02', 'budapest')
-        self.a_game('FRA', 'GER', '2020-06-16 21:00:00+02', 'muenchen')
+        self.a_game('WAL', 'SUI', '2020-06-12 15:00:00+02', 'baku')
+        self.a_game('DEN', 'FIN', '2020-06-12 18:00:00+02', 'kopenhagen')
+        self.a_game('BEL', 'RUS', '2020-06-12 21:00:00+02', 'sankt-petersburg')
+        self.a_game('ENG', 'CRO', '2020-06-13 15:00:00+02', 'london')
+        self.a_game('AUT', 'MKD', '2020-06-13 18:00:00+02', 'bukarest')
+        self.a_game('NED', 'UKR', '2020-06-13 21:00:00+02', 'amsterdam')
+        self.a_game('SCO', 'CZE', '2020-06-14 15:00:00+02', 'glasgow')
+        self.a_game('POL', 'SVK', '2020-06-14 18:00:00+02', 'sankt-petersburg')
+        self.a_game('ESP', 'SWE', '2020-06-14 21:00:00+02', 'sevilla')
+        self.a_game('HUN', 'POR', '2020-06-15 18:00:00+02', 'budapest')
+        self.a_game('FRA', 'GER', '2020-06-15 21:00:00+02', 'muenchen')
 
-        self.a_game('FIN', 'RUS', '2020-06-17 15:00:00+02', 'sankt-petersburg')
-        self.a_game('TUR', 'WAL', '2020-06-17 18:00:00+02', 'baku')
-        self.a_game('ITA', 'SUI', '2020-06-17 21:00:00+02', 'rom')
-        self.a_game('UKR', 'XDA', '2020-06-18 15:00:00+02', 'bukarest')
-        self.a_game('DEN', 'BEL', '2020-06-18 18:00:00+02', 'kopenhagen')
-        self.a_game('NED', 'AUT', '2020-06-18 21:00:00+02', 'amsterdam')        
-        self.a_game('SWE', 'XXB', '2020-06-19 15:00:00+02', 'dublin')
-        self.a_game('CRO', 'CZE', '2020-06-19 18:00:00+02', 'glasgow')
-        self.a_game('ENG', 'XXC', '2020-06-19 21:00:00+02', 'london')
-        self.a_game('XAD', 'FRA', '2020-06-20 15:00:00+02', 'budapest')
-        self.a_game('POR', 'GER', '2020-06-20 18:00:00+02', 'muenchen')
-        self.a_game('ESP', 'POL', '2020-06-20 21:00:00+02', 'bilbao')
-        
+        self.a_game('FIN', 'RUS', '2020-06-16 15:00:00+02', 'sankt-petersburg')
+        self.a_game('TUR', 'WAL', '2020-06-16 18:00:00+02', 'baku')
+        self.a_game('ITA', 'SUI', '2020-06-16 21:00:00+02', 'rom')
+        self.a_game('UKR', 'MKD', '2020-06-17 15:00:00+02', 'bukarest')
+        self.a_game('DEN', 'BEL', '2020-06-17 18:00:00+02', 'kopenhagen')
+        self.a_game('NED', 'AUT', '2020-06-17 21:00:00+02', 'amsterdam')        
+        self.a_game('SWE', 'SVK', '2020-06-18 15:00:00+02', 'sankt-petersburg')
+        self.a_game('CRO', 'CZE', '2020-06-18 18:00:00+02', 'glasgow')
+        self.a_game('ENG', 'SCO', '2020-06-18 21:00:00+02', 'london')
+        self.a_game('HUN', 'FRA', '2020-06-19 15:00:00+02', 'budapest')
+        self.a_game('POR', 'GER', '2020-06-19 18:00:00+02', 'muenchen')
+        self.a_game('ESP', 'POL', '2020-06-19 21:00:00+02', 'sevilla')
 
-        self.a_game('SUI', 'TUR', '2020-06-21 18:00:00+02', 'baku')
-        self.a_game('ITA', 'WAL', '2020-06-21 18:00:00+02', 'rom')
-        self.a_game('XDA', 'NED', '2020-06-22 18:00:00+02', 'amsterdam')
-        self.a_game('UKR', 'AUT', '2020-06-22 18:00:00+02', 'bukarest')
-        self.a_game('RUS', 'DEN', '2020-06-22 21:00:00+02', 'kopenhagen')
-        self.a_game('FIN', 'BEL', '2020-06-22 21:00:00+02', 'sankt-petersburg')
-        self.a_game('CRO', 'XXC', '2020-06-23 21:00:00+02', 'glasgow')
-        self.a_game('CZE', 'ENG', '2020-06-23 21:00:00+02', 'london')
-        self.a_game('XXB', 'ESP', '2020-06-24 18:00:00+02', 'bilbao')
-        self.a_game('SWE', 'POL', '2020-06-24 18:00:00+02', 'dublin')
-        self.a_game('POR', 'FRA', '2020-06-24 21:00:00+02', 'budapest')
-        self.a_game('GER', 'XAD', '2020-06-24 21:00:00+02', 'muenchen')
+        self.a_game('SUI', 'TUR', '2020-06-20 18:00:00+02', 'baku')
+        self.a_game('ITA', 'WAL', '2020-06-20 18:00:00+02', 'rom')
+        self.a_game('MKD', 'NED', '2020-06-21 18:00:00+02', 'amsterdam')
+        self.a_game('UKR', 'AUT', '2020-06-21 18:00:00+02', 'bukarest')
+        self.a_game('RUS', 'DEN', '2020-06-21 21:00:00+02', 'kopenhagen')
+        self.a_game('FIN', 'BEL', '2020-06-21 21:00:00+02', 'sankt-petersburg')
+        self.a_game('CRO', 'SCO', '2020-06-22 21:00:00+02', 'glasgow')
+        self.a_game('CZE', 'ENG', '2020-06-22 21:00:00+02', 'london')
+        self.a_game('SVK', 'ESP', '2020-06-23 18:00:00+02', 'sevilla')
+        self.a_game('SWE', 'POL', '2020-06-23 18:00:00+02', 'sankt-petersburg')
+        self.a_game('POR', 'FRA', '2020-06-23 21:00:00+02', 'budapest')
+        self.a_game('GER', 'HUN', '2020-06-23 21:00:00+02', 'muenchen')
 
     def create_extra_bets(self):
         em = Extra(name='Wer wird Europameister?', points=5, deadline=self.TOURNAMENT_START)

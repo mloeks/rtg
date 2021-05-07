@@ -8,15 +8,15 @@ It is based on Python and the [Django Web Framework](https://www.djangoproject.c
 
 ### Manual testing for EURO 2021
 
-* Update tournament data, as soon as playoffs are thru
-    * Manually update participating teams
-    * Check, if any other updates are required where database is not yet properly normalised, e.g.
-        * extras
-        * bettable names
+* Check, if any other updates are required where database is not yet properly normalised, e.g.
+    * extras
+    * bettable names
+* Check rules and dates
 * Do some explorative testing, mainly covering:
     * sending e-mails properly
     * registration, "forgot password" functionality
     * adding/editing bets, particularly close to betting deadlines
+* Remove old posts, launch login
 
 ## Feature wishlist
 

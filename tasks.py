@@ -68,8 +68,8 @@ def deploy(ctx, app_env):
             ctx.run('cp -rf media /tmp/%s' % project_name)
             ctx.run('cp -rf .htpasswd /tmp/%s' % project_name)
             ctx.run('cp -rf RUN /tmp/%s' % project_name)
-            ctx.run('cp -rf %s.pid /tmp/%s 2>/dev/null' % (project_name, project_name))
-            ctx.run('cp -rf %s.sock /tmp/%s 2>/dev/null' % (project_name, project_name))
+            # ctx.run('cp -rf %s.pid /tmp/%s 2>/dev/null' % (project_name, project_name))
+            # ctx.run('cp -rf %s.sock /tmp/%s 2>/dev/null' % (project_name, project_name))
 
         print("Stopping " + project_name + " app server...")
         ctx.run('${HOME}/init/%s stop' % project_name)

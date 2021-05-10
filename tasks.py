@@ -74,9 +74,10 @@ def deploy(ctx, app_env):
         print("Stopping " + project_name + " app server...")
         ctx.run('${HOME}/init/%s stop' % project_name)
 
-        print("Replacing " + project_name + " app with freshly checked out project")
+        print("Replacing " + project_name + " and 'main' apps with freshly checked out project")
         with ctx.cd(app_env['dir']):
-            ctx.run('rm -rf %s/* 2>/dev/null' % app_name)
+            ctx.run('rm -rf %s 2>/dev/null' % app_name)
+            ctx.run('rm -rf main 2>/dev/null')
             ctx.run('rsync -adC /tmp/%s/* .' % project_name)
 
         print("Updating pip requirements...")

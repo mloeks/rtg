@@ -18,7 +18,7 @@ CORS_ORIGIN_WHITELIST = (
     'https://www.demo.royale-tippgemeinschaft.de',
 )
 
-DEBUG = True
+DEBUG = False
 
 
 def zoned_date(*args):

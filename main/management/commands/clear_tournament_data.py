@@ -6,7 +6,7 @@ from main.models import TournamentGroup, TournamentRound, Venue, Team, Game, Ext
 
 
 class Command(BaseCommand):
-    help = 'Clears tournament data (teams, games etc.) but KEEPS users and posts'
+    help = 'Clears tournament data (teams, games, bets etc.) but KEEPS users and posts'
 
     def handle(self, *args, **options):
         TournamentRound.objects.all().delete()

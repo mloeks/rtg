@@ -1,4 +1,4 @@
-"""Test/Demo settings and globals."""
+"""Production settings and globals."""
 
 from __future__ import absolute_import
 

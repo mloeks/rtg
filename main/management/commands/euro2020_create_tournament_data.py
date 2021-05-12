@@ -167,7 +167,7 @@ class Command(BaseCommand):
         ExtraChoice(name='Viertelfinale', extra=deu, sort_index='030').save()
         ExtraChoice(name='Halbfinale', extra=deu, sort_index='040').save()
         ExtraChoice(name='Zweiter', extra=deu, sort_index='050').save()
-        ExtraChoice(name='Weltmeister', extra=deu, sort_index='060').save()
+        ExtraChoice(name='Europameister', extra=deu, sort_index='060').save()
 
     def a_game(self, home, away, kickoff, venue, deadline=TOURNAMENT_START):
         hometeam = self.teams[home]

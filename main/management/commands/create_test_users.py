@@ -17,7 +17,7 @@ class Command(BaseCommand):
         self.create_users(nr_users)
 
     def clear_data(self):
-        User.objects.exclude(username='admin').exclude(username='mloeks').delete()
+        User.objects.exclude(is_staff=True).delete()
 
     def create_users(self, number):
         for i in range(1, number+1):

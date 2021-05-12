@@ -5,6 +5,7 @@ import uuid
 from enum import Enum
 
 from django.conf import settings
+from django.db.models import Q
 from django.utils import timezone
 from django.utils.text import slugify
 
@@ -46,6 +47,10 @@ def sizeof_fmt(num, suffix='B'):
 def active_users():
     """ Returns users which are active (not disabled) and have logged in this year """
     return User.objects.filter(is_active=True).filter(last_login__year=timezone.now().year)
+
+def inactive_users():
+    """ Returns users which are either not active (disabled) OR have not logged in this year """
+    return User.objects.filter(Q(is_active=False) | Q(last_login=None) | Q(last_login__year__lt=timezone.now().year))
 
 
 class ChoicesEnum(Enum):

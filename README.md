@@ -113,8 +113,9 @@ Start the app, then navigate to:
 Activate the `rtg` virtualenv, then run:
 
 * All tests: `python manage.py test main`
-* Unit / Model tests: `python manage.py test main/test/models`
-* Integration / API tests: `python manage.py test main/test/api`
+* Unit / Model tests: `python manage.py test main.test.models`
+    * Individual unit / model tests e.g.: `python manage.py test main.test.models.test_bet`
+* Integration / API tests: `python manage.py test main.test.api`
 
 #### From within IntelliJ IDE
 

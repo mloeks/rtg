@@ -207,7 +207,6 @@ class UserViewSet(viewsets.ModelViewSet):
 
 # how the public can see users
 class PublicUserViewSet(viewsets.ReadOnlyModelViewSet):
-    # exclude users whose last login was not this year
     queryset = active_users()
 
     serializer_class = PublicUserSerializer
@@ -257,8 +256,7 @@ class CommentViewSet(viewsets.ModelViewSet):
 
 
 class StatisticViewSet(viewsets.ReadOnlyModelViewSet):
-    # TODO reuse util method
-    queryset = Statistic.objects.filter(user__is_active=True).filter(user__last_login__year=django.utils.timezone.now().year)
+    queryset = Statistic.objects.filter(user__pk__in=active_users())
     serializer_class = StatisticSerializer
     pagination_class = None
 

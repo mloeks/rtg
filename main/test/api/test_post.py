@@ -7,7 +7,7 @@ from main.models import Post
 from main.test.api.abstract_rtg_api_test import RtgApiTestCase
 from main.test.utils import TestModelUtils
 
-
+# TODO P3 add tests for PATCH
 class PostApiTests(RtgApiTestCase):
 
     def setUp(self):

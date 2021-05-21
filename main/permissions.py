@@ -62,19 +62,25 @@ class PostPermissions(permissions.BasePermission):
         if request.user.is_authenticated:
             if request.user.is_staff or request.method in permissions.SAFE_METHODS:
                 return True
-            return request.method == 'POST' \
-                    and not 'as_mail' in request.data \
-                    and not 'force_active_users' in request.data \
-                    and not 'force_inactive_users' in request.data \
-                    and not 'force_all_users' in request.data
+            return self._is_write_request_without_mail_options(request)
         else:
             return False
 
     def has_object_permission(self, request, view, obj):
         if request.user.is_authenticated:
-            return request.user.is_staff or request.method in permissions.SAFE_METHODS
+            if request.user.is_staff or request.method in permissions.SAFE_METHODS:
+                return True
+            return self._is_write_request_without_mail_options(request)
         else:
             return False
+
+    def _is_write_request_without_mail_options(self, request):
+        return request.method in ['POST', 'PATCH'] and not self._request_contains_mail_options(request)
+
+    def _request_contains_mail_options(self, request):
+        return 'as_mail' in request.data or 'force_active_users' in request.data \
+                    or 'force_inactive_users' in request.data \
+                    or 'force_all_users' in request.data
 
 
 class CommentPermissions(permissions.BasePermission):

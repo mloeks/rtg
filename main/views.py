@@ -230,7 +230,7 @@ class AdminUserViewSet(viewsets.ModelViewSet):
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = (rtg_permissions.IsAdminOrAuthenticatedReadOnly,)
+    permission_classes = (rtg_permissions.PostPermissions,)
 
     filter_backends = (DjangoFilterBackend, OrderingFilter,)
     filter_fields = ('news_appear',)

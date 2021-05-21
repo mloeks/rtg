@@ -52,6 +52,31 @@ class IsAdminOrSelf(permissions.BasePermission):
                 return request.user.is_staff or obj == request.user
 
 
+class PostPermissions(permissions.BasePermission):
+    """
+        Every authenticated user may create or read posts.
+        Only admins may specify the properties that make posts being sent as e-mail.
+        Admins may use all HTTP methods (especially DELETE posts).
+    """
+    def has_permission(self, request, view):
+        if request.user.is_authenticated:
+            if request.user.is_staff or request.method in permissions.SAFE_METHODS:
+                return True
+            return request.method == 'POST' \
+                    and not 'as_mail' in request.data \
+                    and not 'force_active_users' in request.data \
+                    and not 'force_inactive_users' in request.data \
+                    and not 'force_all_users' in request.data
+        else:
+            return False
+
+    def has_object_permission(self, request, view, obj):
+        if request.user.is_authenticated:
+            return request.user.is_staff or request.method in permissions.SAFE_METHODS
+        else:
+            return False
+
+
 class CommentPermissions(permissions.BasePermission):
     """
         Every authenticated user may create or read comments.

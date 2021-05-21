@@ -54,13 +54,13 @@ class IsAdminOrSelf(permissions.BasePermission):
 
 class PostPermissions(permissions.BasePermission):
     """
-        Every authenticated user may create or read posts.
+        Every authenticated user may create or read posts. They may only delete their own posts.
         Only admins may specify the properties that make posts being sent as e-mail.
-        Admins may use all HTTP methods (especially DELETE posts).
+        Admins may generally use all HTTP methods on all posts.
     """
     def has_permission(self, request, view):
         if request.user.is_authenticated:
-            if request.user.is_staff or request.method in permissions.SAFE_METHODS:
+            if request.user.is_staff or request.method in permissions.SAFE_METHODS or request.method == 'DELETE':
                 return True
             return self._is_write_request_without_mail_options(request)
         else:
@@ -69,6 +69,8 @@ class PostPermissions(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.user.is_authenticated:
             if request.user.is_staff or request.method in permissions.SAFE_METHODS:
+                return True
+            if request.method == 'DELETE' and request.user.pk == obj.author.pk:
                 return True
             return self._is_write_request_without_mail_options(request)
         else:

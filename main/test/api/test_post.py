@@ -84,13 +84,20 @@ class PostApiTests(RtgApiTestCase):
         self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
     def test_delete_failure_non_admin(self):
-        user = self.create_test_user(admin=False)
-
-        test_post = TestModelUtils.create_post('content', user)
+        some_post = TestModelUtils.create_post()
         self.assertEqual(Post.objects.count(), 1)
 
-        response = self.client.delete("%s%i/" % (self.POSTS_BASEURL, test_post.pk))
+        self.create_test_user(admin=False)
+        response = self.client.delete("%s%i/" % (self.POSTS_BASEURL, some_post.pk))
         self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+
+    def test_delete_own_non_admin(self):
+        user = self.create_test_user(admin=False)
+        own_post = self._create_test_post_api(user)
+        self.assertEqual(Post.objects.count(), 1)
+
+        response = self.client.delete("%s%i/" % (self.POSTS_BASEURL, own_post.data['id']))
+        self.assertEqual(status.HTTP_204_NO_CONTENT, response.status_code)
 
     def _create_test_post_api(self, author, title='Title', content='content', finished=True):
         return self.client.post(self.POSTS_BASEURL, {'title': title, 'content': content, 'author': author.pk,

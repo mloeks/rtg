@@ -101,6 +101,34 @@ class GameApiTests(RtgApiTestCase):
         self.assertEqual(g3.id, response.data['results'][0]['id'])
         self.assertEqual(g4.id, response.data['results'][1]['id'])
 
+    def test_game_filter_bets_open(self):
+        self.create_test_user()
+        now = timezone.now()
+
+        g1 = TestModelUtils.create_game(deadline=now - timedelta(days=5))
+        g2 = TestModelUtils.create_game(deadline=now - timedelta(hours=3))
+        g3 = TestModelUtils.create_game(deadline=now)
+        g4 = TestModelUtils.create_game(deadline=now + timedelta(hours=2))
+
+        response = self.client.get(self.GAMES_BASEURL, {'bets_open': 'true'})
+        self.assertEqual(1, response.data['count'])
+        self.assertEqual(g4.id, response.data['results'][0]['id'])
+
+    def test_game_filter_bets_not_open(self):
+        self.create_test_user()
+        now = timezone.now()
+
+        g1 = TestModelUtils.create_game(deadline=now - timedelta(days=5))
+        g2 = TestModelUtils.create_game(deadline=now - timedelta(hours=3))
+        g3 = TestModelUtils.create_game(deadline=now)
+        g4 = TestModelUtils.create_game(deadline=now + timedelta(hours=2))
+
+        response = self.client.get(self.GAMES_BASEURL, {'bets_open': 'false'})
+        self.assertEqual(3, response.data['count'])
+        self.assertEqual(g1.id, response.data['results'][0]['id'])
+        self.assertEqual(g2.id, response.data['results'][1]['id'])
+        self.assertEqual(g3.id, response.data['results'][2]['id'])
+
     @staticmethod
     def create_test_game(venue_name=None):
         team_1 = TestModelUtils.create_team()

@@ -21,11 +21,13 @@ class IsOwnerOrDeadlinePassed(filters.BaseFilterBackend):
 class BettablesWithBetsOpenIfParamSet(filters.BaseFilterBackend):
     """
         Return only bettables where bets can still be placed (deadline has not yet passed), if bets_open=true is set in the request
+        OR only those where bets can NOT be placed anymore (deadline has passed), if bets_open=false is set
     """
     def filter_queryset(self, request, queryset, view):
         bets_open = request.query_params.get('bets_open', None)
-        if bets_open is not None and bets_open == 'true':
-            return queryset.filter(deadline__gt=get_reference_date())
+        if bets_open is not None:
+            return queryset.filter(deadline__gt=get_reference_date()) if bets_open == 'true' \
+                else queryset.filter(deadline__lte=get_reference_date())
         return queryset
 
 

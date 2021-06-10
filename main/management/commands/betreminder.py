@@ -25,7 +25,7 @@ class Command(BaseCommand):
     def send_bet_reminder(self):
         LOG.info('Running bet reminder...')
         for user in active_users().filter(profile__reminder_emails=True).order_by('username'):
-            open_bettables = user.profile.get_open_bettables_deadline_within(timedelta(hours=24))
+            open_bettables = user.profile.get_open_bettables_deadline_within(timedelta(hours=30))
             if open_bettables:
                 ctx = {'user': user, 'open_bettables': open_bettables}
 

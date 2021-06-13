@@ -285,8 +285,8 @@ REST_FRAMEWORK = {
 }
 REST_SESSION_LOGIN = False
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(hours=4),
-    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(hours=12),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=2),
     'AUTH_HEADER_TYPES': ('Token',),
 }
 ########## END REST FRAMEWORK CONFIGURATION

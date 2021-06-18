@@ -131,7 +131,7 @@ class GameViewSet(viewsets.ModelViewSet):
     serializer_class = GameSerializer
     permission_classes = (rtg_permissions.IsAdminOrAuthenticatedReadOnly,)
 
-    filter_backends = (OrderingFilter, rtgfilters.BettablesWithBetsOpenIfParamSet, rtgfilters.GamesFromDate)
+    filter_backends = (OrderingFilter, rtgfilters.BettablesWithBetsOpenIfParamSet, rtgfilters.GamesFromDate, rtgfilters.GamesKickedOff)
 
     ordering_fields = ('id', 'kickoff', 'deadline', 'venue', 'round')
     ordering = ('kickoff', 'id',)

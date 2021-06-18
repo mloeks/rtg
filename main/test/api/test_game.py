@@ -129,6 +129,21 @@ class GameApiTests(RtgApiTestCase):
         self.assertEqual(g2.id, response.data['results'][1]['id'])
         self.assertEqual(g3.id, response.data['results'][2]['id'])
 
+    def test_game_filter_kicked_off(self):
+        self.create_test_user()
+        now = timezone.now()
+
+        g1 = TestModelUtils.create_game(kickoff=now - timedelta(days=5))
+        g2 = TestModelUtils.create_game(kickoff=now - timedelta(hours=3))
+        g3 = TestModelUtils.create_game(kickoff=now)
+        g4 = TestModelUtils.create_game(kickoff=now + timedelta(hours=2))
+
+        response = self.client.get(self.GAMES_BASEURL, {'kicked_off': 'true'})
+        self.assertEqual(3, response.data['count'])
+        self.assertEqual(g1.id, response.data['results'][0]['id'])
+        self.assertEqual(g2.id, response.data['results'][1]['id'])
+        self.assertEqual(g3.id, response.data['results'][2]['id'])
+
     @staticmethod
     def create_test_game(venue_name=None):
         team_1 = TestModelUtils.create_team()

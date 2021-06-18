@@ -49,6 +49,16 @@ class GamesFromDate(filters.BaseFilterBackend):
                 raise ParseError('Invalid date provided in from query parameter')
         return None
 
+class GamesKickedOff(filters.BaseFilterBackend):
+    """
+        Return only games which have been kicked off (this includes finished games!)
+    """
+    def filter_queryset(self, request, queryset, view):
+        kicked_off = request.query_params.get('kicked_off', None)
+        if kicked_off:
+            return queryset.filter(kickoff__lte=get_reference_date())
+        return queryset
+
 
 class TopLevelComments(filters.BaseFilterBackend):
     """

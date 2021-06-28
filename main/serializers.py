@@ -197,12 +197,15 @@ class PublicUserSerializer(serializers.ModelSerializer):
 class AdminUserSerializer(serializers.ModelSerializer):
     email2 = serializers.EmailField(source='profile.email2')
     has_paid = serializers.BooleanField(source='profile.has_paid', default=True)
-    open_bettables = serializers.IntegerField(source='profile.get_open_bettables()', read_only=True)
+    open_bettables = serializers.SerializerMethodField(read_only=True)
     avatar = ImageField(source='profile.avatar')
 
     class Meta:
         model = User
         fields = ('pk', 'username', 'email', 'email2', 'first_name', 'last_name', 'avatar', 'has_paid', 'open_bettables', 'last_login')
+
+    def get_open_bettables(self, obj):
+        return len(obj.profile.get_open_bettables())
 
     def update(self, instance, validated_data):
         profile_data = validated_data.pop('profile', None)

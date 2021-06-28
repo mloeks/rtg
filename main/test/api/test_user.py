@@ -78,7 +78,6 @@ class UserApiTests(RtgApiTestCase):
         self.assertEqual(response.data['first_name'], u2.first_name)
         self.assertEqual(response.data['last_name'], u2.last_name)
         self.assertEqual(response.data['email'], u2.email)
-        self.assertEqual(response.data['open_bettables'], u2.profile.get_open_bettables())
 
     def test_user_public_read(self):
         public_user = self.create_test_user(auth=False)
@@ -170,6 +169,21 @@ class UserApiTests(RtgApiTestCase):
                                      {'username': 'newuser', 'location': 'Buxtehude'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_admin_read_user_details(self):
+        """
+            Admins can request more user details via a dedicated admin endpoint
+        """
+        u1, u2 = TestModelUtils.create_user(), TestModelUtils.create_user()
+
+        self.create_test_user(name=u1.username, admin=True)
+
+        response = self.client.get('%s%i/' % (self.ADMIN_USERS_BASEURL, u2.pk))
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['username'], u2.username)
+        self.assertEqual(response.data['open_bettables'], 0)
+        self.assertEqual(response.data['last_login'], None)
+    
     def test_admin_update_user_has_paid_valid(self):
         """
             Admins may patch any user

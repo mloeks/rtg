@@ -294,8 +294,8 @@ def contact_request(request):
             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [payload['email']])
 
             subject = '%sPost von %s' % (settings.EMAIL_PREFIX, payload['author'],)
-            message = payload['content']
-            send_mail(subject, message, payload['email'], [settings.DEFAULT_STAFF_EMAIL])
+            message = render_to_string('rtg/contact_message.txt', {'contact_request': payload})
+            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [settings.DEFAULT_STAFF_EMAIL])
 
             return HttpResponse()
         else:

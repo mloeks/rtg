@@ -1,0 +1,4 @@
+{{ contact_request.author }} ({{ contact_request.email }}) schickt euch diese Nachricht über das Kontaktformular:
+--------------------------------------
+
+{{ contact_request.content | striptags }}

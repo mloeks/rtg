@@ -31,14 +31,16 @@ class GameApiTests(RtgApiTestCase):
 
     def test_game_read(self):
         self.create_test_user()
-        response = self.get_test_game_api('RTG National Stadium')
+        test_game = TestModelUtils.create_game()
+        response = self.get_test_game_api(test_game.pk)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Game.objects.count(), 1)
-        self.assertIsNotNone(Game.objects.get(venue__name='RTG National Stadium'))
+        self.assertIsNotNone(Game.objects.get(venue__name=test_game.venue.name))
 
     def test_game_response_schema(self):
         self.create_test_user()
-        response = self.get_test_game_api('RTG National Stadium').data
+        test_game = TestModelUtils.create_game()
+        response = self.get_test_game_api(test_game.pk).data
 
         self.assertTrue('round_details' in response and 'abbreviation' in response['round_details'])
         self.assertTrue('round_details' in response and 'name' in response['round_details'])
@@ -51,7 +53,8 @@ class GameApiTests(RtgApiTestCase):
 
     def test_game_public_read(self):
         self.create_test_user(auth=False)
-        response = self.get_test_game_api()
+        test_game = TestModelUtils.create_game()
+        response = self.get_test_game_api(test_game.pk)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_game_update(self):
@@ -84,18 +87,21 @@ class GameApiTests(RtgApiTestCase):
 
     def test_game_delete(self):
         self.create_test_user(admin=True)
-        response = self.delete_test_game_api()
+        test_game = TestModelUtils.create_game()
+        response = self.delete_test_game_api(test_game.pk)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Game.objects.count(), 0)
 
     def test_game_delete_unauth(self):
         self.create_test_user()
-        response = self.delete_test_game_api()
+        test_game = TestModelUtils.create_game()
+        response = self.delete_test_game_api(test_game.pk)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_game_delete_public(self):
         self.create_test_user(auth=False)
-        response = self.delete_test_game_api()
+        test_game = TestModelUtils.create_game()
+        response = self.delete_test_game_api(test_game.pk)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_game_filter_from_date(self):
@@ -155,22 +161,8 @@ class GameApiTests(RtgApiTestCase):
         self.assertEqual(g2.id, response.data['results'][1]['id'])
         self.assertEqual(g3.id, response.data['results'][2]['id'])
 
-    @staticmethod
-    def create_test_game(venue_name=None):
-        team_1 = TestModelUtils.create_team()
-        team_2 = TestModelUtils.create_team()
-        test_venue = TestModelUtils.create_venue(venue_name)
-        test_round = TestModelUtils.create_round()
-        # TODO P3 deadline should not be required, but apparently is
-        test_kickoff = TestModelUtils.create_datetime_from_now(timedelta(days=5))
-        test_game = Game(kickoff=test_kickoff, deadline=test_kickoff, venue=test_venue, round=test_round ,
-                         hometeam=team_1, awayteam=team_2)
-        test_game.save()
-        return test_game
-
-    def get_test_game_api(self, venue_name=None):
-        test_game = self.create_test_game(venue_name)
-        return self.client.get('%s%i/' % (self.GAMES_BASEURL, test_game.pk))
+    def get_test_game_api(self, game_id):
+        return self.client.get('%s%i/' % (self.GAMES_BASEURL, game_id))
 
     def create_test_game_api(self, venue_name=None):
         team_1 = TestModelUtils.create_team()
@@ -183,7 +175,7 @@ class GameApiTests(RtgApiTestCase):
                                                      'venue': test_venue.pk, 'round': test_round.pk}, format='json')
 
     def update_test_game_api(self):
-        test_game = self.create_test_game()
+        test_game = TestModelUtils.create_game()
         team_1 = TeamApiTests.create_test_team()
         team_2 = TeamApiTests.create_test_team()
         test_venue = VenueApiTests.create_test_venue()
@@ -193,6 +185,5 @@ class GameApiTests(RtgApiTestCase):
                                 'hometeam': team_1.pk, 'awayteam': team_2.pk, 'venue': test_venue.pk,
                                 'round': test_round.pk, 'homegoals': 3, 'awaygoals': 2}, format='json')
 
-    def delete_test_game_api(self):
-        test_game = self.create_test_game()
-        return self.client.delete("%s%i/" % (self.GAMES_BASEURL, test_game.pk))
+    def delete_test_game_api(self, game_id):
+        return self.client.delete("%s%i/" % (self.GAMES_BASEURL, game_id))

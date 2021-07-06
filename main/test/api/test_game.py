@@ -66,6 +66,17 @@ class GameApiTests(RtgApiTestCase):
         self.assertEquals(stored_game.awaygoals, 2)
         self.assertRaises(Game.DoesNotExist, Game.objects.get, kickoff='2016-06-06 18:00:00+0000')
 
+    def test_game_update_result(self):
+        self.create_test_user(admin=True)
+        g1 = TestModelUtils.create_game()
+        self.assertEqual(Game.objects.count(), 1)
+
+        self.client.patch("%s%i/" % (self.GAMES_BASEURL, g1.pk), {'homegoals': 3, 'awaygoals': 2}, format='json')
+
+        stored_game = list(Game.objects.all()[:1])[0]
+        self.assertEquals(stored_game.homegoals, 3)
+        self.assertEquals(stored_game.awaygoals, 2)
+
     def test_game_update_unauth(self):
         self.create_test_user()
         response = self.update_test_game_api()

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from datetime import timedelta
 from random import choice, randrange
 from string import printable
 
@@ -47,7 +47,7 @@ class TestModelUtils:
     def create_game(hometeam=None, awayteam=None, kickoff=None, deadline=None, venue=None, round=None, homegoals=-1, awaygoals=-1):
         hometeam = hometeam or TestModelUtils.create_team()
         awayteam = awayteam or TestModelUtils.create_team()
-        kickoff = kickoff or timezone.now()
+        kickoff = kickoff or TestModelUtils.create_datetime_from_now(timedelta(days=5))
         deadline = deadline or kickoff
         venue = venue or TestModelUtils.create_venue()
         round = round or TestModelUtils.create_round()

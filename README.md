@@ -6,17 +6,15 @@ It is based on Python and the [Django Web Framework](https://www.djangoproject.c
 
 ## Current TODOs
 
-### Manual testing for EURO 2021
+### Road towards FIFA Women's World Cup 2023
 
-* Check, if any other updates are required where database is not yet properly normalised, e.g.
-    * extras
-    * bettable names
-* Check rules and dates
-* Do some explorative testing, mainly covering:
-    * sending e-mails properly
-    * registration, "forgot password" functionality
-    * adding/editing bets, particularly close to betting deadlines
-* Remove old posts, launch login
+* P1
+    * Upgrades
+    * New tournament data [1](https://www.kicker.de/frauen-weltmeisterschaft/spieltag)
+    * Smoke tests
+    * Remove old posts, launch login
+* P2
+    * Minor redesign (new colour palette, fonts, images)
 
 ## Feature wishlist
 
@@ -59,7 +57,7 @@ Tried to debug this, the debugger also steps twice into the breakpoint. Currentl
 
 (might be incomplete)
 
-`sudo apt install gcc make cmake python-dev python3-dev python3-virtualenv postgresql`
+`sudo apt install gcc make cmakelo   python3-dev python3-virtualenv postgresql`
 
 ### Python 3 Virtualenv
 `virtualenv -p python3 rtg`
@@ -78,7 +76,7 @@ Run migrations by activating the `rtg` virtualenv and running:
 
 `python manage.py migrate`
 
-Create superuser if it doesn't yet exist:
+Create superuser `mloeks` if it doesn't yet exist:
 
 `python manage.py createsuperuser`
 

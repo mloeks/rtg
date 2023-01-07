@@ -24,7 +24,7 @@ class StatisticApiTests(RtgApiTestCase):
         Statistic.objects.all().delete()
 
     def test_recalculate_after_game_update(self):
-        self.game = TestModelUtils.create_game()
+        self.game = TestModelUtils.create_game(kickoff=TestModelUtils.create_datetime_from_now())
         self.bet = TestModelUtils.create_bet(self.user, self.game, '2:1')
 
         response = self.client.patch("%s%i/" % (self.GAMES_BASEURL, self.game.pk), {'homegoals': 3, 'awaygoals': 2},
@@ -35,6 +35,7 @@ class StatisticApiTests(RtgApiTestCase):
         self.assertEqual(3, updated_bet['points'])
 
         user_stats = self.client.get("%s%i/" % (self.STATISTICS_BASEURL, self.user.pk)).data
+        self.assertIsNotNone(user_stats)
         self.assertEqual(3, user_stats['points'])
         self.assertEqual(1, user_stats['no_differenz'])
         self.assertEqual(1, user_stats['no_bets'])

@@ -6,7 +6,6 @@ from rest_framework import status
 
 from main.models import Bet, Bettable
 from main.test.api.abstract_rtg_api_test import RtgApiTestCase
-from main.test.api.test_game import GameApiTests
 from main.test.utils import TestModelUtils
 
 
@@ -119,15 +118,15 @@ class BetApiTests(RtgApiTestCase):
         """
         u1 = TestModelUtils.create_user()
 
-        g1 = TestModelUtils.create_game()    # kicks off NOW
-        g2 = TestModelUtils.create_game(kickoff=TestModelUtils.create_datetime_from_now(timedelta(hours=2)))
+        game_kickoff_now = TestModelUtils.create_game(kickoff=TestModelUtils.create_datetime_from_now())
+        game_kickoff_future = TestModelUtils.create_game(kickoff=TestModelUtils.create_datetime_from_now(timedelta(hours=2)))
 
         self.create_test_user(u1.username)
-        create_disallowed = self.client.post(self.BETS_BASEURL, {'result_bet': '3:2', 'bettable': g1.pk},
+        create_disallowed = self.client.post(self.BETS_BASEURL, {'result_bet': '3:2', 'bettable': game_kickoff_now.pk},
                                              format='json')
         self.assertEqual(status.HTTP_400_BAD_REQUEST, create_disallowed.status_code)
 
-        create_allowed = self.client.post(self.BETS_BASEURL, {'result_bet': '0:0', 'bettable': g2.pk},
+        create_allowed = self.client.post(self.BETS_BASEURL, {'result_bet': '0:0', 'bettable': game_kickoff_future.pk},
                                           format='json')
         self.assertEqual(status.HTTP_201_CREATED, create_allowed.status_code)
 
@@ -160,19 +159,19 @@ class BetApiTests(RtgApiTestCase):
         """
         u1 = TestModelUtils.create_user()
 
-        g1 = TestModelUtils.create_game()    # kicks off NOW
-        g2 = TestModelUtils.create_game(kickoff=TestModelUtils.create_datetime_from_now(timedelta(hours=2)))
+        game_kickoff_now = TestModelUtils.create_game(kickoff=TestModelUtils.create_datetime_from_now())
+        game_kickoff_future = TestModelUtils.create_game(kickoff=TestModelUtils.create_datetime_from_now(timedelta(hours=2)))
 
-        gb1 = TestModelUtils.create_bet(u1, g1, 2, 1)
-        gb2 = TestModelUtils.create_bet(u1, g2)
+        gb1 = TestModelUtils.create_bet(u1, game_kickoff_now, 2, 1)
+        gb2 = TestModelUtils.create_bet(u1, game_kickoff_future)
 
         self.create_test_user(u1.username)
         update_disallowed = self.client.put("%s%i/" % (self.BETS_BASEURL, gb1.pk),
-                                            {'result_bet': '3:2', 'bettable': g1.pk}, format='json')
+                                            {'result_bet': '3:2', 'bettable': game_kickoff_now.pk}, format='json')
         self.assertEqual(status.HTTP_400_BAD_REQUEST, update_disallowed.status_code)
 
         update_allowed = self.client.put("%s%i/" % (self.BETS_BASEURL, gb2.pk),
-                                         {'result_bet': '0:0', 'bettable': g2.pk}, format='json')
+                                         {'result_bet': '0:0', 'bettable': game_kickoff_future.pk}, format='json')
         self.assertEqual(status.HTTP_200_OK, update_allowed.status_code)
 
     def test_bet_update_other(self):
@@ -229,27 +228,20 @@ class BetApiTests(RtgApiTestCase):
         response = self.delete_test_bet_api()
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    @staticmethod
-    def create_test_bet(user):
-        test_bettable = GameApiTests.create_test_game()
-        test_bet = Bet(result_bet='4:2', bettable=test_bettable, user=user)
-        test_bet.save()
-        return test_bet
-
     def get_test_bet_api(self):
-        test_bet = self.create_test_bet(self.test_user)
+        test_bet = TestModelUtils.create_bet(self.test_user, None, '4:2')
         return self.client.get('%s%i/' % (self.BETS_BASEURL, test_bet.pk))
 
     def create_test_bet_api(self):
-        test_bettable = GameApiTests.create_test_game()
+        test_bettable = TestModelUtils.create_game()
         return self.client.post(self.BETS_BASEURL, {'result_bet': '5:1', 'bettable': test_bettable.pk}, format='json')
 
     def update_test_bet_api(self):
-        test_bet = self.create_test_bet(self.test_user)
-        test_bettable = GameApiTests.create_test_game()
+        test_bet = TestModelUtils.create_bet(self.test_user, None, '4:2')
+        test_bettable = TestModelUtils.create_game()
         return self.client.put("%s%i/" % (self.BETS_BASEURL, test_bet.pk),
                                {'result_bet': '3:2', 'bettable': test_bettable.pk}, format='json')
 
     def delete_test_bet_api(self):
-        test_bet = self.create_test_bet(self.test_user)
+        test_bet = TestModelUtils.create_bet(self.test_user, None, '4:2')
         return self.client.delete("%s%i/" % (self.BETS_BASEURL, test_bet.pk))

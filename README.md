@@ -8,14 +8,10 @@ It is based on Python and the [Django Web Framework](https://www.djangoproject.c
 
 ### Road towards FIFA Women's World Cup 2023
 
-* P1
-    * Upgrades:
-      * Check changelogs of major upgrades for breaking changes which may not be covered by tests (which are all green)
-      * Run some manual smoke tests
-    * New tournament data [1](https://www.kicker.de/frauen-weltmeisterschaft/spieltag)
-    * Remove old posts, launch login
-* P2
-    * Minor redesign (new colour palette, fonts, images)
+* Upgrades:
+  * Check changelogs of major upgrades for breaking changes which may not be covered by tests (which are all green)
+  * Run some manual smoke tests
+* Remove old posts, launch login
 
 ## Feature wishlist
 
@@ -58,7 +54,7 @@ Tried to debug this, the debugger also steps twice into the breakpoint. Currentl
 
 (might be incomplete)
 
-`sudo apt install gcc make cmakelo   python3-dev python3-virtualenv postgresql`
+`sudo apt install gcc make cmake python3-dev python3-virtualenv postgresql`
 
 ### Python 3 Virtualenv
 `virtualenv -p python3 rtg`

@@ -9,9 +9,10 @@ It is based on Python and the [Django Web Framework](https://www.djangoproject.c
 ### Road towards FIFA Women's World Cup 2023
 
 * P1
-    * Upgrades
+    * Upgrades:
+      * Check changelogs of major upgrades for breaking changes which may not be covered by tests (which are all green)
+      * Run some manual smoke tests
     * New tournament data [1](https://www.kicker.de/frauen-weltmeisterschaft/spieltag)
-    * Smoke tests
     * Remove old posts, launch login
 * P2
     * Minor redesign (new colour palette, fonts, images)

@@ -1,17 +1,21 @@
-Django==3.0.11
-djangorestframework==3.12.2
+Django==3.2.16
+djangorestframework==3.14.0
 
-fabric==2.5.0
-psycopg2-binary==2.8.6
+fabric==2.7.1
+psycopg2-binary==2.9.5
+django-allauth==0.52.0
+django-cors-headers==3.13.0
+python-dateutil==2.8.2
+
+# MAJOR UPGRADES
+pytest==7.2.1
+djangorestframework_simplejwt==5.2.2
+django-filter==22.1
+Pillow==9.4.0
+
+# UNMAINTAINED -- find a replacement
 path.py==12.5.0
 unipath==1.1
-pytest==6.2.1
 django-rest-auth==0.9.5
-django-allauth==0.44.0
-djangorestframework_simplejwt==4.6.0
-django-cors-headers==3.6.0
-django-filter==2.4.0
 django-pgcrypto==2.0.0
-Pillow==8.1.0
-python-dateutil==2.8.1
 html2text==2020.1.16

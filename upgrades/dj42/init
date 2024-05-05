@@ -1,0 +1,102 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:
+# Required-Start: $local_fs $syslog
+# Required-Stop:  $local_fs $syslog
+# Default-Start:  2 3 4 5
+# Default-Stop:   0 1 6
+# Short-Description: Gunicorn processes
+### END INIT INFO
+
+
+NAME="dj42_test"
+PROJECT_DIR="$HOME/dj42_test"
+SETTINGS="config.settings.production"
+PYTHONPATH="$HOME/django-$NAME:$PROJECT_DIR"
+
+PIDFILE="$PROJECT_DIR/$NAME.pid"
+SOCKET="$PROJECT_DIR/$NAME.sock"
+DAEMON="$HOME/.virtualenvs/$NAME/bin/gunicorn"
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+WORKERS=1
+OPTS="-D -b unix:///$SOCKET --worker-class gevent --workers $WORKERS --pid $PIDFILE config.wsgi"
+
+
+status()
+{
+    CUID=`id -u`
+    if [ -s $PIDFILE ] && [ `pgrep -F $PIDFILE -U $CUID` ]; then
+        if [ $1 ]; then echo "$NAME is running"; fi
+        return 0;
+    else
+        if [ $1 ]; then echo "$NAME is not running"; fi
+        return 2;
+    fi
+}
+
+start()
+{
+    if [ ! -f $DAEMON ]; then echo "$DAEMON does not exist. Aborting."; return 4; fi
+    if status; then echo "$NAME is running. Aborting."; return 3; fi
+    printf "Starting $NAME "
+    export PYTHONPATH=$PYTHONPATH
+    export DJANGO_SETTINGS_MODULE=$SETTINGS
+    cd $PROJECT_DIR && $DAEMON $OPTS
+
+    # Wait until the process is started
+    x=0; while [ $x -lt 100 -a ! -s $PIDFILE ]; do x=`expr $x + 1`; printf "."; sleep .1; done
+
+    # Because the process may crash after startup, wait 2 seconds before check the process status
+    x=0; while [ $x -lt 20 ]; do x=`expr $x + 1`; printf "."; sleep .1; done
+
+    if status; then echo "OK"; return 0; else echo "failed"; return 1; fi
+}
+
+stop()
+{
+    if status; then
+        PID=`cat $PIDFILE`
+        kill -QUIT $PID;
+        printf "Stopping $NAME "
+
+        # Wait until the process has closed
+        x=0; while [ $x -lt 100 -a `pgrep -P $PID -d ,` ]; do x=`expr $x + 1`; printf "."; sleep .1; done
+        if [ `pgrep -P $PID -d ,` ]; then echo "failed"; else echo "OK"; fi
+    else
+        echo "Site $NAME is not running";
+    fi
+}
+
+reload()
+{
+    if [ -f $PIDFILE ]
+    then
+        printf "Reloading $NAME: "
+        kill -HUP `cat $PIDFILE` && echo "OK" || echo "failed";
+    else
+        echo "Site $NAME is not running"
+    fi
+}
+
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        stop && start
+        ;;
+    reload)
+        reload
+        ;;
+    status)
+        status 1
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|restart|reload|status}"
+        RETVAL=1
+esac
+exit $RETVAL

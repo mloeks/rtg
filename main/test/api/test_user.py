@@ -159,7 +159,8 @@ class UserApiTests(RtgApiTestCase):
     def test_user_update_first_name_too_long(self):
         user = self.create_test_user()
         response = self.client.patch("%s%i/" % (self.USERS_BASEURL, user.pk),
-                                     {'first_name': 'aaaaaaaaa max. 30 characters aaaaaaaaaaaaaaaaaaaaaaaa'},
+                                     {'first_name':
+                                          'aaaaaaaaa max. 150 characters aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'},
                                      format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 

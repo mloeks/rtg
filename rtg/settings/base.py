@@ -247,7 +247,6 @@ WSGI_APPLICATION = 'wsgi.application'
 ########## END WSGI CONFIGURATION
 
 # auth settings
-# PASSWORD_RESET_TIMEOUT_DAYS = 1
 AUTH_PASSWORD_VALIDATORS = [{
     'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
 }]

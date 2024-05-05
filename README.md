@@ -6,14 +6,19 @@ It is based on Python and the [Django Web Framework](https://www.djangoproject.c
 
 ## Current TODOs
 
-### Road towards FIFA Women's World Cup 2023
+### Road towards UEFA EURO 2024 Germany
 
-* Upgrades:
-  * Check changelogs of major upgrades for breaking changes which may not be covered by tests (which are all green)
+* Upgrade to Django 4.2 (LTS)
+  * Check deployment works - upgrade to Django 4.x on server and diff scripts
+* Upgrade remaining libraries
+  * Check changelogs of major upgrades (since 2020!) for breaking changes which may not be covered by tests (which are all green)
   * Run some manual smoke tests
+
+* Prepare new tournament data
+  * Create new command named "euro2024_create_tournament_data"
 * Remove old posts, launch login
 
-## Feature wishlist
+## Feature wishlist (quite old)
 
 Some features that would be nice to have if I find the time someday...
 
@@ -57,9 +62,20 @@ Tried to debug this, the debugger also steps twice into the breakpoint. Currentl
 `sudo apt install gcc make cmake python3-dev python3-virtualenv postgresql`
 
 ### Python 3 Virtualenv
-`virtualenv -p python3 rtg`
 
-Install required packages within `rtg` virtualenv:
+Install Python virtualenv:
+
+`pip install virtualenv`
+
+Create virtualenv `rtg` in `.v` subdirectory:
+
+`mkdir .v; cd .v; virtualenv -p python3 rtg`
+
+Activate virtualenv with
+
+`source .v/rtg/bin/activate`
+
+Then install required packages within `rtg` virtualenv:
 
 `pip install -r requirements/base.txt`
 
@@ -145,7 +161,7 @@ Therefore, there are always some necessary preparations for new tournaments, whi
 * Manual steps to be carried out:
     * Backup PROD database
     * Prepare new tournament data (teams, games etc.) in a new command named "<tournament_abbrev>_create_tournament_data"
-    * Commit an push that new command
+    * Commit and push that new command
     * First locally, then on DEMO, then on PROD:
         * Run Django command "clear_tournament_data"
         * Run Django command "<tournament_abbrev>_create_tournament_data"

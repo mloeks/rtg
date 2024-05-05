@@ -13,10 +13,15 @@ It is based on Python and the [Django Web Framework](https://www.djangoproject.c
 * Upgrade remaining libraries
   * Check changelogs of major upgrades (since 2020!) for breaking changes which may not be covered by tests (which are all green)
   * Run some manual smoke tests
+  * django-rest-auth
+    * Replace with [dj-rest-auth](https://github.com/iMerica/dj-rest-auth)
+    * Update URLs in frontend?
 
 * Prepare new tournament data
   * Create new command named "euro2024_create_tournament_data"
 * Remove old posts, launch login
+* Manual testing
+  * Authentication & Authorization! Token stuff ... do old register/login URLs still work
 
 ## Feature wishlist (quite old)
 

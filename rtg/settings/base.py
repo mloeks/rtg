@@ -180,11 +180,11 @@ LOCAL_APPS = (
     'main',
     'rest_framework',
     'rest_framework.authtoken',
-    'rest_auth',
+    'dj_rest_auth',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'rest_auth.registration',
+    'dj_rest_auth.registration',
     'corsheaders'
 )
 
@@ -276,7 +276,11 @@ AUTHENTICATION_BACKENDS = (
 
 ########## REST FRAMEWORK CONFIGURATION
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # TODO P1 do we need this in addition? Does JWT based auth work
+        'dj_rest_auth.jwt_auth.JWTCookieAuthentication'
+    ),
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'DEFAULT_RENDERER_CLASSES': ('rest_framework.renderers.JSONRenderer',),
@@ -288,6 +292,13 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(hours=12),
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=2),
     'AUTH_HEADER_TYPES': ('Token',),
+}
+# TODO P1 settings from dj-rest-auth - do these conflict with simplejwt? do we need both?
+# https://dj-rest-auth.readthedocs.io/en/latest/installation.html#json-web-token-jwt-support-optional
+REST_AUTH = {
+    'USE_JWT': True,
+    'JWT_AUTH_COOKIE': 'my-app-auth',
+    'JWT_AUTH_REFRESH_COOKIE': 'my-refresh-token',
 }
 ########## END REST FRAMEWORK CONFIGURATION
 

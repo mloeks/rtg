@@ -1,14 +1,13 @@
+from dj_rest_auth.views import PasswordResetConfirmView, PasswordChangeView
+from dj_rest_auth.views import PasswordResetView
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from rest_auth.views import PasswordResetConfirmView, PasswordChangeView
-from rest_auth.views import PasswordResetView
-from rest_framework_simplejwt.views import TokenRefreshView
-
 from main.login_overrides import RtgObtainJSONWebToken
 from main.registration_overrides import rtg_register
 from main.views import contact_request, health
+from rest_framework_simplejwt.views import TokenRefreshView
 
 admin.autodiscover()
 
@@ -19,7 +18,7 @@ urlpatterns = [
     # APP: main
     path('rtg/', include('main.urls')),
 
-    # use django-rest-auth extension views for password reset endpoints
+    # use dj-rest-auth extension views for password reset endpoints
     path('rest-auth/password/reset/', PasswordResetView.as_view(), name='rest_password_reset'),
     path('rest-auth/password/reset/confirm/', PasswordResetConfirmView.as_view(), name='rest_password_reset_confirm'),
     path('rest-auth/password/change/', PasswordChangeView.as_view(), name='rest_password_change'),

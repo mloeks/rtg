@@ -7,8 +7,8 @@ from django.contrib.sites.requests import RequestSite
 from django.core import validators
 from django.core.mail.message import EmailMultiAlternatives
 from django.template.loader import render_to_string
-from rest_auth.registration.serializers import RegisterSerializer
-from rest_auth.serializers import PasswordResetConfirmSerializer, PasswordResetSerializer, PasswordChangeSerializer
+from dj_rest_auth.registration.serializers import RegisterSerializer
+from dj_rest_auth.serializers import PasswordResetConfirmSerializer, PasswordResetSerializer, PasswordChangeSerializer
 from rest_framework import serializers
 from rest_framework import status
 from rest_framework.response import Response

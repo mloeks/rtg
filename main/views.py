@@ -1,11 +1,9 @@
 import logging
 
-import django
 from django.conf import settings
 from django.core.mail import send_mail, EmailMessage
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.template.loader import render_to_string
-from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, status

@@ -2,13 +2,16 @@
 import re
 from string import whitespace, ascii_letters
 
+from allauth.account import app_settings as allauth_account_settings
+from allauth.account.adapter import get_adapter
+from allauth.account.utils import assess_unique_email
+from dj_rest_auth.registration.serializers import RegisterSerializer
+from dj_rest_auth.serializers import PasswordResetConfirmSerializer
 from django.conf import settings
 from django.contrib.sites.requests import RequestSite
 from django.core import validators
 from django.core.mail.message import EmailMultiAlternatives
 from django.template.loader import render_to_string
-from dj_rest_auth.registration.serializers import RegisterSerializer
-from dj_rest_auth.serializers import PasswordResetConfirmSerializer, PasswordResetSerializer, PasswordChangeSerializer
 from rest_framework import serializers
 from rest_framework import status
 from rest_framework.response import Response
@@ -39,6 +42,26 @@ class RtgRegisterSerializer(RegisterSerializer):
             'first_name': self.validated_data.get('first_name', ''),
             'last_name': self.validated_data.get('last_name', '')
         }
+
+    def validate_email(self, email):
+        """
+        dj-rest-auth does not support allauth's enumeration allowance, i.e. rejecting new users with existing e-mail addresses,
+        thus revealing registered user's addresses.
+        Since we don't use e-mail verification, we need to allow enumeration, in spite of its privacy implications.
+        dj-rest-auth does the same (always checks for unique e-mails), but only based on verified e-mails.
+
+        If ACCOUNT_PREVENT_ENUMERATION is set to being falsy (non-default), this override replaces the default
+        validation of dj-rest-auth to ignore the verified flag on e-mail addresses, and instead always fails if
+        a user with the given e-mail address already exists.
+        """
+        if allauth_account_settings.PREVENT_ENUMERATION:
+            return super().validate_email(email)
+
+        email = get_adapter().clean_email(email)
+        if allauth_account_settings.UNIQUE_EMAIL:
+            if email and not assess_unique_email(email):
+                raise serializers.ValidationError('Die E-Mail Adresse ist bereits vergeben.')
+        return email
 
 
 class RtgUsernameValidator(validators.RegexValidator):
@@ -100,25 +123,6 @@ class RtgRegisterView(RtgObtainJSONWebToken):
 
 
 rtg_register = RtgRegisterView.as_view()
-
-
-# TODO P3 it seems the password validation here is different than on register
-# on register it needs to be 8 characters long, but here it may be shorter?
-class RtgPasswordChangeSerializer(PasswordChangeSerializer):
-    def validate_old_password(self, value):
-        try:
-            return super(RtgPasswordChangeSerializer, self).validate_old_password(value)
-        except serializers.ValidationError:
-            raise serializers.ValidationError('Ungültiges aktuelles Passwort')
-
-
-class RtgPasswordResetSerializer(PasswordResetSerializer):
-    def get_email_options(self):
-        return {
-            'extra_email_context': {
-                'site_base_url': settings.SITE_BASE_URL
-            }
-        }
 
 
 class RtgPasswordResetConfirmSerializer(PasswordResetConfirmSerializer):

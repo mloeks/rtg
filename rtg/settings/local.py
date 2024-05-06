@@ -31,6 +31,7 @@ ALLOWED_HOSTS = [
 
 CORS_ORIGIN_REGEX_WHITELIST = ('^(https?://)?(localhost|192.168.2.121):3000$', )
 
+SITE_ID = 1
 SITE_BASE_URL = 'http://localhost:3000'
 
 ########## EMAIL CONFIGURATION

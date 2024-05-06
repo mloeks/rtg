@@ -28,12 +28,14 @@ class TestModelUtils:
         pass
 
     @staticmethod
-    def create_user(username=None, first_name=None, last_name=None, active=True, last_login=None):
+    def create_user(username=None, first_name=None, last_name=None, active=True, last_login=None, email=None):
         username = username or TestModelUtils.create_random_string(8, USERNAME_CHARACTERS)
         first_name = first_name or TestModelUtils.create_random_string(8)
         last_name = last_name or TestModelUtils.create_random_string(8)
+        email = email or TestModelUtils.create_random_string(4) + '@' + TestModelUtils.create_random_string(4) + '.com'
 
-        return User.objects.create(username=username, first_name=first_name, last_name=last_name, is_active=active, last_login=last_login)
+        return User.objects.create(username=username, first_name=first_name, last_name=last_name, is_active=active,
+                                   last_login=last_login, email=email)
 
     @staticmethod
     def create_profile(user=None, email2=None, about=None, location=None, has_paid=False, reminder_emails=True,

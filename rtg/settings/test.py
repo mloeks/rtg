@@ -10,6 +10,7 @@ from .base import *
 ALLOWED_HOSTS = [
     '.demo.royale-tippgemeinschaft.de',   # Allow domain and subdomains
 ]
+SITE_ID = 2
 SITE_BASE_URL = 'https://demo.royale-tippgemeinschaft.de'
 ########## END HOST CONFIGURATION
 

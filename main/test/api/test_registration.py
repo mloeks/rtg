@@ -4,6 +4,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 
 from main.models import Profile
 from main.test.api.abstract_rtg_api_test import RtgApiTestCase
+from main.test.utils import TestModelUtils
 
 
 class RegistrationApiTests(RtgApiTestCase):
@@ -50,3 +51,15 @@ class RegistrationApiTests(RtgApiTestCase):
         response = self.client.post(self.REGISTER_URL, register_payload, format='json')
         self.assertEqual(HTTP_400_BAD_REQUEST, response.status_code)
         self.assertTrue('non_field_errors' in response.data)
+
+    def test_register_invalid_user_email_already_exists(self):
+        some_email = 'hrh@windsor.co.uk'
+        TestModelUtils.create_user('Her Royal Highness', 'Elizabeth', 'Windsor', True, None, some_email)
+
+        register_payload = {
+            'username': 'Her Real Royal Highness', 'first_name': 'Margaret', 'last_name': 'Windsor',
+            'password': 'shirley1', 'password2': 'shirley1', 'email': some_email
+        }
+        response = self.client.post(self.REGISTER_URL, register_payload, format='json')
+        self.assertEqual(HTTP_400_BAD_REQUEST, response.status_code)
+        self.assertTrue('email' in response.data)

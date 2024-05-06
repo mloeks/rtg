@@ -44,7 +44,6 @@ MANAGERS = ADMINS
 ########## GENERAL CONFIGURATION
 TIME_ZONE = 'Europe/Berlin'
 LANGUAGE_CODE = 'de'
-SITE_ID = 1
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -253,25 +252,33 @@ AUTH_PASSWORD_VALIDATORS = [{
 }]
 
 # rest-auth settings
-OLD_PASSWORD_FIELD_ENABLED = True
-LOGOUT_ON_PASSWORD_CHANGE = False
-REST_AUTH_SERIALIZERS = {
-    'PASSWORD_CHANGE_SERIALIZER': 'main.registration_overrides.RtgPasswordChangeSerializer',
-    'PASSWORD_RESET_SERIALIZER': 'main.registration_overrides.RtgPasswordResetSerializer',
+# See: https://dj-rest-auth.readthedocs.io/en/latest/configuration.html
+REST_AUTH = {
+    'USE_JWT': True,
+    'OLD_PASSWORD_FIELD_ENABLED': True,
+    'SESSION_LOGIN': False,
+
+    'PASSWORD_RESET_USE_SITES_DOMAIN': True,
     'PASSWORD_RESET_CONFIRM_SERIALIZER': 'main.registration_overrides.RtgPasswordResetConfirmSerializer',
 }
 
 # all-auth settings
-# ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_EMAIL_REQUIRED = True
+# strictly don't allow duplicate e-mails, even though this is a little privacy issue, since we do not use e-mail verification
+ACCOUNT_PREVENT_ENUMERATION = False
 ACCOUNT_USERNAME_MIN_LENGTH = 3
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_USERNAME_VALIDATORS = 'main.registration_overrides.rtg_username_validators'
 
 # allow for e-mail as user name (EmailBackend)
 AUTHENTICATION_BACKENDS = (
-    'rtg.backends.UsernameOrEmailBackend',
+    # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
 )
 
 

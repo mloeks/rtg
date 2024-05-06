@@ -6,22 +6,68 @@ It is based on Python and the [Django Web Framework](https://www.djangoproject.c
 
 ## Current TODOs
 
-### Road towards UEFA EURO 2024 Germany
+### Manual tests
 
-* Upgrade to Django 4.2 (LTS)
-  * Check deployment works - upgrade to Django 4.x on server and diff scripts
-* Upgrade remaining libraries
-  * Check changelogs of major upgrades (since 2020!) for breaking changes which may not be covered by tests (which are all green)
-  * Run some manual smoke tests
-  * django-rest-auth
-    * Replace with [dj-rest-auth](https://github.com/iMerica/dj-rest-auth)
-    * Update URLs in frontend?
+Using old frontend.
 
-* Prepare new tournament data
-  * Create new command named "euro2024_create_tournament_data"
-* Remove old posts, launch login
-* Manual testing
-  * Authentication & Authorization! Token stuff ... do old register/login URLs still work
+#### User Flow
+
+| Test                                | Issues |
+|-------------------------------------|--------|
+| Register as new user                | OK     |
+| Reset password link                 | OK     |
+| Set new password through reset link | OK     |
+| Change password in settings         | OK     |
+| Change user details                 | OK     |
+| Change avatar                       | .      |
+| Delete account                      | .      |
+| Refreshing tokens                   | .      |
+
+#### Games Flow
+
+| Test                              | Issues |
+|-----------------------------------|--------|
+| Show all games, recent games etc. | .      |
+
+#### Bets Flow
+
+| Test                                                       | Issues |
+|------------------------------------------------------------|--------|
+| Place bet on bets page for open games (incl. invalid bets) | .      |
+| Place bet on home page                                     | .      |
+| Do not accept bets after deadline has passed               | .      |
+| Points should be calculated correctly                      | .      |
+| See all bets in game card                                  | .      |
+
+#### Comments Flow
+
+| Test                                         | Issues |
+|----------------------------------------------|--------|
+| Post a comment with replies on home page     | .      |
+| Use the contact form without being logged in | .      |
+
+#### Admin Flow
+
+| Test                                                            | Issues |
+|-----------------------------------------------------------------|--------|
+| Regular users must not be able to access admin pages / sections | .      |
+| Add new post on home page incl. draft intermediate save         | .      |
+| Send via e-mail options                                         | .      |
+| Add new game on games page                                      | .      |
+| Administrate users (who has paid etc)                           | .      |
+| Enter game results                                              | .      |
+| (Un-)set maintenance page                                       | .      |
+| Access Django's admin page (how / where?)                       | OK     |
+
+### Further TODOs for launch
+
+* Update static UI assets (dates etc.)
+* Data reset: backup PROD DB, remove old posts & tournament data
+* Prepare and add new tournament data
+* Activate cron jobs / increase frequency for live mode
+
+* Check libraries with major upgrades for breaking changes
+* Check some P1/P2 TODOs
 
 ## Feature wishlist (quite old)
 

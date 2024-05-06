@@ -13,9 +13,14 @@ ALLOWED_HOSTS = [
 SITE_BASE_URL = 'https://demo.royale-tippgemeinschaft.de'
 ########## END HOST CONFIGURATION
 
+# REST Framework CORS
 CORS_ORIGIN_WHITELIST = (
     'https://demo.royale-tippgemeinschaft.de',
     'https://www.demo.royale-tippgemeinschaft.de',
+)
+# Django Admin CORS
+CSRF_TRUSTED_ORIGINS = (
+    'https://api.demo.royale-tippgemeinschaft.de',
 )
 
 DEBUG = False

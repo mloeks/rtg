@@ -17,6 +17,10 @@ CORS_ORIGIN_WHITELIST = (
     'https://royale-tippgemeinschaft.de',
     'https://www.royale-tippgemeinschaft.de',
 )
+# Django Admin CORS
+CSRF_TRUSTED_ORIGINS = (
+    'https://api.royale-tippgemeinschaft.de',
+)
 
 ########## EMAIL CONFIGURATION
 SERVER_EMAIL = 'koenigshaus@royale-tippgemeinschaft.de'

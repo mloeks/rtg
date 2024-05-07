@@ -277,7 +277,7 @@ class StatisticViewSet(viewsets.ReadOnlyModelViewSet):
 # TODO P3 Remove exempt once the frontend sends CSRF token correctly
 @csrf_exempt
 def contact_request(request):
-    if request.method == 'POST' and request.is_ajax():
+    if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
         form = RtgContactForm(request.POST)
         if form.is_valid():
             payload = {

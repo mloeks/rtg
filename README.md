@@ -19,8 +19,8 @@ Using old frontend.
 | Set new password through reset link | OK     |
 | Change password in settings         | OK     |
 | Change user details                 | OK     |
-| Change avatar                       | .      |
-| Delete account                      | .      |
+| Change avatar                       | OK     |
+| Delete account                      | OK     |
 | Refreshing tokens                   | .      |
 
 #### Games Flow
@@ -41,26 +41,27 @@ Using old frontend.
 
 #### Comments Flow
 
-| Test                                         | Issues |
-|----------------------------------------------|--------|
-| Post a comment with replies on home page     | .      |
-| Use the contact form without being logged in | .      |
+| Test                                                    | Issues                            |
+|---------------------------------------------------------|-----------------------------------|
+| Add new post on home page incl. draft intermediate save | OK                                |
+| Post a comment with replies on home page                | OK                                |
+| Use the contact form without being logged in            | 500 response. WSGIRequest is_ajax |
 
 #### Admin Flow
 
 | Test                                                            | Issues |
 |-----------------------------------------------------------------|--------|
 | Regular users must not be able to access admin pages / sections | .      |
-| Add new post on home page incl. draft intermediate save         | .      |
-| Send via e-mail options                                         | .      |
+| New post e-mail options                                         | .      |
 | Add new game on games page                                      | .      |
 | Administrate users (who has paid etc)                           | .      |
 | Enter game results                                              | .      |
 | (Un-)set maintenance page                                       | .      |
-| Access Django's admin page (how / where?)                       | OK     |
+| Access Django's admin page                                      | OK     |
 
 ### Further TODOs for launch
 
+* Check console errors on as many pages / flows as possible
 * Update static UI assets (dates etc.)
 * Data reset: backup PROD DB, remove old posts & tournament data
 * Prepare and add new tournament data

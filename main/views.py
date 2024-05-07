@@ -36,7 +36,7 @@ class BetViewSet(viewsets.ModelViewSet):
 
     # return all bets of the user and all other bets if deadline has passed
     filter_backends = (rtgfilters.IsOwnerOrDeadlinePassed, OrderingFilter, DjangoFilterBackend)
-    filter_fields = ('user', 'bettable',)
+    filterset_fields = ('user', 'bettable',)
 
     # never use pagination for bets, since they should never be displayed paginated to the user in the UI
     pagination_class = None
@@ -231,7 +231,7 @@ class PostViewSet(viewsets.ModelViewSet):
     permission_classes = (rtg_permissions.PostPermissions,)
 
     filter_backends = (DjangoFilterBackend, OrderingFilter,)
-    filter_fields = ('news_appear',)
+    filterset_fields = ('news_appear',)
     ordering = ('-date_created',)
 
 
@@ -241,7 +241,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     permission_classes = (rtg_permissions.CommentPermissions,)
 
     filter_backends = (DjangoFilterBackend, OrderingFilter, rtgfilters.TopLevelComments)
-    filter_fields = ('post', 'reply_to')
+    filterset_fields = ('post', 'reply_to')
     ordering = ('post', 'date_created',)
 
     def perform_create(self, serializer):

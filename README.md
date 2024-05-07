@@ -25,48 +25,45 @@ Using old frontend.
 
 #### Games Flow
 
-| Test                              | Issues |
-|-----------------------------------|--------|
-| Show all games, recent games etc. | .      |
+| Test                                    | Issues |
+|-----------------------------------------|--------|
+| Show all games, recent games etc.       | OK     |
+| Game status is correct based on kickoff | OK     |
 
 #### Bets Flow
 
 | Test                                                       | Issues |
 |------------------------------------------------------------|--------|
-| Place bet on bets page for open games (incl. invalid bets) | .      |
-| Place bet on home page                                     | .      |
-| Do not accept bets after deadline has passed               | .      |
-| Points should be calculated correctly                      | .      |
-| See all bets in game card                                  | .      |
+| Place bet on bets page for open games (incl. invalid bets) | OK     |
+| Place bet on home page                                     | OK     |
+| Do not accept bets after deadline has passed               | OK     |
+| Points should be calculated correctly                      | OK     |
+| See all bets in game card                                  | OK     |
 
 #### Comments Flow
 
-| Test                                                    | Issues                            |
-|---------------------------------------------------------|-----------------------------------|
-| Add new post on home page incl. draft intermediate save | OK                                |
-| Post a comment with replies on home page                | OK                                |
-| Use the contact form without being logged in            | 500 response. WSGIRequest is_ajax |
+| Test                                                    | Issues |
+|---------------------------------------------------------|--------|
+| Add new post on home page incl. draft intermediate save | OK     |
+| Post a comment with replies on home page                | OK     |
+| Use the contact form without being logged in            | OK     |
 
 #### Admin Flow
 
 | Test                                                            | Issues |
 |-----------------------------------------------------------------|--------|
-| Regular users must not be able to access admin pages / sections | .      |
-| New post e-mail options                                         | .      |
-| Add new game on games page                                      | .      |
-| Administrate users (who has paid etc)                           | .      |
-| Enter game results                                              | .      |
+| Regular users must not be able to access admin pages / sections | OK     |
+| New post e-mail options                                         | OK     |
+| Add new game on games page                                      | OK     |
+| Administrate users (who has paid etc)                           | OK     |
+| Enter game results                                              | OK     |
 | (Un-)set maintenance page                                       | .      |
 | Access Django's admin page                                      | OK     |
+| Bet Reminder script                                             | OK     |
 
-### Further TODOs for launch
+### Remaining TODOs for launch
 
-* Check console errors on as many pages / flows as possible
-* Update static UI assets (dates etc.)
-* Data reset: backup PROD DB, remove old posts & tournament data
-* Prepare and add new tournament data
-* Activate cron jobs / increase frequency for live mode
-
+* Run all tests again on DEMO
 * Check libraries with major upgrades for breaking changes
 * Check some P1/P2 TODOs
 

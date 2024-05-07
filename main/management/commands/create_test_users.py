@@ -3,6 +3,8 @@
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 
+from main.models import Post
+
 
 class Command(BaseCommand):
     help = 'Creates a given number of test users'
@@ -17,6 +19,7 @@ class Command(BaseCommand):
         self.create_users(nr_users)
 
     def clear_data(self):
+        Post.objects.all().delete()
         User.objects.exclude(is_staff=True).delete()
 
     def create_users(self, number):

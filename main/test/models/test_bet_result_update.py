@@ -2,10 +2,11 @@
 import time
 from random import randrange
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from main.models import Statistic, ResultBetType
+from main.models import Statistic
 from main.test.utils import TestModelUtils as utils
 
 
@@ -24,30 +25,29 @@ class BetResultUpdateTests(TestCase):
         # GIVEN: some user
         some_user = utils.create_user('Queen')
 
-        # AND: any two games
-        g1, g2 = utils.create_game(), utils.create_game()
+        # AND: some games
+        g1, g2, g3 = utils.create_game(), utils.create_game(), utils.create_game()
 
         # AND: some bets for these games
-        b1 = utils.create_bet(some_user, g1, "4:2")
-        b2 = utils.create_bet(some_user, g2, "3:0")
+        utils.create_bet(some_user, g1, "4:2")
+        utils.create_bet(some_user, g2, "3:0")
+        utils.create_bet(some_user, g3, "2:2")
 
         # WHEN games get a result and are saved
-        g1.homegoals = 3
-        g1.awaygoals = 1
-        g1.save()
-        g2.homegoals = 1
-        g2.awaygoals = 1
-        g2.save()
+        g1.set_result_goals(3, 1)
+        g2.set_result_goals(1, 1)
+        g3.set_result_goals(1, 1)
 
         # THEN: the user stats are as expected
         user_stats = Statistic.objects.get(user=some_user)
-        self.assertEqual(2, user_stats.no_bets)
+        self.assertEqual(3, user_stats.no_bets)
         self.assertEqual(0, user_stats.no_volltreffer)
         self.assertEqual(1, user_stats.no_differenz)
         self.assertEqual(0, user_stats.no_tendenz)
-        self.assertEqual(0, user_stats.no_remis_tendenz)
+        self.assertEqual(1, user_stats.no_remis_tendenz)
         self.assertEqual(1, user_stats.no_niete)
-        self.assertEqual(3, user_stats.points)
+
+        self.assertEqual(1*settings.BET_POINTS["differenz"] + 1*settings.BET_POINTS["remis_tendenz"] + 1*settings.BET_POINTS["niete"], user_stats.points)
 
     def test_more_complex_update(self):
         # GIVEN: two users
@@ -93,22 +93,24 @@ class BetResultUpdateTests(TestCase):
         # THEN: the stats of user 1 should be as expected
         u1_stats = Statistic.objects.get(user=u1)
         self.assertEqual(7, u1_stats.no_bets)
-        self.assertEqual(13, u1_stats.points)
         self.assertEqual(2, u1_stats.no_volltreffer)
         self.assertEqual(0, u1_stats.no_differenz)
         self.assertEqual(0, u1_stats.no_remis_tendenz)
         self.assertEqual(1, u1_stats.no_tendenz)
         self.assertEqual(2, u1_stats.no_niete)
 
+        self.assertEqual(e2.points + 1*settings.BET_POINTS["volltreffer"] + 1*settings.BET_POINTS["tendenz"] + 2*settings.BET_POINTS["niete"], u1_stats.points)
+
         # AND: the stats of user 2 should be as expected
         u2_stats = Statistic.objects.get(user=u2)
         self.assertEqual(5, u2_stats.no_bets)
-        self.assertEqual(5, u2_stats.points)
         self.assertEqual(0, u2_stats.no_volltreffer)
         self.assertEqual(1, u2_stats.no_differenz)
         self.assertEqual(1, u2_stats.no_remis_tendenz)
         self.assertEqual(0, u2_stats.no_tendenz)
         self.assertEqual(2, u2_stats.no_niete)
+
+        self.assertEqual(1*settings.BET_POINTS["differenz"] + 1*settings.BET_POINTS["remis_tendenz"] + 2*settings.BET_POINTS["niete"], u2_stats.points)
 
     def test_many_users(self):
         """

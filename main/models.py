@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import *
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models, utils
 from django.db.models import Q
@@ -328,40 +329,40 @@ class Bet(models.Model):
             return
 
         bettable_game = self.bettable.game
-
-        # TODO P3 hardcoded points... move to settings? or think about how to dynamically expose them via the API
-        volltreffer = (ResultBetType.volltreffer.name, 5)
-        differenz = (ResultBetType.differenz.name, 3)
-        remis_tendenz = (ResultBetType.remis_tendenz.name, 2)
-        tendenz = (ResultBetType.tendenz.name, 1)
-        niete = (ResultBetType.niete.name, 0)
+        points = settings.BET_POINTS
 
         (game_hg, game_ag) = (int(bettable_game.homegoals), int(bettable_game.awaygoals))
         (bet_hg, bet_ag) = self.get_gamebet_goals()
 
         if game_hg == bet_hg and game_ag == bet_ag:
-            self.result_bet_type, self.points = volltreffer
+            self.result_bet_type = ResultBetType.volltreffer.name
+            self.points = points["volltreffer"]
             return
 
         if (game_hg - game_ag) == (bet_hg - bet_ag):
             if game_hg == game_ag:
                 # game was a remis
-                self.result_bet_type, self.points = remis_tendenz
+                self.result_bet_type = ResultBetType.remis_tendenz.name
+                self.points = points["remis_tendenz"]
                 return
             else:
                 # game was no remis
-                self.result_bet_type, self.points = differenz
+                self.result_bet_type = ResultBetType.differenz.name
+                self.points = points["differenz"]
                 return
 
         if (game_hg - game_ag) * (bet_hg - bet_ag) > 0:
-            self.result_bet_type, self.points = tendenz
+            self.result_bet_type = ResultBetType.tendenz.name
+            self.points = points["tendenz"]
             return
 
         if game_hg is game_ag and bet_hg is bet_ag:
-            self.result_bet_type, self.points = tendenz
+            self.result_bet_type = ResultBetType.tendenz.name
+            self.points = points["tendenz"]
             return
 
-        self.result_bet_type, self.points = niete
+        self.result_bet_type = ResultBetType.niete.name
+        self.points = points["niete"]
 
     def __str__(self):
         return self.bet_str()

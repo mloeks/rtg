@@ -2,6 +2,8 @@
 from datetime import timedelta
 
 from django.contrib.auth.models import User
+from django.conf import settings
+
 from rest_framework import status
 
 from main.models import Game, Bet, Statistic
@@ -32,11 +34,11 @@ class StatisticApiTests(RtgApiTestCase):
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
         updated_bet = self.client.get("%s%i/" % (self.BETS_BASEURL, self.bet.pk)).data
-        self.assertEqual(3, updated_bet['points'])
+        self.assertEqual(settings.BET_POINTS["differenz"], updated_bet['points'])
 
         user_stats = self.client.get("%s%i/" % (self.STATISTICS_BASEURL, self.user.pk)).data
         self.assertIsNotNone(user_stats)
-        self.assertEqual(3, user_stats['points'])
+        self.assertEqual(settings.BET_POINTS["differenz"], user_stats['points'])
         self.assertEqual(1, user_stats['no_differenz'])
         self.assertEqual(1, user_stats['no_bets'])
 

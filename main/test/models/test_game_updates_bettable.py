@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.conf import settings
 from django.test import TestCase
 
 from main.models import Bet, Game, Bettable
@@ -49,7 +50,7 @@ class GameResultBetUpdateTests(TestCase):
 
         # THEN: the bet should have the correct points
         updated_bet = Bet.objects.get(pk=some_bet.pk)
-        self.assertEqual(3, updated_bet.points)
+        self.assertEqual(settings.BET_POINTS["differenz"], updated_bet.points)
         self.assertEqual('differenz', updated_bet.result_bet_type)
 
     # TODO P2 write API test for this scenario as this test was green when it actually didn't work when tested manually via the API browser

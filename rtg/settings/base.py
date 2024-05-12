@@ -306,6 +306,16 @@ REGISTRATION_OPEN = True
 LOGIN_OPEN = True
 ########## END REGISTRATION CONFIGURATION
 
+########## BETTING CONFIGURATION
+# keys must match the choices available in the ResultBetType model
+BET_POINTS = {
+    'volltreffer': 3,
+    'differenz': 2,
+    'remis_tendenz': 1,
+    'tendenz': 1,
+    'niete': 0
+}
+
 # 2.5MB - 2621440
 # 3MB - 3145728
 # 5MB - 5242880

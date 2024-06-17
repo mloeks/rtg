@@ -202,7 +202,7 @@ class AdminUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('pk', 'username', 'email', 'email2', 'first_name', 'last_name', 'avatar', 'has_paid', 'open_bettables', 'last_login')
+        fields = ('pk', 'username', 'email', 'email2', 'first_name', 'last_name', 'avatar', 'has_paid', 'is_active', 'open_bettables', 'last_login')
 
     def get_open_bettables(self, obj):
         return len(obj.profile.get_open_bettables())

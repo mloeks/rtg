@@ -6,64 +6,6 @@ It is based on Python and the [Django Web Framework](https://www.djangoproject.c
 
 ## Current TODOs
 
-### Manual tests
-
-Using old frontend.
-
-#### User Flow
-
-| Test                                | Issues |
-|-------------------------------------|--------|
-| Register as new user                | OK     |
-| Reset password link                 | OK     |
-| Set new password through reset link | OK     |
-| Change password in settings         | OK     |
-| Change user details                 | OK     |
-| Change avatar                       | OK     |
-| Delete account                      | OK     |
-| Refreshing tokens                   | .      |
-
-#### Games Flow
-
-| Test                                    | Issues |
-|-----------------------------------------|--------|
-| Show all games, recent games etc.       | OK     |
-| Game status is correct based on kickoff | OK     |
-
-#### Bets Flow
-
-| Test                                                       | Issues |
-|------------------------------------------------------------|--------|
-| Place bet on bets page for open games (incl. invalid bets) | OK     |
-| Place bet on home page                                     | OK     |
-| Do not accept bets after deadline has passed               | OK     |
-| Points should be calculated correctly                      | OK     |
-| See all bets in game card                                  | OK     |
-
-#### Comments Flow
-
-| Test                                                    | Issues |
-|---------------------------------------------------------|--------|
-| Add new post on home page incl. draft intermediate save | OK     |
-| Post a comment with replies on home page                | OK     |
-| Use the contact form without being logged in            | OK     |
-
-#### Admin Flow
-
-| Test                                                            | Issues |
-|-----------------------------------------------------------------|--------|
-| Regular users must not be able to access admin pages / sections | OK     |
-| New post e-mail options                                         | OK     |
-| Add new game on games page                                      | OK     |
-| Administrate users (who has paid etc)                           | OK     |
-| Enter game results                                              | OK     |
-| (Un-)set maintenance page                                       | .      |
-| Access Django's admin page                                      | OK     |
-| Bet Reminder script                                             | OK     |
-
-### Remaining TODOs for launch
-
-* Run all tests again on DEMO
 * Check libraries with major upgrades for breaking changes
 * Check some P1/P2 TODOs
 
@@ -215,7 +157,7 @@ Therefore, there are always some necessary preparations for new tournaments, whi
         * Run Django command "clear_tournament_data"
         * Run Django command "<tournament_abbrev>_create_tournament_data"
         * Test
-    * Reset "has_paid" flag for all users
+    * Reset "has_paid" and "is_active" flags for all users
 
 ## Past migration to a generic RTG project
 
